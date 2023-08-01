@@ -5,7 +5,7 @@ namespace UCABPagaloTodoMS.Tests.DataSeed
 {
     public static class DataSeed
     {
-        public static void SetupDbContextData(this Mock<IUCABPagaloTodoDbContext> mockContext)
+        public static void SetupDbContextData(this Mock<IFerminToroDbContext> mockContext)
         {
 
         }

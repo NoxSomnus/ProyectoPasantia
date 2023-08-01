@@ -3,18 +3,22 @@ using System.Reflection;
 using UCABPagaloTodoMS.Core.Database;
 using UCABPagaloTodoMS.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using FerminToroMS.Core.Entities;
 
 namespace UCABPagaloTodoMS.Infrastructure.Database;
 
 
-public class UCABPagaloTodoDbContext : DbContext, IUCABPagaloTodoDbContext
+public class FerminToroDbContext : DbContext, IFerminToroDbContext
 {
-    public UCABPagaloTodoDbContext(DbContextOptions<UCABPagaloTodoDbContext> options)
+    public FerminToroDbContext(DbContextOptions<FerminToroDbContext> options)
         : base(options)
     {
     }
 
     public virtual DbSet<ValoresEntity> Valores { get; set; } = null!;
+
+    public virtual DbSet<EstudianteEntity> Estudiantes { get; set; } = null!;
+    public virtual DbSet<EmpleadoEntity> Empleados { get; set; } = null!;
 
     public DbContext DbContext
     {

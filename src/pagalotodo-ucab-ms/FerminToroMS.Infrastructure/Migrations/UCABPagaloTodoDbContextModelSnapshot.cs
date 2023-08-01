@@ -10,7 +10,7 @@ using UCABPagaloTodoMS.Infrastructure.Database;
 
 namespace UCABPagaloTodoMS.Infrastructure.Migrations
 {
-    [DbContext(typeof(UCABPagaloTodoDbContext))]
+    [DbContext(typeof(FerminToroDbContext))]
     partial class UCABPagaloTodoDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -52,7 +52,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Valores");
+                    b.ToTable("Valores", (string)null);
                 });
 #pragma warning restore 612, 618
         }

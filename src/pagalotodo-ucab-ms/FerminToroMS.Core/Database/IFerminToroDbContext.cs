@@ -1,11 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FerminToroMS.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using UCABPagaloTodoMS.Core.Entities;
 
 namespace UCABPagaloTodoMS.Core.Database
 {
-    public interface IUCABPagaloTodoDbContext
+    public interface IFerminToroDbContext
     {
         DbSet<ValoresEntity> Valores { get; }
+
+        DbSet<EstudianteEntity> Estudiantes { get; }
+
+        DbSet<EmpleadoEntity> Empleados { get; }
 
         DbContext DbContext
         {

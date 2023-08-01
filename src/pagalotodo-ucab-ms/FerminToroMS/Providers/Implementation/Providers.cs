@@ -52,11 +52,11 @@ namespace UCABPagaloTodoMS.Providers.Implementation
             string environment, bool isRequired)
         {
             string DBConnectionString = configuration["DBConnectionString"];
-            services.AddDbContext<UCABPagaloTodoDbContext>(options => options.UseNpgsql(DBConnectionString));
+            services.AddDbContext<FerminToroDbContext>(options => options.UseNpgsql(DBConnectionString));
            
 
             services.AddHealthChecks()
-                .AddDbContextCheck<UCABPagaloTodoDbContext>(null, null, new[] { "ready" });
+                .AddDbContextCheck<FerminToroDbContext>(null, null, new[] { "ready" });
             return services;
         }
 

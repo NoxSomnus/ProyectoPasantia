@@ -9,10 +9,10 @@ namespace UCABPagaloTodoMS.Application.Handlers.Commands
 {
     public class AgregarValorePruebaCommandHandler : IRequestHandler<AgregarValorPruebaCommand, Guid>
     {
-        private readonly IUCABPagaloTodoDbContext _dbContext;
+        private readonly IFerminToroDbContext _dbContext;
         private readonly ILogger<ConsultarValoresQueryHandler> _logger;
 
-        public AgregarValorePruebaCommandHandler(IUCABPagaloTodoDbContext dbContext, ILogger<ConsultarValoresQueryHandler> logger)
+        public AgregarValorePruebaCommandHandler(IFerminToroDbContext dbContext, ILogger<ConsultarValoresQueryHandler> logger)
         {
             _dbContext = dbContext;
             _logger = logger;

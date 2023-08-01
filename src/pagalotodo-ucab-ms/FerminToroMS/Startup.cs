@@ -46,7 +46,7 @@ public class Startup
         var appSettingsSection = Configuration.GetSection("AppSettings");
         _appSettings = appSettingsSection.Get<AppSettings>();
         services.Configure<AppSettings>(appSettingsSection);
-        services.AddTransient<IUCABPagaloTodoDbContext, UCABPagaloTodoDbContext>();
+        services.AddTransient<IFerminToroDbContext, FerminToroDbContext>();
 
         services.AddProviders(Configuration, Folder, _appSettings, environment);
 

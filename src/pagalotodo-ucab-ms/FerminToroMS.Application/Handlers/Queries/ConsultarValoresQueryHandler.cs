@@ -9,10 +9,10 @@ namespace UCABPagaloTodoMS.Application.Handlers.Queries
 {
     public class ConsultarValoresQueryHandler : IRequestHandler<ConsultarValoresPruebaQuery, List<ValoresResponse>>
     {
-        private readonly IUCABPagaloTodoDbContext _dbContext;
+        private readonly IFerminToroDbContext _dbContext;
         private readonly ILogger<ConsultarValoresQueryHandler> _logger;
 
-        public ConsultarValoresQueryHandler(IUCABPagaloTodoDbContext dbContext, ILogger<ConsultarValoresQueryHandler> logger)
+        public ConsultarValoresQueryHandler(IFerminToroDbContext dbContext, ILogger<ConsultarValoresQueryHandler> logger)
         {
             _dbContext = dbContext;
             _logger = logger;

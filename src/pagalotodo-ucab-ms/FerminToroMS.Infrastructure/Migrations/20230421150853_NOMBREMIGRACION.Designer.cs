@@ -11,7 +11,7 @@ using UCABPagaloTodoMS.Infrastructure.Database;
 
 namespace UCABPagaloTodoMS.Infrastructure.Migrations
 {
-    [DbContext(typeof(UCABPagaloTodoDbContext))]
+    [DbContext(typeof(FerminToroDbContext))]
     [Migration("20230421150853_NOMBREMIGRACION")]
     partial class NOMBREMIGRACION
     {

@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UCABPagaloTodoMS.Core\UCABPagaloTodoMS.Core.csproj" />
+    <ProjectReference Include="..\FerminToroMS.Core\FerminToroMS.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

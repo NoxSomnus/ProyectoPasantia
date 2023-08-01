@@ -1,7 +1,10 @@
-﻿namespace UCABPagaloTodoMS.Core.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace UCABPagaloTodoMS.Core.Entities;
 
 public class BaseEntity
 {
+    [Column(Order = 1)]
     public Guid Id { get; set; }
 
     public DateTime CreatedAt { get; set; }

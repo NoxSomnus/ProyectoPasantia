@@ -55,10 +55,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UCABPagaloTodoMS.Application\UCABPagaloTodoMS.Application.csproj" />
-    <ProjectReference Include="..\UCABPagaloTodoMS.Core\UCABPagaloTodoMS.Core.csproj" />
-    <ProjectReference Include="..\UCABPagaloTodoMS.Infrastructure\UCABPagaloTodoMS.Infrastructure.csproj" />
-    <ProjectReference Include="..\UCABPagaloTodoMS\UCABPagaloTodoMS.csproj" />
+    <ProjectReference Include="..\FerminToroMS.Application\FerminToroMS.Application.csproj" />
+    <ProjectReference Include="..\FerminToroMS.Core\FerminToroMS.Core.csproj" />
+    <ProjectReference Include="..\FerminToroMS.Infrastructure\FerminToroMS.Infrastructure.csproj" />
+    <ProjectReference Include="..\FerminToroMS\FerminToroMS.csproj" />
   </ItemGroup>
 
   <ItemGroup>
