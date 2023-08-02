@@ -1,8 +1,8 @@
-﻿using UCABPagaloTodoMS.Core.Database;
+﻿using FerminToroMS.Core.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace UCABPagaloTodoMS.Infrastructure.Database
+namespace FerminToroMS.Infrastructure.Database
 {
     
     public class DbContextTransactionProxy : IDbContextTransactionProxy

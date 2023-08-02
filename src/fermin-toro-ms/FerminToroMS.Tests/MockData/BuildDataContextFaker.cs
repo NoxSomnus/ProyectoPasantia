@@ -1,5 +1,5 @@
 ﻿
-namespace UCABPagaloTodoMS.Tests.MockData
+namespace FerminToroMS.Tests.MockData
 {
     public static class BuildDataContextFaker
     {

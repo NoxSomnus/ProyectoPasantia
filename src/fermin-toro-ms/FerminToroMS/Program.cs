@@ -1,7 +1,7 @@
 ﻿using Destructurama;
 using Serilog;
 
-namespace UCABPagaloTodoMS;
+namespace FerminToroMS;
 
 public static class Program
 {

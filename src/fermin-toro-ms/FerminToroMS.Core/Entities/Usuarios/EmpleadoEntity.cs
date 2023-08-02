@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FerminToroMS.Core.Entities
+namespace FerminToroMS.Core.Entities.Usuarios
 {
     public class EmpleadoEntity : PersonaEntity
     {

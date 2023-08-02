@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using UCABPagaloTodoMS.Application.Responses;
+using FerminToroMS.Application.Responses;
 
-namespace UCABPagaloTodoMS.Application.Queries
+namespace FerminToroMS.Application.Queries
 {
     public class ConsultarValoresPruebaQuery : IRequest<List<ValoresResponse>>
     { }

@@ -1,4 +1,4 @@
-﻿namespace UCABPagaloTodoMS.Application.Responses
+﻿namespace FerminToroMS.Application.Responses
 {
     public class ValoresResponse
     {

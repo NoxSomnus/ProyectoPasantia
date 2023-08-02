@@ -1,11 +1,11 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using UCABPagaloTodoMS.Core.Database;
-using UCABPagaloTodoMS.Core.Entities;
-using Microsoft.EntityFrameworkCore;
+using FerminToroMS.Core.Database;
 using FerminToroMS.Core.Entities;
+using FerminToroMS.Core.Entities.Usuarios;
+using Microsoft.EntityFrameworkCore;
 
-namespace UCABPagaloTodoMS.Infrastructure.Database;
+namespace FerminToroMS.Infrastructure.Database;
 
 
 public class FerminToroDbContext : DbContext, IFerminToroDbContext
@@ -14,12 +14,25 @@ public class FerminToroDbContext : DbContext, IFerminToroDbContext
         : base(options)
     {
     }
-
     public virtual DbSet<ValoresEntity> Valores { get; set; } = null!;
-
     public virtual DbSet<EstudianteEntity> Estudiantes { get; set; } = null!;
     public virtual DbSet<EmpleadoEntity> Empleados { get; set; } = null!;
-
+    public virtual DbSet<AbonoEntity> Abonos { get; set; } = null!;
+    public virtual DbSet<CronogramaEntity> Cronogramas { get; set; } = null!;
+    public virtual DbSet<CursoEntity> Cursos { get; set; } = null!;
+    public virtual DbSet<DatoEmpresaJuridicaEntity> Datos_Empresa_Juridica { get; set; } = null!;
+    public virtual DbSet<DeudasEntity> Deudas { get; set; } = null!;
+    public virtual DbSet<Empleado_PermisoEntity> Permisos_Empleados { get; set; } = null!;
+    public virtual DbSet<Fechas_PagoEntity> Fechas_Limite_Pago { get; set; } = null!;
+    public virtual DbSet<InscripcionEntity> Inscripciones { get; set; } = null!;
+    public virtual DbSet<Metodo_PagoEntity> Metodos_Pago { get; set; } = null!;
+    public virtual DbSet<ModuloEntity> Modulos { get; set; } = null!;
+    public virtual DbSet<Modulos_AprobadoEntity> Modulos_Aprobados { get; set; } = null!;
+    public virtual DbSet<PagoEntity> Pagos { get; set; } = null!;
+    public virtual DbSet<PeriodoEntity> Periodos { get; set; } = null!;
+    public virtual DbSet<PermisosEntity> Permisos { get; set; } = null!;
+    public virtual DbSet<Precio_Mod_TurnoEntity> Precios { get; set; } = null!;
+    public virtual DbSet<PromocionEntity> Promociones { get; set; } = null!;
     public DbContext DbContext
     {
         get

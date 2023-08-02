@@ -1,11 +1,11 @@
-﻿using UCABPagaloTodoMS.Core.Database;
+﻿using FerminToroMS.Core.Database;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using UCABPagaloTodoMS.Application.Queries;
-using UCABPagaloTodoMS.Application.Responses;
+using FerminToroMS.Application.Queries;
+using FerminToroMS.Application.Responses;
 using Microsoft.EntityFrameworkCore;
 
-namespace UCABPagaloTodoMS.Application.Handlers.Queries
+namespace FerminToroMS.Application.Handlers.Queries
 {
     public class ConsultarValoresQueryHandler : IRequestHandler<ConsultarValoresPruebaQuery, List<ValoresResponse>>
     {

@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using UCABPagaloTodoMS.Infrastructure.Database;
-using UCABPagaloTodoMS.Infrastructure.Settings;
-using UCABPagaloTodoMS.Providers.Interface;
+using FerminToroMS.Infrastructure.Database;
+using FerminToroMS.Infrastructure.Settings;
+using FerminToroMS.Providers.Interface;
 
-namespace UCABPagaloTodoMS.Providers.Implementation
+namespace FerminToroMS.Providers.Implementation
 {
     
     public class Providers : IProviders
