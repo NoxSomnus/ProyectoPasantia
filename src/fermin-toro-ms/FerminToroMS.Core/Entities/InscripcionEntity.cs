@@ -12,7 +12,7 @@ namespace FerminToroMS.Core.Entities
         public string EstadoSolvencia { get; set; } = null!;
         public bool FueraVenezuela { get; set; }
         public string? EstadoVenezuela { get; set; }
-        public string? Nota { get; set; } //preguntar si manejan nota con letras o numeros
+        public string? NotaAcademica { get; set; }
         public Guid CronogramaId { get; set; }
         public CronogramaEntity Cronograma { get; set; } = null!;
         public ICollection<DeudasEntity>? Deudas { get; set; }

@@ -8,7 +8,7 @@ namespace FerminToroMS.Core.Entities
 {
     public class PagoEntity : BaseEntity
     {
-        public DateTime Fecha { get; set; }
+        public DateTime Fecha { get; set; } //posiblemente se cambie a nulleable para la migracion
         public bool PorCuotas { get; set; }
         public bool EnDivisa { get; set; }
         public string? URLComprobante { get; set; }

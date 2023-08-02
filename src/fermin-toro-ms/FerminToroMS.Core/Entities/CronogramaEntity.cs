@@ -18,16 +18,15 @@ namespace FerminToroMS.Core.Entities
         public TurnosEnum Turno { get; set; }
         public int Duracion_Semanas { get; set; }
         public int NroHoras { get; set; }
-        //Relacion de modulo, periodo, instructor, asistente
+        //Relacion de modulo, periodo, instructor
         public Guid ModuloId { get; set; }
         public ModuloEntity Modulo { get; set; } = null!;
         public Guid PeriodoId { get; set; }
         public PeriodoEntity Periodo { get; set; } = null!;
         public Guid? InstructorId { get; set; }
         public InstructorEntity? Instructor { get; set; }
-
+        //Relacion con inscripciones y Promociones
         public ICollection<InscripcionEntity>? Inscripciones { get; set; }
         public ICollection<PromocionEntity>? Promociones { get; set; } 
-        //falta agregar las referencias de inscripciones
     }
 }
