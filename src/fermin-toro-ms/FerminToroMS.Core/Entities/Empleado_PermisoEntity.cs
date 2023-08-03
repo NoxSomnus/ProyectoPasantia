@@ -1,5 +1,4 @@
-﻿using FerminToroMS.Core.Entities.Usuarios;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,9 +9,9 @@ namespace FerminToroMS.Core.Entities
 {
     public class Empleado_PermisoEntity : BaseEntity
     {
-        public Guid EmpleadoEntityId { get; set; }
+        public Guid EmpleadoId { get; set; }
         public EmpleadoEntity Empleado { get; set; } = null!;
-        public Guid PermisoEntityId { get; set; }
+        public Guid PermisoId { get; set; }
         public PermisosEntity Permiso { get; set; } = null!;
     }
 }

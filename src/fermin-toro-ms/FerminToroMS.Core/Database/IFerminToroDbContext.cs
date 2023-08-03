@@ -1,5 +1,4 @@
 ﻿using FerminToroMS.Core.Entities;
-using FerminToroMS.Core.Entities.Usuarios;
 using Microsoft.EntityFrameworkCore;
 
 namespace FerminToroMS.Core.Database

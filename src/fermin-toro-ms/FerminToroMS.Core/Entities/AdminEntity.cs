@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace FerminToroMS.Core.Entities
 {
-    public class PermisosEntity : BaseEntity
+    /*public class AdminEntity : EmpleadoEntity
     {
-        public string NombrePermiso { get; set; } = null!;
-    }
+        public bool? EsDirector { get; set; }
+    }*/
 }

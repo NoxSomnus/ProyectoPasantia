@@ -1,5 +1,4 @@
-﻿using FerminToroMS.Core.Entities.Usuarios;
-using FerminToroMS.Core.Enums;
+﻿using FerminToroMS.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +23,7 @@ namespace FerminToroMS.Core.Entities
         public Guid PeriodoId { get; set; }
         public PeriodoEntity Periodo { get; set; } = null!;
         public Guid? InstructorId { get; set; }
-        public InstructorEntity? Instructor { get; set; }
+        public EmpleadoEntity? Instructor { get; set; }
         //Relacion con inscripciones y Promociones
         public ICollection<InscripcionEntity>? Inscripciones { get; set; }
         public ICollection<PromocionEntity>? Promociones { get; set; } 
