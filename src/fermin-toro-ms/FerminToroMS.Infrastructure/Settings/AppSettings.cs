@@ -1,4 +1,4 @@
-﻿namespace UCABPagaloTodoMS.Infrastructure.Settings;
+﻿namespace FerminToroMS.Infrastructure.Settings;
 
 public class AppSettings
 {

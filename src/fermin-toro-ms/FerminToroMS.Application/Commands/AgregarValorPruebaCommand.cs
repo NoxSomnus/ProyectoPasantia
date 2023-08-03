@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using UCABPagaloTodoMS.Application.Requests;
-using UCABPagaloTodoMS.Application.Responses;
+using FerminToroMS.Application.Requests;
+using FerminToroMS.Application.Responses;
 
-namespace UCABPagaloTodoMS.Application.Commands
+namespace FerminToroMS.Application.Commands
 {
     public class AgregarValorPruebaCommand : IRequest<Guid>
     {

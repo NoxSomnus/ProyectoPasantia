@@ -1,7 +1,7 @@
 ﻿using Moq;
-using UCABPagaloTodoMS.Core.Database;
+using FerminToroMS.Core.Database;
 
-namespace UCABPagaloTodoMS.Tests.DataSeed
+namespace FerminToroMS.Tests.DataSeed
 {
     public static class DataSeed
     {

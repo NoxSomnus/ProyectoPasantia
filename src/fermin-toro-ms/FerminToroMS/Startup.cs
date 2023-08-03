@@ -1,14 +1,14 @@
 ﻿using System.Reflection;
-using UCABPagaloTodoMS.Core.Database;
-using UCABPagaloTodoMS.Infrastructure.Database;
-using UCABPagaloTodoMS.Infrastructure.Settings;
-using UCABPagaloTodoMS.Providers.Implementation;
+using FerminToroMS.Core.Database;
+using FerminToroMS.Infrastructure.Database;
+using FerminToroMS.Infrastructure.Settings;
+using FerminToroMS.Providers.Implementation;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using RestSharp;
 using MediatR;
-using UCABPagaloTodoMS.Application.Handlers.Queries;
+using FerminToroMS.Application.Handlers.Queries;
 
-namespace UCABPagaloTodoMS;
+namespace FerminToroMS;
 
 
 public class Startup

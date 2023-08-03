@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UCABPagaloTodoMS.Core.Entities;
+namespace FerminToroMS.Core.Entities;
 
 public class BaseEntity
 {

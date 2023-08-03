@@ -1,6 +1,6 @@
-﻿using UCABPagaloTodoMS.Infrastructure.Settings;
+﻿using FerminToroMS.Infrastructure.Settings;
 
-namespace UCABPagaloTodoMS.Providers.Implementation
+namespace FerminToroMS.Providers.Implementation
 {
     
     public static class GeneralStartup

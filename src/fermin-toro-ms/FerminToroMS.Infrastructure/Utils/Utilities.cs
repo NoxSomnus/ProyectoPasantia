@@ -1,4 +1,4 @@
-﻿namespace UCABPagaloTodoMS.Infrastructure.Utils
+﻿namespace FerminToroMS.Infrastructure.Utils
 {
     public static class Utilities
     {

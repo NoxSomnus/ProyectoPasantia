@@ -1,5 +1,5 @@
-﻿using UCABPagaloTodoMS.Controllers;
-using UCABPagaloTodoMS.Tests.MockData;
+﻿using FerminToroMS.Controllers;
+using FerminToroMS.Tests.MockData;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
-namespace UCABPagaloTodoMS.Tests.UnitTests.Controllers
+namespace FerminToroMS.Tests.UnitTests.Controllers
 {
     public class EjemploControllerTest
     {

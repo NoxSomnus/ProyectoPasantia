@@ -4,6 +4,7 @@ using System.Numerics;
 using FerminToroMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FerminToroMS.Infrastructure.Migrations
 {
     [DbContext(typeof(FerminToroDbContext))]
-    partial class UCABPagaloTodoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230802203759_ModificacionAtributosACiertasEntidades")]
+    partial class ModificacionAtributosACiertasEntidades
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,7 +90,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<int>("Duracion_Semanas")
                         .HasColumnType("integer");
 
-                    b.Property<DateOnly>("FechaFin")
+                    b.Property<DateOnly?>("FechaFin")
                         .HasColumnType("date");
 
                     b.Property<DateOnly>("FechaInicio")
@@ -98,7 +100,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("InstructorId")
+                    b.Property<Guid?>("InstructorId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Modalidad")
@@ -112,6 +114,9 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.Property<Guid>("PeriodoId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Regularidad")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Turno")
                         .HasColumnType("integer");
@@ -345,11 +350,8 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<bool>("FueraVenezuela")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Nota")
+                    b.Property<string>("NotaAcademica")
                         .HasColumnType("text");
-
-                    b.Property<int>("Regularidad")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -378,10 +380,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("NombreMetodo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("URLInfo")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -494,14 +492,14 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<bool>("EsJuridico")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("EsPagoDeAbono")
+                    b.Property<bool?>("EsPagoDeAbono")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateOnly?>("FechaPagoEfectivo")
-                        .HasColumnType("date");
+                    b.Property<string>("FechaPagoEfectivo")
+                        .HasColumnType("text");
 
                     b.Property<TimeOnly?>("HoraPagoEfectivo")
                         .HasColumnType("time without time zone");
@@ -769,7 +767,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .HasColumnOrder(2);
 
                     b.Property<string>("Codigo_Verificacion")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Correo")
@@ -787,10 +784,13 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("Edad")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("Es_Regular")
                         .HasColumnType("boolean");
 
-                    b.Property<DateOnly>("Fecha_Nac")
+                    b.Property<DateOnly?>("Fecha_Nac")
                         .HasColumnType("date");
 
                     b.Property<string>("Nombre")
@@ -895,9 +895,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                 {
                     b.HasOne("FerminToroMS.Core.Entities.Usuarios.InstructorEntity", "Instructor")
                         .WithMany("CronogramasAsignados")
-                        .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InstructorId");
 
                     b.HasOne("FerminToroMS.Core.Entities.ModuloEntity", "Modulo")
                         .WithMany("Cronogramas")

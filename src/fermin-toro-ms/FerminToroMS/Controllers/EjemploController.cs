@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using UCABPagaloTodoMS.Application.Commands;
-using UCABPagaloTodoMS.Application.Queries;
-using UCABPagaloTodoMS.Application.Requests;
-using UCABPagaloTodoMS.Application.Responses;
-using UCABPagaloTodoMS.Base;
+using FerminToroMS.Application.Commands;
+using FerminToroMS.Application.Queries;
+using FerminToroMS.Application.Requests;
+using FerminToroMS.Application.Responses;
+using FerminToroMS.Base;
 
-namespace UCABPagaloTodoMS.Controllers
+namespace FerminToroMS.Controllers
 {
     [ApiController]
     [Route("[controller]")]

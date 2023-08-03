@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace UCABPagaloTodoMS.Infrastructure.Migrations
+namespace FerminToroMS.Infrastructure.Migrations
 {   
     public partial class NOMBREMIGRACION : Migration
     {

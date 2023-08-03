@@ -1,4 +1,4 @@
-﻿namespace UCABPagaloTodoMS.Core.Database
+﻿namespace FerminToroMS.Core.Database
 {
     public interface IDbContextTransactionProxy : IDisposable
     {

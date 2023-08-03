@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using UCABPagaloTodoMS.Application.Commands;
-using UCABPagaloTodoMS.Application.Handlers.Queries;
-using UCABPagaloTodoMS.Application.Mappers;
-using UCABPagaloTodoMS.Core.Database;
+using FerminToroMS.Application.Commands;
+using FerminToroMS.Application.Handlers.Queries;
+using FerminToroMS.Application.Mappers;
+using FerminToroMS.Core.Database;
 
-namespace UCABPagaloTodoMS.Application.Handlers.Commands
+namespace FerminToroMS.Application.Handlers.Commands
 {
     public class AgregarValorePruebaCommandHandler : IRequestHandler<AgregarValorPruebaCommand, Guid>
     {

@@ -1,6 +1,6 @@
-﻿using UCABPagaloTodoMS.Infrastructure.Settings;
+﻿using FerminToroMS.Infrastructure.Settings;
 
-namespace UCABPagaloTodoMS.Providers.Interface
+namespace FerminToroMS.Providers.Interface
 {
     public interface IProviders
     {

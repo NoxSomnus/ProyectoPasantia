@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace UCABPagaloTodoMS.Base
+namespace FerminToroMS.Base
 {
     public class BaseController<TController> : ControllerBase
     {

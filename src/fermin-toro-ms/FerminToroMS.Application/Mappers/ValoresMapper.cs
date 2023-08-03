@@ -1,8 +1,8 @@
-﻿using UCABPagaloTodoMS.Application.Requests;
-using UCABPagaloTodoMS.Application.Responses;
-using UCABPagaloTodoMS.Core.Entities;
+﻿using FerminToroMS.Application.Requests;
+using FerminToroMS.Application.Responses;
+using FerminToroMS.Core.Entities;
 
-namespace UCABPagaloTodoMS.Application.Mappers
+namespace FerminToroMS.Application.Mappers
 {
     public static class ValoresMapper
     {

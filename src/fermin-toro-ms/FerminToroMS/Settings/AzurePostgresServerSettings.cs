@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace UCABPagaloTodoMS.Settings;
+namespace FerminToroMS.Settings;
 
 
 public class AzurePostgresServerSettings

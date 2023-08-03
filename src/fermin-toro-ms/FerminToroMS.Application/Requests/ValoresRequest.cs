@@ -1,4 +1,4 @@
-﻿namespace UCABPagaloTodoMS.Application.Requests
+﻿namespace FerminToroMS.Application.Requests
 {
     public class ValoresRequest
     {

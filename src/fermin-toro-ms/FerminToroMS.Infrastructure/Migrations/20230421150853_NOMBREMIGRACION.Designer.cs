@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using UCABPagaloTodoMS.Infrastructure.Database;
+using FerminToroMS.Infrastructure.Database;
 
 #nullable disable
 
-namespace UCABPagaloTodoMS.Infrastructure.Migrations
+namespace FerminToroMS.Infrastructure.Migrations
 {
     [DbContext(typeof(FerminToroDbContext))]
     [Migration("20230421150853_NOMBREMIGRACION")]
@@ -24,7 +24,7 @@ namespace UCABPagaloTodoMS.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("UCABPagaloTodoMS.Core.Entities.ValoresEntity", b =>
+            modelBuilder.Entity("FerminToroMS.Core.Entities.ValoresEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
