@@ -65,7 +65,9 @@ namespace FerminToroMS.Infrastructure.Migrations
                     Correo = table.Column<string>(type: "text", nullable: false),
                     Username = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    Discriminator = table.Column<string>(type: "text", nullable: false),
+                    esAdmin = table.Column<bool>(type: "boolean", nullable: false),
+                    esDirector = table.Column<bool>(type: "boolean", nullable: false),
+                    esInstructor = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -86,11 +88,12 @@ namespace FerminToroMS.Infrastructure.Migrations
                     Apellido = table.Column<string>(type: "text", nullable: false),
                     Correo = table.Column<string>(type: "text", nullable: false),
                     Direccion_Hab = table.Column<string>(type: "text", nullable: false),
-                    Fecha_Nac = table.Column<DateOnly>(type: "date", nullable: false),
+                    Fecha_Nac = table.Column<DateOnly>(type: "date", nullable: true),
+                    Edad = table.Column<int>(type: "integer", nullable: true),
                     Rango_Edad = table.Column<string>(type: "text", nullable: false),
                     Es_Regular = table.Column<bool>(type: "boolean", nullable: false),
                     Porcentaje_Beca = table.Column<int>(type: "integer", nullable: false),
-                    Codigo_Verificacion = table.Column<string>(type: "text", nullable: false),
+                    Codigo_Verificacion = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -107,7 +110,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     NombreMetodo = table.Column<string>(type: "text", nullable: false),
-                    URLInfo = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -190,7 +192,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     NombrePermiso = table.Column<string>(type: "text", nullable: false),
-                    InstructorEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EmpleadoEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -200,8 +202,8 @@ namespace FerminToroMS.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Permisos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Permisos_Empleados_InstructorEntityId",
-                        column: x => x.InstructorEntityId,
+                        name: "FK_Permisos_Empleados_EmpleadoEntityId",
+                        column: x => x.EmpleadoEntityId,
                         principalTable: "Empleados",
                         principalColumn: "Id");
                 });
@@ -237,15 +239,16 @@ namespace FerminToroMS.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FechaInicio = table.Column<DateOnly>(type: "date", nullable: false),
-                    FechaFin = table.Column<DateOnly>(type: "date", nullable: false),
+                    FechaFin = table.Column<DateOnly>(type: "date", nullable: true),
                     Horario_Dias = table.Column<string>(type: "text", nullable: false),
+                    Regularidad = table.Column<int>(type: "integer", nullable: false),
                     Modalidad = table.Column<int>(type: "integer", nullable: false),
                     Turno = table.Column<int>(type: "integer", nullable: false),
                     Duracion_Semanas = table.Column<int>(type: "integer", nullable: false),
                     NroHoras = table.Column<int>(type: "integer", nullable: false),
                     ModuloId = table.Column<Guid>(type: "uuid", nullable: false),
                     PeriodoId = table.Column<Guid>(type: "uuid", nullable: false),
-                    InstructorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    InstructorId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -258,8 +261,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                         name: "FK_Cronogramas_Empleados_InstructorId",
                         column: x => x.InstructorId,
                         principalTable: "Empleados",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Cronogramas_Modulos_ModuloId",
                         column: x => x.ModuloId,
@@ -332,8 +334,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    EmpleadoEntityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PermisoEntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EmpleadoId = table.Column<Guid>(type: "uuid", nullable: false),
                     PermisoId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
@@ -344,8 +345,8 @@ namespace FerminToroMS.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Permisos_Empleados", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Permisos_Empleados_Empleados_EmpleadoEntityId",
-                        column: x => x.EmpleadoEntityId,
+                        name: "FK_Permisos_Empleados_Empleados_EmpleadoId",
+                        column: x => x.EmpleadoId,
                         principalTable: "Empleados",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -362,11 +363,10 @@ namespace FerminToroMS.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Regularidad = table.Column<int>(type: "integer", nullable: false),
                     EstadoSolvencia = table.Column<string>(type: "text", nullable: false),
                     FueraVenezuela = table.Column<bool>(type: "boolean", nullable: false),
                     EstadoVenezuela = table.Column<string>(type: "text", nullable: true),
-                    Nota = table.Column<string>(type: "text", nullable: true),
+                    NotaAcademica = table.Column<string>(type: "text", nullable: true),
                     CronogramaId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
@@ -452,14 +452,14 @@ namespace FerminToroMS.Infrastructure.Migrations
                     URLComprobante = table.Column<string>(type: "text", nullable: true),
                     EsAprobado = table.Column<bool>(type: "boolean", nullable: true),
                     Comentarios = table.Column<string>(type: "text", nullable: true),
-                    FechaPagoEfectivo = table.Column<DateOnly>(type: "date", nullable: true),
+                    FechaPagoEfectivo = table.Column<string>(type: "text", nullable: true),
                     HoraPagoEfectivo = table.Column<TimeOnly>(type: "time without time zone", nullable: true),
                     EsJuridico = table.Column<bool>(type: "boolean", nullable: false),
                     CheckRetencion = table.Column<bool>(type: "boolean", nullable: true),
                     NroRetencion = table.Column<int>(type: "integer", nullable: true),
                     NroFactura = table.Column<int>(type: "integer", nullable: true),
                     NroRecibo = table.Column<int>(type: "integer", nullable: true),
-                    EsPagoDeAbono = table.Column<bool>(type: "boolean", nullable: false),
+                    EsPagoDeAbono = table.Column<bool>(type: "boolean", nullable: true),
                     PrimeraCuotaId = table.Column<Guid>(type: "uuid", nullable: true),
                     InscripcionId = table.Column<Guid>(type: "uuid", nullable: false),
                     EmpresaJuridicaId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -599,14 +599,14 @@ namespace FerminToroMS.Infrastructure.Migrations
                 column: "PrimeraCuotaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Permisos_InstructorEntityId",
+                name: "IX_Permisos_EmpleadoEntityId",
                 table: "Permisos",
-                column: "InstructorEntityId");
+                column: "EmpleadoEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Permisos_Empleados_EmpleadoEntityId",
+                name: "IX_Permisos_Empleados_EmpleadoId",
                 table: "Permisos_Empleados",
-                column: "EmpleadoEntityId");
+                column: "EmpleadoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Permisos_Empleados_PermisoId",

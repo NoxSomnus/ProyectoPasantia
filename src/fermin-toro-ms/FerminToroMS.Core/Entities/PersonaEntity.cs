@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FerminToroMS.Core.Entities.Usuarios
+namespace FerminToroMS.Core.Entities
 {
     public class PersonaEntity : BaseEntity
     {

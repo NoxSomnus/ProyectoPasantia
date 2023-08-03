@@ -2,7 +2,6 @@
 using System.Reflection;
 using FerminToroMS.Core.Database;
 using FerminToroMS.Core.Entities;
-using FerminToroMS.Core.Entities.Usuarios;
 using Microsoft.EntityFrameworkCore;
 
 namespace FerminToroMS.Infrastructure.Database;

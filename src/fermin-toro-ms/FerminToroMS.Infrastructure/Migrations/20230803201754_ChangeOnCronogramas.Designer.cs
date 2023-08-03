@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FerminToroMS.Infrastructure.Migrations
 {
     [DbContext(typeof(FerminToroDbContext))]
-    [Migration("20230802162926_ERComplete")]
-    partial class ERComplete
+    [Migration("20230803201754_ChangeOnCronogramas")]
+    partial class ChangeOnCronogramas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -90,7 +90,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<int>("Duracion_Semanas")
                         .HasColumnType("integer");
 
-                    b.Property<DateOnly>("FechaFin")
+                    b.Property<DateOnly?>("FechaFin")
                         .HasColumnType("date");
 
                     b.Property<DateOnly>("FechaInicio")
@@ -100,7 +100,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("InstructorId")
+                    b.Property<Guid?>("InstructorId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Modalidad")
@@ -114,6 +114,9 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.Property<Guid>("PeriodoId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Regularidad")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Turno")
                         .HasColumnType("integer");
@@ -259,10 +262,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("EmpleadoEntityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PermisoEntityId")
+                    b.Property<Guid>("EmpleadoId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("PermisoId")
@@ -276,11 +276,137 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmpleadoEntityId");
+                    b.HasIndex("EmpleadoId");
 
                     b.HasIndex("PermisoId");
 
                     b.ToTable("Permisos_Empleados");
+                });
+
+            modelBuilder.Entity("FerminToroMS.Core.Entities.EmpleadoEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnOrder(4);
+
+                    b.Property<BigInteger>("Cedula")
+                        .HasColumnType("numeric")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Correo")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnOrder(5);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnOrder(3);
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("esAdmin")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("esDirector")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("esInstructor")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Empleados");
+                });
+
+            modelBuilder.Entity("FerminToroMS.Core.Entities.EstudianteEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnOrder(4);
+
+                    b.Property<BigInteger>("Cedula")
+                        .HasColumnType("numeric")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Codigo_Verificacion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Correo")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnOrder(5);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Direccion_Hab")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Edad")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Es_Regular")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateOnly?>("Fecha_Nac")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnOrder(3);
+
+                    b.Property<int>("Porcentaje_Beca")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Rango_Edad")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Estudiantes");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.Fechas_PagoEntity", b =>
@@ -347,11 +473,8 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<bool>("FueraVenezuela")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Nota")
+                    b.Property<string>("NotaAcademica")
                         .HasColumnType("text");
-
-                    b.Property<int>("Regularidad")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -380,10 +503,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("NombreMetodo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("URLInfo")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -496,14 +615,14 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<bool>("EsJuridico")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("EsPagoDeAbono")
+                    b.Property<bool?>("EsPagoDeAbono")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateOnly?>("FechaPagoEfectivo")
-                        .HasColumnType("date");
+                    b.Property<string>("FechaPagoEfectivo")
+                        .HasColumnType("text");
 
                     b.Property<TimeOnly?>("HoraPagoEfectivo")
                         .HasColumnType("time without time zone");
@@ -562,7 +681,10 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<string>("Meses")
+                    b.Property<string>("MesFin")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MesInicio")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -594,7 +716,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("InstructorEntityId")
+                    b.Property<Guid?>("EmpleadoEntityId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("NombrePermiso")
@@ -609,7 +731,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InstructorEntityId");
+                    b.HasIndex("EmpleadoEntityId");
 
                     b.ToTable("Permisos");
                 });
@@ -697,127 +819,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.ToTable("Promociones");
                 });
 
-            modelBuilder.Entity("FerminToroMS.Core.Entities.Usuarios.EmpleadoEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnOrder(1);
-
-                    b.Property<string>("Apellido")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(4);
-
-                    b.Property<BigInteger>("Cedula")
-                        .HasColumnType("numeric")
-                        .HasColumnOrder(2);
-
-                    b.Property<string>("Correo")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(5);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(3);
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Empleados");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("EmpleadoEntity");
-                });
-
-            modelBuilder.Entity("FerminToroMS.Core.Entities.Usuarios.EstudianteEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnOrder(1);
-
-                    b.Property<string>("Apellido")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(4);
-
-                    b.Property<BigInteger>("Cedula")
-                        .HasColumnType("numeric")
-                        .HasColumnOrder(2);
-
-                    b.Property<string>("Codigo_Verificacion")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Correo")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(5);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Direccion_Hab")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Es_Regular")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateOnly>("Fecha_Nac")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(3);
-
-                    b.Property<int>("Porcentaje_Beca")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Rango_Edad")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Estudiantes");
-                });
-
             modelBuilder.Entity("FerminToroMS.Core.Entities.ValoresEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -852,16 +853,9 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.ToTable("Valores");
                 });
 
-            modelBuilder.Entity("FerminToroMS.Core.Entities.Usuarios.InstructorEntity", b =>
-                {
-                    b.HasBaseType("FerminToroMS.Core.Entities.Usuarios.EmpleadoEntity");
-
-                    b.HasDiscriminator().HasValue("InstructorEntity");
-                });
-
             modelBuilder.Entity("EstudianteEntityModuloEntity", b =>
                 {
-                    b.HasOne("FerminToroMS.Core.Entities.Usuarios.EstudianteEntity", null)
+                    b.HasOne("FerminToroMS.Core.Entities.EstudianteEntity", null)
                         .WithMany()
                         .HasForeignKey("EstudiantesAprobadosId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -876,7 +870,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.AbonoEntity", b =>
                 {
-                    b.HasOne("FerminToroMS.Core.Entities.Usuarios.EstudianteEntity", "Estudiante")
+                    b.HasOne("FerminToroMS.Core.Entities.EstudianteEntity", "Estudiante")
                         .WithMany("Abonos")
                         .HasForeignKey("EstudianteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -895,11 +889,9 @@ namespace FerminToroMS.Infrastructure.Migrations
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.CronogramaEntity", b =>
                 {
-                    b.HasOne("FerminToroMS.Core.Entities.Usuarios.InstructorEntity", "Instructor")
+                    b.HasOne("FerminToroMS.Core.Entities.EmpleadoEntity", "Instructor")
                         .WithMany("CronogramasAsignados")
-                        .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InstructorId");
 
                     b.HasOne("FerminToroMS.Core.Entities.ModuloEntity", "Modulo")
                         .WithMany("Cronogramas")
@@ -922,7 +914,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.DeudasEntity", b =>
                 {
-                    b.HasOne("FerminToroMS.Core.Entities.Usuarios.EstudianteEntity", "Estudiante")
+                    b.HasOne("FerminToroMS.Core.Entities.EstudianteEntity", "Estudiante")
                         .WithMany("Deudas")
                         .HasForeignKey("EstudianteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -941,9 +933,9 @@ namespace FerminToroMS.Infrastructure.Migrations
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.Empleado_PermisoEntity", b =>
                 {
-                    b.HasOne("FerminToroMS.Core.Entities.Usuarios.EmpleadoEntity", "Empleado")
+                    b.HasOne("FerminToroMS.Core.Entities.EmpleadoEntity", "Empleado")
                         .WithMany()
-                        .HasForeignKey("EmpleadoEntityId")
+                        .HasForeignKey("EmpleadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -993,7 +985,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.Modulos_AprobadoEntity", b =>
                 {
-                    b.HasOne("FerminToroMS.Core.Entities.Usuarios.EstudianteEntity", "Estudiante")
+                    b.HasOne("FerminToroMS.Core.Entities.EstudianteEntity", "Estudiante")
                         .WithMany()
                         .HasForeignKey("EstudianteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1035,9 +1027,9 @@ namespace FerminToroMS.Infrastructure.Migrations
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.PermisosEntity", b =>
                 {
-                    b.HasOne("FerminToroMS.Core.Entities.Usuarios.InstructorEntity", null)
+                    b.HasOne("FerminToroMS.Core.Entities.EmpleadoEntity", null)
                         .WithMany("Permisos")
-                        .HasForeignKey("InstructorEntityId");
+                        .HasForeignKey("EmpleadoEntityId");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.Precio_Mod_TurnoEntity", b =>
@@ -1075,6 +1067,20 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Navigation("PagosJuridicos");
                 });
 
+            modelBuilder.Entity("FerminToroMS.Core.Entities.EmpleadoEntity", b =>
+                {
+                    b.Navigation("CronogramasAsignados");
+
+                    b.Navigation("Permisos");
+                });
+
+            modelBuilder.Entity("FerminToroMS.Core.Entities.EstudianteEntity", b =>
+                {
+                    b.Navigation("Abonos");
+
+                    b.Navigation("Deudas");
+                });
+
             modelBuilder.Entity("FerminToroMS.Core.Entities.InscripcionEntity", b =>
                 {
                     b.Navigation("Deudas");
@@ -1097,20 +1103,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Navigation("Cronogramas");
 
                     b.Navigation("Fechas_Pago");
-                });
-
-            modelBuilder.Entity("FerminToroMS.Core.Entities.Usuarios.EstudianteEntity", b =>
-                {
-                    b.Navigation("Abonos");
-
-                    b.Navigation("Deudas");
-                });
-
-            modelBuilder.Entity("FerminToroMS.Core.Entities.Usuarios.InstructorEntity", b =>
-                {
-                    b.Navigation("CronogramasAsignados");
-
-                    b.Navigation("Permisos");
                 });
 #pragma warning restore 612, 618
         }

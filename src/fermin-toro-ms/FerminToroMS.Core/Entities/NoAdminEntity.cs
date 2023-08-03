@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FerminToroMS.Core.Entities.Usuarios
+namespace FerminToroMS.Core.Entities
 {
-    public class NoAdminEntity : EmpleadoEntity
+    /*public class NoAdminEntity : EmpleadoEntity
     {
         public ICollection<PermisosEntity>? Permisos { get; set; }
-    }
+    }*/
 }

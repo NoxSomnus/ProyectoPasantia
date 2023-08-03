@@ -70,7 +70,7 @@ public class Startup
             });
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("./" + Folder + "/swagger.json", $"UCABPagaloTodo Microservice ({VersionNumber})");
+                c.SwaggerEndpoint("./" + Folder + "/swagger.json", $"FerminToroMS Microservice ({VersionNumber})");
                 c.InjectStylesheet(_appSettings.SwaggerStyle);
                 c.DisplayRequestDuration();
                 c.RoutePrefix = string.Empty;

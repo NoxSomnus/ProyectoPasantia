@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FerminToroMS.Core.Entities.Usuarios;
 
 namespace FerminToroMS.Core.Entities
 {

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FerminToroMS.Core.Entities.Usuarios
+namespace FerminToroMS.Application.Requests
 {
-    public class EmpleadoEntity : PersonaEntity
+    public class LoginRequest
     {
-        public string Username { get; set; } = null!;
+        public string UserName { get; set; } = null!;
+
         public string Password { get; set; } = null!;
     }
 }
