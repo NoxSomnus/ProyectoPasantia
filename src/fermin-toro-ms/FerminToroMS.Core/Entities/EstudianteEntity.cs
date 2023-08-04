@@ -11,7 +11,7 @@ namespace FerminToroMS.Core.Entities
     public class EstudianteEntity : BaseEntity
     {
         [Column(Order = 2)]
-        public BigInteger Cedula { get; set; }
+        public string Cedula { get; set; } = null!;
         [Column(Order = 3)]
         public string Nombre { get; set; } = null!;
         [Column(Order = 4)]

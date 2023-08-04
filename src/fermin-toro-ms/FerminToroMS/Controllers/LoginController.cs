@@ -28,7 +28,7 @@ namespace FerminToroMS.Controllers
         /// El método devuelve un objeto JSON con la información del estado del login.
         /// </remarks>
 
-        [HttpPost("Login")]
+        [HttpPost("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -53,7 +53,7 @@ namespace FerminToroMS.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ocurrió un error al agregar el servicio");
+                _logger.LogError(ex, "Ocurrió un error al Iniciar Sesion");
                 return StatusCode(500, "Ocurrió un error en el inicio de sesion. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
         }

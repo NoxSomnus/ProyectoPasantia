@@ -66,7 +66,7 @@ namespace FerminToroMS.Application.Handlers.Queries
         /// <summary>
         /// Método asincronico que maneja la búsqueda de un usuario por su nombre de usuario y contraseña.
         /// </summary>
-        /// <param name="request">La consulta UserLoginQuery que especifica el usuario y contraseña del usuario que se busca.</param>
+        /// <param name="request">La consulta LoginQuery que especifica el usuario y contraseña del usuario que se busca.</param>
         /// <returns>Un objeto UserLoginResponse que contiene información detallada del usuario encontrado.</returns>
         private async Task<LoginResponse> HandleAsync(LoginQuery request)
         {
@@ -76,7 +76,7 @@ namespace FerminToroMS.Application.Handlers.Queries
             {
                 _logger.LogInformation("LoginQueryHandler.HandleAsync");
 
-                var userExists = _dbContext.Empleados.Any(c => c.Username == request._request.UserName);
+                var userExists = await _dbContext.Empleados.AnyAsync(c => c.Username == request._request.UserName);
                 if (!userExists)
                 {
                     throw new UserNotFoundException(request._request.UserName);
