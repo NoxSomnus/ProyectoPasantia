@@ -44,8 +44,8 @@ namespace FerminToroMS.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ocurrió un error al los cursos");
-                return StatusCode(500, "Ocurrió un error en el inicio de sesion. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+                _logger.LogError(ex, "Ocurrió un error al agregar los cursos");
+                return StatusCode(500, "Ocurrió un error al agregar los cursos. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
 
         }
@@ -76,10 +76,15 @@ namespace FerminToroMS.Controllers
                 var response = await _mediator.Send(command);
                 return Ok(response);
             }
+            catch (BadCSVRequest ex)
+            {
+                _logger.LogError(ex, "Error AddPricesToCourseCommand.HandleAsync. {Mensaje}", ex.Message);
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Ocurrió un error al agregar los precios de los cursos");
-                return StatusCode(500, "Ocurrió un error en el inicio de sesion. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+                return StatusCode(500, "Ocurrió un error al agregar los precios de los cursos. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
 
         }

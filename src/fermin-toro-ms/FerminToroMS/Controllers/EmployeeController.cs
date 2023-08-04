@@ -50,8 +50,8 @@ namespace FerminToroMS.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ocurrió un error al agregar el servicio");
-                return StatusCode(500, "Ocurrió un error en el inicio de sesion. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+                _logger.LogError(ex, "Ocurrió un error al agregar el empleado");
+                return StatusCode(500, "Ocurrió un error al añadir al empleado. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
         }
 
@@ -82,8 +82,50 @@ namespace FerminToroMS.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ocurrió un error al agregar el servicio");
-                return StatusCode(500, "Ocurrió un error en el inicio de sesion. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+                _logger.LogError(ex, "Ocurrió un error al agregar el permiso");
+                return StatusCode(500, "Ocurrió un error al agregar el permiso. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
+        /// Método que verifica un permiso de un usuario al acceder a una opcion.
+        /// </summary>
+        /// <param name="UserId">Guid que corresponde el usuario que quiere acceder a una opcion</param>
+        /// <param name="PermissionName">String del permiso que debe tener el usuario para acceder a la opcion</param>
+        /// <returns>Un objeto JSON con la información de si la operacion fue exitosa.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Post con un objeto JSON en el cuerpo de la solicitud 
+        /// que contiene las propiedades necesarias registrar un nuevo permiso.
+        /// El método devuelve un objeto JSON con la información del estado de la operacion.
+        /// </remarks>
+
+        [HttpGet("CheckPermission")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> CheckPermission([FromQuery] Guid UserId, [FromQuery] string PermissionName)
+        {
+            _logger.LogInformation("Entrando al metodo que verifica si el usuario tiene permiso para acceder a una opcion");
+            try
+            {
+                var command = new CheckPermissionQuery(UserId, PermissionName);
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (DataNotFoundException ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al verificar los permisos");
+                return NotFound(ex.Message);
+            }
+            catch (UserIdNotFoundException ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al verificar los permisos");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al verificar los permisos");
+                return StatusCode(500, "Ocurrió un error al verificar los permisos. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
         }
     }
