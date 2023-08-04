@@ -3,6 +3,7 @@ using System;
 using FerminToroMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FerminToroMS.Infrastructure.Migrations
 {
     [DbContext(typeof(FerminToroDbContext))]
-    partial class UCABPagaloTodoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230804144945_ChangeOnCedulaValueType")]
+    partial class ChangeOnCedulaValueType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -629,9 +631,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<Guid>("InscripcionId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("MetodoPagoId")
-                        .HasColumnType("uuid");
-
                     b.Property<int?>("NroFactura")
                         .HasColumnType("integer");
 
@@ -661,8 +660,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.HasIndex("EmpresaJuridicaId");
 
                     b.HasIndex("InscripcionId");
-
-                    b.HasIndex("MetodoPagoId");
 
                     b.HasIndex("PrimeraCuotaId");
 
@@ -720,6 +717,9 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("EmpleadoEntityId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("NombrePermiso")
                         .IsRequired()
                         .HasColumnType("text");
@@ -731,6 +731,8 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmpleadoEntityId");
 
                     b.ToTable("Permisos");
                 });
@@ -933,7 +935,7 @@ namespace FerminToroMS.Infrastructure.Migrations
             modelBuilder.Entity("FerminToroMS.Core.Entities.Empleado_PermisoEntity", b =>
                 {
                     b.HasOne("FerminToroMS.Core.Entities.EmpleadoEntity", "Empleado")
-                        .WithMany("Permisos")
+                        .WithMany()
                         .HasForeignKey("EmpleadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1013,12 +1015,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FerminToroMS.Core.Entities.Metodo_PagoEntity", "MetodoPago")
-                        .WithMany("Pagos")
-                        .HasForeignKey("MetodoPagoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("FerminToroMS.Core.Entities.PagoEntity", "PrimeraCuota")
                         .WithMany()
                         .HasForeignKey("PrimeraCuotaId");
@@ -1027,9 +1023,14 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.Navigation("Inscripcion");
 
-                    b.Navigation("MetodoPago");
-
                     b.Navigation("PrimeraCuota");
+                });
+
+            modelBuilder.Entity("FerminToroMS.Core.Entities.PermisosEntity", b =>
+                {
+                    b.HasOne("FerminToroMS.Core.Entities.EmpleadoEntity", null)
+                        .WithMany("Permisos")
+                        .HasForeignKey("EmpleadoEntityId");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.Precio_Mod_TurnoEntity", b =>
@@ -1085,11 +1086,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                 {
                     b.Navigation("Deudas");
 
-                    b.Navigation("Pagos");
-                });
-
-            modelBuilder.Entity("FerminToroMS.Core.Entities.Metodo_PagoEntity", b =>
-                {
                     b.Navigation("Pagos");
                 });
 

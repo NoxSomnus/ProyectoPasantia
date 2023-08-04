@@ -29,6 +29,8 @@ namespace FerminToroMS.Core.Entities
         public InscripcionEntity Inscripcion { get; set; } = null!;
         public Guid? EmpresaJuridicaId { get; set; }
         public DatoEmpresaJuridicaEntity? EmpresaJuridica { get; set; }
+        public Guid MetodoPagoId { get; set; }
+        public Metodo_PagoEntity MetodoPago { get; set; } = null!;
 
         public ICollection<AbonoEntity>? Abonos { get; set; }
     }
