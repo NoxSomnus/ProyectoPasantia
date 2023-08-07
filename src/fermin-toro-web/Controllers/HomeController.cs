@@ -7,7 +7,8 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using UCABPagaloTodoWeb.Models;
+using System.IO;
+using FerminToroWeb.GoogleDriveAPI;
 
 namespace UCABPagaloTodoWeb.Controllers
 {
@@ -89,5 +90,30 @@ namespace UCABPagaloTodoWeb.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        //---------------------------------------------------------------------------------------
+
+        [HttpGet]
+        public ActionResult GetGoogleDriveFiles()
+        {
+            return View(GoogleDriveRepository.GetDriveFiles());
+        }
+
+        [HttpPost]
+        public ActionResult DeleteFile(GoogleDriveFiles file)
+        {
+            GoogleDriveRepository.DeleteFile(file);
+            return RedirectToAction("GetGoogleDriveFiles");
+        }
+
+        [HttpPost]
+        public ActionResult UploadFile(IFormFile file)
+        {
+            GoogleDriveRepository.FileUpload(file);
+            return RedirectToAction("GetGoogleDriveFiles");
+        }
+
+        
     }
 }
+    
