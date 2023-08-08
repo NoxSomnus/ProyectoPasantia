@@ -78,8 +78,6 @@ namespace FerminToroWeb.GoogleDriveAPI
             }
             return FileList;
         }
-
-        //file Upload to the Google Drive.
         public static string FileUpload(IFormFile file)
         {
             if (file != null && file.Length > 0)
@@ -96,7 +94,8 @@ namespace FerminToroWeb.GoogleDriveAPI
 
                 var fileMetadata = new Google.Apis.Drive.v3.Data.File()
                 {
-                    Name = fileName
+                    Name = fileName,
+                    Parents = new List<string> { "1W8p67Ugspg9Q8MWtz9YJcRqym09KKnmX" }
                 };
 
                 FilesResource.CreateMediaUpload request;
@@ -110,7 +109,49 @@ namespace FerminToroWeb.GoogleDriveAPI
 
                 var uploadedFile = request.ResponseBody;
                 string fileId = uploadedFile.Id;
+                // Eliminar el archivo local después de la subida
+                File.Delete(path);
+                return fileId;
+            }
 
+            return null;
+        }
+
+
+        //file Upload to the Google Drive Drive Tests.
+        public static string FileUploadCSV(IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+                DriveService service = GetService();
+
+                string fileName = Path.GetFileName(file.FileName);
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "GoogleDriveFiles", fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                var fileMetadata = new Google.Apis.Drive.v3.Data.File()
+                {
+                    Name = fileName,
+                    Parents = new List<string> { "1W8p67Ugspg9Q8MWtz9YJcRqym09KKnmX" }
+                };
+
+                FilesResource.CreateMediaUpload request;
+
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    request = service.Files.Create(fileMetadata, stream, file.ContentType);
+                    request.Fields = "id";
+                    request.Upload();
+                }
+
+                var uploadedFile = request.ResponseBody;
+                string fileId = uploadedFile.Id;
+                // Eliminar el archivo local después de la subida
+                File.Delete(path);
                 return fileId;
             }
 

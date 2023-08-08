@@ -10,16 +10,16 @@ using System.Text;
 using System.IO;
 using FerminToroWeb.GoogleDriveAPI;
 
-namespace UCABPagaloTodoWeb.Controllers
+namespace FerminToroWeb.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApiUrlConfig apiurl;
+        private readonly ApiUrlConfigClass apiurl;
         private HttpClient _httpClient;
         public HomeController(ILogger<HomeController> logger)
         {
-            apiurl = new ApiUrlConfig();
+            apiurl = new ApiUrlConfigClass();
             _logger = logger;
             _httpClient = new HttpClient();
         }
@@ -38,7 +38,7 @@ namespace UCABPagaloTodoWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginAction(string username, string password)
         {
-            var apiUrl = apiurl.ApiUrl + "/login/login";
+            var apiUrl = apiurl.ApiUrl + "/login";
             var requestBody = new { UserName = username, Password = password };
             var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
             {
@@ -89,31 +89,7 @@ namespace UCABPagaloTodoWeb.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        //---------------------------------------------------------------------------------------
-
-        [HttpGet]
-        public ActionResult GetGoogleDriveFiles()
-        {
-            return View(GoogleDriveRepository.GetDriveFiles());
-        }
-
-        [HttpPost]
-        public ActionResult DeleteFile(GoogleDriveFiles file)
-        {
-            GoogleDriveRepository.DeleteFile(file);
-            return RedirectToAction("GetGoogleDriveFiles");
-        }
-
-        [HttpPost]
-        public ActionResult UploadFile(IFormFile file)
-        {
-            GoogleDriveRepository.FileUpload(file);
-            return RedirectToAction("GetGoogleDriveFiles");
-        }
-
-        
+        }        
     }
 }
     

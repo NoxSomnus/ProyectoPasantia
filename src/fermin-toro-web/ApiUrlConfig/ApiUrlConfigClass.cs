@@ -1,9 +1,9 @@
 ﻿namespace FerminToroWeb.ApiUrlConfig
 {
-    public class ApiUrlConfig
+    public class ApiUrlConfigClass
     {
         public string ApiUrl;
-        public ApiUrlConfig() 
+        public ApiUrlConfigClass() 
         {
             ApiUrl = "https://localhost:5001/api";
         }

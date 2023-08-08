@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<style>
+    .user-table {
+        border-collapse: collapse;
+    }
+
+        .user-table th, .user-table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+</style>
+
+<div class="text-center">
+    <h1 class="display-4">Migracion de informacion</h1>
+</div>
+
+<table class="migration-table">
+    <tbody>
+        <tr>
+            <td>Migrar Cursos con Modulos</td>
+            <td>
+                <form asp-action="UploadCoursesCSVView" asp-controller="Admin">
+                    <button class="btn btn-success" type="submit">Ir a opción</button>
+                </form>
+            </td>
+    </tbody>
+</table>
+
