@@ -81,13 +81,12 @@ namespace FerminToroMS.Application.Handlers.Commands
                             Cedula = studentrequest.Cedula,
                             Apellido = studentrequest.Apellido,
                             Correo = studentrequest.Correo,
+                            CorreoSecundario = studentrequest.CorreoSecundario,
                             Direccion_Hab = studentrequest.Direccion,
                             Edad = studentrequest.Edad,
                             Telefono = studentrequest.Telefono,
                             Rango_Edad = studentrequest.Rango_Edad,
                             CreatedAt = studentrequest.Fecha_Creacion,
-                            
-
                         };
                         _dbContext.Estudiantes.Add(estudiante);
                     }
@@ -96,6 +95,7 @@ namespace FerminToroMS.Application.Handlers.Commands
                         student.Es_Regular = studentrequest.Es_Regular;
                         student.Edad = studentrequest.Edad;
                         student.Rango_Edad = student.Rango_Edad;
+                        student.Telefono = student.Telefono;
                         _dbContext.Estudiantes.Update(student);
                     }
                     await _dbContext.SaveEfContextChanges("APP");
