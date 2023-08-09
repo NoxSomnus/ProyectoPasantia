@@ -8,5 +8,17 @@ namespace FerminToroWeb.Controllers
         {
             return View();
         }
+        public IActionResult AdminHome()
+        {
+            return View();
+        }
+        public IActionResult DirectorHome()
+        {
+            return View();
+        }
+        public IActionResult UploadCSVMigrationOptions()
+        {
+            return View();
+        }
     }
 }
