@@ -124,6 +124,7 @@ namespace FerminToroMS.Application.Handlers.Commands
                     {
                         schedule.FechaFin = DateOnly.ParseExact(schedulerequest.FechaInicio, "dd/MM/yyyy", null);
                     }
+                    _dbContext.Cronogramas.Add(schedule);
                     await _dbContext.SaveEfContextChanges("APP");
                 }
 
