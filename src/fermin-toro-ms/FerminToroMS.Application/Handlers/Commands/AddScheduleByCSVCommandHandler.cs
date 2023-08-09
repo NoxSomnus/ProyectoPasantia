@@ -110,8 +110,7 @@ namespace FerminToroMS.Application.Handlers.Commands
                     }
                     var schedule = new CronogramaEntity
                     {
-                        FechaInicio = schedulerequest.FechaInicio,
-                        FechaFin = schedulerequest.FechaFin,
+                        FechaInicio = DateOnly.ParseExact(schedulerequest.FechaInicio, "dd/MM/yyyy", null),               
                         Horario_Dias = schedulerequest.Horario,
                         Regularidad = schedulerequest.Regularidad,
                         Modalidad = schedulerequest.Modalidad,
@@ -121,6 +120,10 @@ namespace FerminToroMS.Application.Handlers.Commands
                         ModuloId = modul.Id,
                         PeriodoId = period.Id
                     };
+                    if (schedulerequest.FechaFin != null)
+                    {
+                        schedule.FechaFin = DateOnly.ParseExact(schedulerequest.FechaInicio, "dd/MM/yyyy", null);
+                    }
                     await _dbContext.SaveEfContextChanges("APP");
                 }
 

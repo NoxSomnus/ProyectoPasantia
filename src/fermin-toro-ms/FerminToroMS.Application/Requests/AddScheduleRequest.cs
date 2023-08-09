@@ -16,8 +16,8 @@ namespace FerminToroMS.Application.Requests
         public RegularidadEnum Regularidad { get; set; }
         public string Modulo { get; set; } = null!;
         public TurnosEnum Turno { get; set; }
-        public DateOnly FechaInicio { get; set; }
-        public DateOnly? FechaFin { get; set; }
+        public string FechaInicio { get; set; } = null!;
+        public string? FechaFin { get; set; }
         public string Horario { get; set; } = null!;
         public ModalidadEnum Modalidad { get; set; }
         public int Semanas { get; set; }
