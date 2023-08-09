@@ -70,8 +70,6 @@ namespace FerminToroMS.Application.Handlers.Queries
         /// <returns>Un objeto UserLoginResponse que contiene información detallada del usuario encontrado.</returns>
         private async Task<LoginResponse> HandleAsync(LoginQuery request)
         {
-            var transaction = _dbContext.BeginTransaction();
-
             try
             {
                 _logger.LogInformation("LoginQueryHandler.HandleAsync");
