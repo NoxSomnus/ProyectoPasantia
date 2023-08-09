@@ -2,6 +2,7 @@
 using FerminToroMS.Core.Database;
 using FerminToroMS.Core.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace FerminToroMS.Application.Handlers.Commands
         private readonly ILogger<AddStudentsByCSVCommandHandler> _logger;
 
         /// <summary>
-        /// Constructor de la clase AddPermissionCommandHandler.
+        /// Constructor de la clase AddStudentsByCSVCommandHandler.
         /// </summary>
         /// <param name="dbContext">El contexto de la base de datos que se utilizará para buscar el usuario.</param>
         /// <param name="logger">El objeto ILogger que se utilizará para registrar la actividad del manejador del comando.</param>
@@ -30,7 +31,7 @@ namespace FerminToroMS.Application.Handlers.Commands
         /// <summary>
         /// Manejador del comando que registra un nuevo permiso al sistema.
         /// </summary>
-        /// <param name="request">El comando AddPermissionCommand que especifica el nombre del nuevo permiso.</param>
+        /// <param name="request">El comando AddStudentsByCSVCommand que especifica el nombre del nuevo permiso.</param>
         /// <param name="cancellationToken">El token de cancelación que puede detener la operación en cualquier momento.</param>
         /// <returns>Un objeto GeneralResponse que contiene información si la operacion fue exitosa o no.</returns>
         public Task<bool> Handle(AddStudentsByCSVCommand request, CancellationToken cancellationToken)
@@ -39,7 +40,7 @@ namespace FerminToroMS.Application.Handlers.Commands
             {
                 if (request == null)
                 {
-                    _logger.LogWarning("AddPermissionCommandHandler.Handle: Request null.");
+                    _logger.LogWarning("AddStudentsByCSVCommandHandler.Handle: Request null.");
 
                     throw new ArgumentNullException(nameof(request));
 
@@ -51,7 +52,7 @@ namespace FerminToroMS.Application.Handlers.Commands
             }
             catch
             {
-                _logger.LogWarning("AddPermissionCommandHandler.Handle: ArgumentNullException");
+                _logger.LogWarning("AddStudentsByCSVCommandHandler.Handle: ArgumentNullException");
                 throw;
             }
             throw new NotImplementedException();
@@ -67,7 +68,7 @@ namespace FerminToroMS.Application.Handlers.Commands
 
             try
             {
-                _logger.LogInformation("AddPermissionCommandHandler.HandleAsync");
+                _logger.LogInformation("AddStudentsByCSVCommandHandler.HandleAsync");
                 foreach (var studentrequest in request._request.Students)
                 {
                     var studentId = Guid.NewGuid();
@@ -86,7 +87,7 @@ namespace FerminToroMS.Application.Handlers.Commands
                             Edad = studentrequest.Edad,
                             Telefono = studentrequest.Telefono,
                             Rango_Edad = studentrequest.Rango_Edad,
-                            CreatedAt = studentrequest.Fecha_Creacion,
+                            Es_Regular = studentrequest.Es_Regular,                            
                         };
                         _dbContext.Estudiantes.Add(estudiante);
                     }
@@ -103,12 +104,12 @@ namespace FerminToroMS.Application.Handlers.Commands
 
                 transaction.Commit();
 
-                _logger.LogInformation("AddPermissionCommandHandler.HandleAsync {Response}", true);
+                _logger.LogInformation("AddStudentsByCSVCommandHandler.HandleAsync {Response}", true);
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error AddPermissionCommandHandler.HandleAsync. {Mensaje}", ex.Message);
+                _logger.LogError(ex, "Error AddStudentsByCSVCommandHandler.HandleAsync. {Mensaje}", ex.Message);
                 transaction.Rollback();
                 throw;
             }

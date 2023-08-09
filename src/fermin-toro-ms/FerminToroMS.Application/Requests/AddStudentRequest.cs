@@ -18,6 +18,5 @@ namespace FerminToroMS.Application.Requests
         public int Edad { get; set; }
         public string Rango_Edad { get; set; } = null!;
         public bool Es_Regular { get; set; }
-        public DateTime Fecha_Creacion { get; set; }
     }
 }
