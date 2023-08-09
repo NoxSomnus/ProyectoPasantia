@@ -7,18 +7,19 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using UCABPagaloTodoWeb.Models;
+using System.IO;
+using FerminToroWeb.GoogleDriveAPI;
 
-namespace UCABPagaloTodoWeb.Controllers
+namespace FerminToroWeb.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApiUrlConfig apiurl;
+        private readonly ApiUrlConfigClass apiurl;
         private HttpClient _httpClient;
         public HomeController(ILogger<HomeController> logger)
         {
-            apiurl = new ApiUrlConfig();
+            apiurl = new ApiUrlConfigClass();
             _logger = logger;
             _httpClient = new HttpClient();
         }
@@ -37,7 +38,7 @@ namespace UCABPagaloTodoWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginAction(string username, string password)
         {
-            var apiUrl = apiurl.ApiUrl + "/login/login";
+            var apiUrl = apiurl.ApiUrl + "/login";
             var requestBody = new { UserName = username, Password = password };
             var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
             {
@@ -88,6 +89,7 @@ namespace UCABPagaloTodoWeb.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        }        
     }
 }
+    

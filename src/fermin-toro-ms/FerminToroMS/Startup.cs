@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using RestSharp;
 using MediatR;
 using FerminToroMS.Application.Handlers.Queries;
+using FerminToroMS.Core.Interfaces;
+using FerminToroMS.Application.Rabbit;
+using FerminToroMS.Infrastructure.Services;
 
 namespace FerminToroMS;
 
@@ -47,7 +50,9 @@ public class Startup
         _appSettings = appSettingsSection.Get<AppSettings>();
         services.Configure<AppSettings>(appSettingsSection);
         services.AddTransient<IFerminToroDbContext, FerminToroDbContext>();
-
+        services.AddTransient<IRabbitProducerCSV, RabbitProducerCSV>();
+        services.AddTransient<IRabbitConsumerCSV, RabbitConsumerCSV>();
+        services.AddTransient<IGoogleDriveService, GoogleDriveService>();
         services.AddProviders(Configuration, Folder, _appSettings, environment);
 
         services.AddMediatR(
