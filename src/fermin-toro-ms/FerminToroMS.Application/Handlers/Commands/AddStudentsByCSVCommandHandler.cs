@@ -33,7 +33,7 @@ namespace FerminToroMS.Application.Handlers.Commands
         /// </summary>
         /// <param name="request">El comando AddStudentsByCSVCommand que especifica el nombre del nuevo permiso.</param>
         /// <param name="cancellationToken">El token de cancelación que puede detener la operación en cualquier momento.</param>
-        /// <returns>Un objeto GeneralResponse que contiene información si la operacion fue exitosa o no.</returns>
+        /// <returns>Un tipo bool que contiene información si la operacion fue exitosa o no.</returns>
         public Task<bool> Handle(AddStudentsByCSVCommand request, CancellationToken cancellationToken)
         {
             try
@@ -58,10 +58,10 @@ namespace FerminToroMS.Application.Handlers.Commands
             throw new NotImplementedException();
         }
         /// <summary>
-        /// Método asincronico que maneja el registro del nuevo empleado.
+        /// Método asincronico que maneja el registro de los estudiantes.
         /// </summary>
-        /// <param name="request">El comando EmployeeSignUpCommand que especifica los datos del nuevo empleado.</param>
-        /// <returns>Un objeto GeneralResponse que contiene información de si la operacion de registro fue exitosa o no.</returns>
+        /// <param name="request">El comando AddStudentsByCSVCommand que especifica los datos de los estudiantes a guardar.</param>
+        /// <returns>Un tipo bool que contiene información de si la operacion de registro fue exitosa o no.</returns>
         private async Task<bool> HandleAsync(AddStudentsByCSVCommand request)
         {
             var transaction = _dbContext.BeginTransaction();
