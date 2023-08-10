@@ -1,0 +1,72 @@
+﻿@{
+    var username = ViewContext.HttpContext.Session.GetString("Username");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Academia Cisco Fermin Toro</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/MenuAdministradorStyle.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo-wrap">
+                <img src="~/img/logos/Logo_white_letras.png" class="logo">
+                <div class="user-type">Administrador</div>
+            </div>
+            <ul>
+                <li id="inicio-link">
+                    @using (Html.BeginForm("MenuAdministrador", "Admin", FormMethod.Post))
+                    {
+                        <button id="boton-Inicio" type="submit">Inicio</button>
+                    }
+                </li>
+                <li id="usuarios-link">
+                    @using (Html.BeginForm("UploadCSVMigrationOptions", "Admin", FormMethod.Post))
+                    {
+                        <button id="boton-VerUsuarios" type="submit">Migración</button>
+                    }
+                </li>
+            </ul>
+            <img src="~/img/user.jfif" class="user-pic" onclick="toggleMenu()">
+            <div class="sub-menu-wrap" id="subMenu">
+                <div class="sub-menu">
+                    <div class="uer-info">
+                        <img src="~/img/user.jfif">
+                        <h3>@username</h3>
+                    </div>
+                    <hr>
+                    <a href="" class="sub-menu-link">
+                        <img src="~/img/profile.png">
+                        <p>Editar Información</p>
+                    </a>
+                    <a href="/home/logout" class="sub-menu-link">
+                        <img src="~/img/logout.png">
+                        <p>Cerrar Sesión</p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - Academia Fermin Toro - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/MenuAdministradorScript.js" sp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

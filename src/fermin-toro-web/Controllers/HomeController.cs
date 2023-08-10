@@ -7,10 +7,8 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.IO;
-using FerminToroWeb.GoogleDriveAPI;
 
-namespace FerminToroWeb.Controllers
+namespace UCABPagaloTodoWeb.Controllers
 {
     public class HomeController : Controller
     {
@@ -35,35 +33,55 @@ namespace FerminToroWeb.Controllers
             return View(new LoginViewModel());
         }
 
+        public IActionResult Login()
+        {
+
+            return View(new LoginViewModel());
+        }
+
         [HttpPost]
         public async Task<IActionResult> LoginAction(string username, string password)
         {
-            var apiUrl = apiurl.ApiUrl + "/login";
-            var requestBody = new { UserName = username, Password = password };
-            var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+            try
             {
-                NullValueHandling = NullValueHandling.Ignore
-            }); // Serializa el body a formato JSON
-            var response = await _httpClient.PostAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
-            // Envía la solicitud POST con el body en formato JSON
-            if (response.IsSuccessStatusCode)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
-                HttpContext.Session.SetString("UserId", loginResponse.Id.ToString());
-                var esDirector = "No";
-                if (loginResponse.IsDirector) 
+                var apiUrl = apiurl.ApiUrl + "/login";
+                var requestBody = new { UserName = username, Password = password };
+                var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
                 {
-                    esDirector = "Si";
+                    NullValueHandling = NullValueHandling.Ignore
+                }); // Serializa el body a formato JSON
+                var response = await _httpClient.PostAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+                // Envía la solicitud POST con el body en formato JSON
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
+
+                    var esDirector = "No";
+                    if (loginResponse.IsDirector)
+                    {
+                        esDirector = "Si";
+                        HttpContext.Session.SetString("EsDirector", esDirector);
+                    }
+                    HttpContext.Session.SetString("UserId", loginResponse.Id.ToString());
+                    HttpContext.Session.SetString("Username", loginResponse.Username);
                     HttpContext.Session.SetString("EsDirector", esDirector);
-                    return View("~/Views/Admin/DirectorHome.cshtml");
+                    return RedirectToAction("MenuAdministrador","Admin"); 
                 }
-                HttpContext.Session.SetString("EsDirector", esDirector);
-                return View("~/Views/Admin/AdminHome.cshtml"); // si te da error de login action es este return, cambia la vista que retorna
+                if (response.StatusCode == HttpStatusCode.Unauthorized) { return RedirectToAction("InvalidPasswordView", "Home"); }
+                if (response.StatusCode == HttpStatusCode.NotFound) { return RedirectToAction("UserNotFoundView", "Home"); }
+                return RedirectToAction("SomethingWentWrongView", "Home");
             }
-            if (response.StatusCode == HttpStatusCode.Unauthorized) { return RedirectToAction("InvalidPasswordView", "Home"); }
-            if (response.StatusCode == HttpStatusCode.NotFound) { return RedirectToAction("UserNotFoundView", "Home"); }
-            return RedirectToAction("SomethingWentWrongView", "Home");
+            catch (HttpRequestException) 
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return Redirect("Login");
         }
 
         public IActionResult Privacy()
@@ -89,7 +107,6 @@ namespace FerminToroWeb.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }        
+        }
     }
 }
-    

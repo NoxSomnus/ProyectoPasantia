@@ -1,31 +1,72 @@
 ﻿@{
     ViewData["Title"] = "Inicio";
-    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
 }
 <style>
-    .user-table {
+    .migration-table {
         border-collapse: collapse;
     }
 
-        .user-table th, .user-table td {
+        .migration-table th, .migration-table td {
             padding: 10px;
             border: 1px solid #ccc;
         }
+
+    .table-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50vh; 
+    }
 </style>
 
+
 <div class="text-center">
-    <h1 class="display-4">Migracion de informacion</h1>
+    <h1 class="display-4">Migración de información</h1>
 </div>
 
-<table class="migration-table">
-    <tbody>
-        <tr>
-            <td>Migrar Cursos con Modulos</td>
-            <td>
-                <form asp-action="UploadCoursesCSVView" asp-controller="Admin">
-                    <button class="btn btn-success" type="submit">Ir a opción</button>
-                </form>
-            </td>
-    </tbody>
-</table>
+<div class="table-container">
+    <table class="migration-table">
+        <thead>
+            <tr>
+                <th>Opción</th>
+                <th>Ir</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Migrar Cursos con Módulos</td>
+                <td>
+                    <form asp-action="UploadCoursesCSVView" asp-controller="Admin">
+                        <button class="btn btn-success" type="submit">Ir a opción</button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Migrar Precio de los Cursos</td>
+                <td>
+                    <form asp-action="UploadCoursesCSVView" asp-controller="Admin">
+                        <button class="btn btn-success" type="submit">Ir a opción</button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Migrar Cronogramas</td>
+                <td>
+                    <form asp-action="UploadCoursesCSVView" asp-controller="Admin">
+                        <button class="btn btn-success" type="submit">Ir a opción</button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Migrar Estudiantes</td>
+                <td>
+                    <form asp-action="UploadCoursesCSVView" asp-controller="Admin">
+                        <button class="btn btn-success" type="submit">Ir a opción</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 

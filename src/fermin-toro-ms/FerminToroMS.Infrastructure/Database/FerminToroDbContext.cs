@@ -32,6 +32,8 @@ public class FerminToroDbContext : DbContext, IFerminToroDbContext
     public virtual DbSet<PermisosEntity> Permisos { get; set; } = null!;
     public virtual DbSet<Precio_Mod_TurnoEntity> Precios { get; set; } = null!;
     public virtual DbSet<PromocionEntity> Promociones { get; set; } = null!;
+    public virtual DbSet<PaisesEntity> Paises { get; set; } = null!;
+    public virtual DbSet<EstadosVnzlaEntity> Estados_Venezuela { get; set; } = null!;
     public DbContext DbContext
     {
         get

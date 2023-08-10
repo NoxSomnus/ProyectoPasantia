@@ -12,7 +12,7 @@ namespace FerminToroWeb.Controllers
     {
         private readonly ApiUrlConfigClass apiurl;
         private HttpClient _httpClient;
-        public DriveController(ILogger<HomeController> logger)
+        public DriveController(ILogger<DriveController> logger)
         {
             apiurl = new ApiUrlConfigClass();
             _httpClient = new HttpClient();

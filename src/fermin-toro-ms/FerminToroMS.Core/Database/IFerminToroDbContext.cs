@@ -25,6 +25,8 @@ namespace FerminToroMS.Core.Database
         DbSet<PermisosEntity> Permisos { get; }
         DbSet<Precio_Mod_TurnoEntity> Precios { get; }
         DbSet<PromocionEntity> Promociones { get; }
+        DbSet<PaisesEntity> Paises { get; }
+        DbSet<EstadosVnzlaEntity> Estados_Venezuela { get; }
         DbContext DbContext
         {
             get;
