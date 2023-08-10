@@ -20,7 +20,6 @@ namespace FerminToroMS.Application.Requests
         public string? FechaFin { get; set; }
         public string Horario { get; set; } = null!;
         public ModalidadEnum Modalidad { get; set; }
-        public int Semanas { get; set; }
 
     }
 }

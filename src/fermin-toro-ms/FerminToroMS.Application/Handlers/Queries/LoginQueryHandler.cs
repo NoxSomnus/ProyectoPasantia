@@ -92,6 +92,7 @@ namespace FerminToroMS.Application.Handlers.Queries
                     return new LoginResponse
                     {
                         Id = user.Id,
+                        Username = user.Username,
                         Success = true,
                         IsDirector = user.esDirector
                     };
@@ -99,6 +100,7 @@ namespace FerminToroMS.Application.Handlers.Queries
                 return new LoginResponse
                 {
                     Id = user.Id,
+                    Username = user.Username,
                     Success = true,
                     IsDirector = false
                 };

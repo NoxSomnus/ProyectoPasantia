@@ -9,6 +9,7 @@ namespace FerminToroMS.Application.Responses
     public class LoginResponse
     {
         public Guid Id { get; set; }
+        public string Username { get; set; } = null!;
         public bool Success { get; set; }// indica si la conexion fue exitosa o no
         public bool IsDirector { get; set; }
     }

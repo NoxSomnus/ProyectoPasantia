@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FerminToroWeb.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FerminToroWeb.Controllers
 {
@@ -8,9 +9,14 @@ namespace FerminToroWeb.Controllers
         {
             return View();
         }
-        public IActionResult AdminHome()
+        [Route("Admin/")]
+        public IActionResult MenuAdministrador()
         {
-            return View();
+            var model = new AdminMenuModel
+            {
+                HttpContext = HttpContext
+            };
+            return View(model);
         }
         public IActionResult DirectorHome()
         {

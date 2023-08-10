@@ -1,5 +1,6 @@
 ﻿using FerminToroMS.Application.Commands;
 using FerminToroMS.Application.Exceptions;
+using FerminToroMS.Application.RefactoredMethods;
 using FerminToroMS.Core.Database;
 using FerminToroMS.Core.Entities;
 using MediatR;
@@ -66,14 +67,13 @@ namespace FerminToroMS.Application.Handlers.Commands
         private async Task<bool> HandleAsync(AddScheduleByCSVCommand request)
         {
             var transaction = _dbContext.BeginTransaction();
-
             try
             {
+                var enumcheck = new EnumChecks();
                 _logger.LogInformation("AddScheduleByCSVCommandHandler.HandleAsync");
                 foreach (var schedulerequest in request._request.Schedules)
                 {
                     var periodId = Guid.NewGuid();
-                    var scheduleId = Guid.NewGuid();
                     var period = _dbContext.Periodos.FirstOrDefault(c => c.NombrePeriodo == schedulerequest.NombrePerido
                     && c.Año == schedulerequest.Año);
                     if (period == null)
@@ -108,28 +108,37 @@ namespace FerminToroMS.Application.Handlers.Commands
                         throw new BadCSVRequest("El archivo .csv no cumple con el formato esperado, ingrese el nombre" +
                             "de los modulos como esta registrado en el sistema");
                     }
-                    var schedule = new CronogramaEntity
+                    var schedule = _dbContext.Cronogramas.FirstOrDefault(c => c.ModuloId == modul.Id 
+                    && c.PeriodoId == period.Id && c.Regularidad == schedulerequest.Regularidad 
+                    && c.Turno == schedulerequest.Turno && c.Modalidad == schedulerequest.Modalidad);
+                    if (schedule == null)
                     {
-                        FechaInicio = DateOnly.ParseExact(schedulerequest.FechaInicio, "dd/MM/yyyy", null),               
-                        Horario_Dias = schedulerequest.Horario,
-                        Regularidad = schedulerequest.Regularidad,
-                        Modalidad = schedulerequest.Modalidad,
-                        Turno = schedulerequest.Turno,
-                        Duracion_Semanas = schedulerequest.Semanas,
-                        NroHoras = 80,
-                        ModuloId = modul.Id,
-                        PeriodoId = period.Id
-                    };
-                    if (schedulerequest.FechaFin != null)
-                    {
-                        schedule.FechaFin = DateOnly.ParseExact(schedulerequest.FechaInicio, "dd/MM/yyyy", null);
+                        schedule = new CronogramaEntity
+                        {
+                            FechaInicio = DateOnly.ParseExact(schedulerequest.FechaInicio, "dd/MM/yyyy", null),
+                            Horario_Dias = schedulerequest.Horario,
+                            Regularidad = schedulerequest.Regularidad,
+                            Modalidad = schedulerequest.Modalidad,
+                            Turno = schedulerequest.Turno,
+                            Duracion_Semanas = enumcheck.RegularidadCheck(schedulerequest.Regularidad),
+                            NroHoras = 80,
+                            ModuloId = modul.Id,
+                            PeriodoId = period.Id
+                        };
+                        if (schedulerequest.FechaFin != null)
+                        {
+                            schedule.FechaFin = DateOnly.ParseExact(schedulerequest.FechaFin, "dd/MM/yyyy", null);
+                        }
+                        _dbContext.Cronogramas.Add(schedule);
                     }
-                    _dbContext.Cronogramas.Add(schedule);
+                    else 
+                    {
+                        schedule.FechaInicio = DateOnly.ParseExact(schedulerequest.FechaInicio, "dd/MM/yyyy", null);
+                        _dbContext.Cronogramas.Update(schedule);
+                    }
                     await _dbContext.SaveEfContextChanges("APP");
                 }
-
                 transaction.Commit();
-
                 _logger.LogInformation("AddScheduleByCSVCommandHandler.HandleAsync {Response}", true);
                 return true;
             }

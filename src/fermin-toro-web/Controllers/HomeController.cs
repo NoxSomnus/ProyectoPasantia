@@ -34,12 +34,18 @@ namespace UCABPagaloTodoWeb.Controllers
             return View(new LoginViewModel());
         }
 
+        public IActionResult Login()
+        {
+
+            return View(new LoginViewModel());
+        }
+
         [HttpPost]
         public async Task<IActionResult> LoginAction(string username, string password)
         {
             try
             {
-                var apiUrl = apiurl.ApiUrl + "/login/login";
+                var apiUrl = apiurl.ApiUrl + "/login";
                 var requestBody = new { UserName = username, Password = password };
                 var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
                 {
@@ -51,25 +57,32 @@ namespace UCABPagaloTodoWeb.Controllers
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
-                    HttpContext.Session.SetString("UserId", loginResponse.Id.ToString());
+
                     var esDirector = "No";
                     if (loginResponse.IsDirector)
                     {
                         esDirector = "Si";
                         HttpContext.Session.SetString("EsDirector", esDirector);
-                        return View("~/Views/Admin/DirectorHome.cshtml");
                     }
+                    HttpContext.Session.SetString("UserId", loginResponse.Id.ToString());
+                    HttpContext.Session.SetString("Username", loginResponse.Username);
                     HttpContext.Session.SetString("EsDirector", esDirector);
-                    return View("~/Views/Admin/AdminHome.cshtml"); // si te da error de login action es este return, cambia la vista que retorna
+                    return RedirectToAction("MenuAdministrador","Admin"); 
                 }
                 if (response.StatusCode == HttpStatusCode.Unauthorized) { return RedirectToAction("InvalidPasswordView", "Home"); }
                 if (response.StatusCode == HttpStatusCode.NotFound) { return RedirectToAction("UserNotFoundView", "Home"); }
                 return RedirectToAction("SomethingWentWrongView", "Home");
             }
-            catch (HttpRequestException ex) 
+            catch (HttpRequestException) 
             {
                 return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
             }
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return Redirect("Login");
         }
 
         public IActionResult Privacy()
