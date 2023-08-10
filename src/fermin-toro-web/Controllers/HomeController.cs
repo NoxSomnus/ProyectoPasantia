@@ -7,18 +7,17 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using UCABPagaloTodoWeb.Models;
 
 namespace UCABPagaloTodoWeb.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApiUrlConfig apiurl;
+        private readonly ApiUrlConfigClass apiurl;
         private HttpClient _httpClient;
         public HomeController(ILogger<HomeController> logger)
         {
-            apiurl = new ApiUrlConfig();
+            apiurl = new ApiUrlConfigClass();
             _logger = logger;
             _httpClient = new HttpClient();
         }

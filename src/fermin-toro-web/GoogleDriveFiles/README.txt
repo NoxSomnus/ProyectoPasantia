@@ -1,0 +1,1 @@
+This folder is used to save temporaly the files that will be upload to Google Drive

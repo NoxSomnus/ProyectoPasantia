@@ -1,4 +1,4 @@
-namespace UCABPagaloTodoWeb.Models
+namespace FerminToroWeb.Models
 {
     public class ErrorViewModel
     {

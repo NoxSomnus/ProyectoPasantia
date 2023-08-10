@@ -74,6 +74,8 @@ namespace FerminToroMS.Application.Handlers.Commands
             try
             {
                 _logger.LogInformation("AddPermissionCommandHandler.HandleAsync");
+                //borra el primero
+                request._request.Courses.Remove(request._request.Courses.First());
                 foreach (var courserequest in request._request.Courses)
                 {
                     var courseId = Guid.NewGuid();
@@ -88,12 +90,17 @@ namespace FerminToroMS.Application.Handlers.Commands
                         _dbContext.Cursos.Add(curso);
                         course = curso;
                     }
-                    var modul = new ModuloEntity
+                    var modul = _dbContext.Modulos.FirstOrDefault(c => c.Nombre == courserequest.ModulName
+                    && c.CursoId == course.Id);
+                    if (modul == null)
                     {
-                        CursoId= course.Id,
-                        Nombre = courserequest.ModulName
-                    };
-                    _dbContext.Modulos.Add(modul);
+                        modul = new ModuloEntity
+                        {
+                            CursoId = course.Id,
+                            Nombre = courserequest.ModulName
+                        };
+                        _dbContext.Modulos.Add(modul);
+                    }
                     await _dbContext.SaveEfContextChanges("APP");
                 }
 

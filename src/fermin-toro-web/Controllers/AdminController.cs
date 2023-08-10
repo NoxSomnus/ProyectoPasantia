@@ -26,5 +26,9 @@ namespace FerminToroWeb.Controllers
         {
             return View();
         }
+        public IActionResult UploadCoursesCSVAction()
+        {
+            return RedirectToAction("UploadCoursesCSVFile", "Drive");
+        }
     }
 }
