@@ -70,7 +70,7 @@ namespace UCABPagaloTodoWeb.Controllers
                 }
                 if (response.StatusCode == HttpStatusCode.Unauthorized) { return RedirectToAction("InvalidPasswordView", "Home"); }
                 if (response.StatusCode == HttpStatusCode.NotFound) { return RedirectToAction("UserNotFoundView", "Home"); }
-                return RedirectToAction("SomethingWentWrongView", "Home");
+                return RedirectToAction("SomethingWentWrongView", "Messages");
             }
             catch (HttpRequestException) 
             {

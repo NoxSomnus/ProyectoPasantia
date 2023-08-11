@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="GoogleDriveFiles\" />
-    <Folder Include="Responses\" />
   </ItemGroup>
 
   <ItemGroup>

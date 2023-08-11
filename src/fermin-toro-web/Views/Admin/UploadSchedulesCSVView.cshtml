@@ -1,13 +1,13 @@
 ﻿@{
-    ViewData["Title"] = "Cargar Cursos";
+    ViewData["Title"] = "Cargar Cronogramas";
     Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Subir Cursos y sus modulos</h1>
+    <h1 class="display-4">Subir Cronogramas</h1>
 </div>
 
-<form method="post" enctype="multipart/form-data" asp-controller="Drive" asp-action="UploadCoursesCSVFile">
+<form method="post" enctype="multipart/form-data" asp-controller="Drive" asp-action="UploadSchedulesCSVFile">
     <div>
         <label for="file">Seleccionar archivo(.CSV):</label>
         <input type="file" name="file" id="file" />

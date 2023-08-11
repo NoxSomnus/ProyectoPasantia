@@ -18,17 +18,20 @@ namespace FerminToroWeb.Controllers
             };
             return View(model);
         }
-        public IActionResult DirectorHome()
-        {
-            return View();
-        }
         public IActionResult UploadCSVMigrationOptions()
         {
             return View();
         }
-        public IActionResult UploadCoursesCSVAction()
+        //------------------------------------------------------------------
+        public IActionResult UploadCoursesCSVView()
         {
-            return RedirectToAction("UploadCoursesCSVFile", "Drive");
+            return View();
         }
+        //------------------------------------------------------------------
+        public IActionResult UploadSchedulesCSVView()
+        {
+            return View();
+        }
+        
     }
 }

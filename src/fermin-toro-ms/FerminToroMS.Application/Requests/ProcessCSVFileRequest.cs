@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FerminToroMS.Application.Requests
 {
-    public class ProcessCoursesCSVFileRequest
+    public class ProcessCSVFileRequest
     {
         public string DriveFileId { get; set; } = null!;
     }
