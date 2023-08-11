@@ -17,6 +17,7 @@ namespace FerminToroWeb.Controllers
             apiurl = new ApiUrlConfigClass();
             _httpClient = new HttpClient();
         }
+
         [HttpGet]
         public ActionResult GetGoogleDriveFiles()
         {
@@ -49,7 +50,7 @@ namespace FerminToroWeb.Controllers
             var Id = GoogleDriveRepository.FileUploadCSV(file);
             if (Id == null) 
             {
-                return Redirect("FailedUploadFileView");
+                return RedirectToAction("UploadFailedView", "Messages");
             }
             var apiUrl = apiurl.ApiUrl + "/drive/processcoursescsvfile";
             var requestBody = new { drivefileid = Id };
@@ -62,12 +63,38 @@ namespace FerminToroWeb.Controllers
             {
                 if (response.StatusCode == HttpStatusCode.BadRequest) 
                 {
-                    return View("~/Views/Admin/UploadCSVFileBadRequest.cshtml"); 
+                    return RedirectToAction("BadCSVFormat", "Messages"); 
                 }
 
-                return View("~/Views/Admin/SomethingWentWrongView.cshtml");
+                return RedirectToAction("SomethingWentWrongView", "Messages");
             }
-            return View("~/Views/Admin/UploadCSVSucessfulView.cshtml");
+            return RedirectToAction("SuccessfulMessageView", "Messages");
+        }
+        [HttpPost]
+        public async Task<IActionResult> UploadSchedulesCSVFile(IFormFile file)
+        {
+            var Id = GoogleDriveRepository.FileUploadCSV(file);
+            if (Id == null)
+            {
+                return RedirectToAction("UploadFailedView", "Messages");
+            }
+            var apiUrl = apiurl.ApiUrl + "/drive/processschedulescsvfile";
+            var requestBody = new { drivefileid = Id };
+            var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            }); // Serializa el body a formato JSON
+            var response = await _httpClient.PostAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return RedirectToAction("BadCSVFormat", "Messages");
+                }
+
+                return RedirectToAction("SomethingWentWrongView", "Messages");
+            }
+            return RedirectToAction("SuccessfulMessageView", "Messages");
         }
     }
 }

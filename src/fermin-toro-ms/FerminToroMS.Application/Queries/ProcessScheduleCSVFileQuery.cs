@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace FerminToroMS.Application.Queries
 {
-    public class ProcessCoursesCSVFileQuery : IRequest<bool>
+    public class ProcessScheduleCSVFileQuery : IRequest<bool>
     {
         public ProcessCSVFileRequest _request { get; set; }
 
-        public ProcessCoursesCSVFileQuery(ProcessCSVFileRequest request)
+        public ProcessScheduleCSVFileQuery(ProcessCSVFileRequest request)
         {
             _request = request;
         }
     }
+
 }

@@ -21,7 +21,7 @@ namespace FerminToroMS.Controllers
         [HttpPost("ProcessCoursesCSVFile")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> ProcessCoursesCSVFile([FromBody] ProcessCoursesCSVFileRequest request)
+        public async Task<ActionResult> ProcessCoursesCSVFile([FromBody] ProcessCSVFileRequest request)
         {
             _logger.LogInformation("Entrando al metodo que procesa el archivo del firebase");
             try
@@ -31,6 +31,30 @@ namespace FerminToroMS.Controllers
                 return Ok(response);
             }
             catch (BadCSVRequest ex) 
+            {
+                _logger.LogError("Ocurrio un error en la lectura del archivo. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los valores de prueba. Exception: " + ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing the debt file.");
+            }
+        }
+
+        [HttpPost("ProcessSchedulesCSVFile")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ProcessSchedulesCSVFile([FromBody] ProcessCSVFileRequest request)
+        {
+            _logger.LogInformation("Entrando al metodo que procesa el archivo de google drive");
+            try
+            {
+                var query = new ProcessScheduleCSVFileQuery(request);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (BadCSVRequest ex)
             {
                 _logger.LogError("Ocurrio un error en la lectura del archivo. Exception: " + ex);
                 return BadRequest(ex.Message);

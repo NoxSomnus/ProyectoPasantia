@@ -1,7 +1,6 @@
 ﻿@{
     var username = ViewContext.HttpContext.Session.GetString("Username");
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,6 +25,12 @@
                     }
                 </li>
                 <li id="usuarios-link">
+                    @using (Html.BeginForm("Add", "Employee", FormMethod.Post))
+                    {
+                        <button id="boton-VerUsuarioss" type="submit">Añadir Empleado</button>
+                    }
+                </li>
+                <li id="migration-link">
                     @using (Html.BeginForm("UploadCSVMigrationOptions", "Admin", FormMethod.Post))
                     {
                         <button id="boton-VerUsuarios" type="submit">Migración</button>
@@ -53,6 +58,7 @@
         </nav>
     </header>
     <div class="container">
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

@@ -108,14 +108,16 @@ namespace FerminToroMS.Application.Handlers.Commands
                         throw new BadCSVRequest("El archivo .csv no cumple con el formato esperado, ingrese el nombre" +
                             "de los modulos como esta registrado en el sistema");
                     }
+                    var fechainicio = "";
                     var schedule = _dbContext.Cronogramas.FirstOrDefault(c => c.ModuloId == modul.Id 
                     && c.PeriodoId == period.Id && c.Regularidad == schedulerequest.Regularidad 
                     && c.Turno == schedulerequest.Turno && c.Modalidad == schedulerequest.Modalidad);
+                    fechainicio = schedulerequest.FechaInicio + "/" + schedulerequest.Año;
                     if (schedule == null)
                     {
                         schedule = new CronogramaEntity
                         {
-                            FechaInicio = DateOnly.ParseExact(schedulerequest.FechaInicio, "dd/MM/yyyy", null),
+                            FechaInicio = DateOnly.ParseExact(fechainicio, "dd/MM/yyyy", null),
                             Horario_Dias = schedulerequest.Horario,
                             Regularidad = schedulerequest.Regularidad,
                             Modalidad = schedulerequest.Modalidad,
@@ -125,7 +127,7 @@ namespace FerminToroMS.Application.Handlers.Commands
                             ModuloId = modul.Id,
                             PeriodoId = period.Id
                         };
-                        if (schedulerequest.FechaFin != null)
+                        if (schedulerequest.FechaFin != "")
                         {
                             schedule.FechaFin = DateOnly.ParseExact(schedulerequest.FechaFin, "dd/MM/yyyy", null);
                         }
@@ -133,7 +135,7 @@ namespace FerminToroMS.Application.Handlers.Commands
                     }
                     else 
                     {
-                        schedule.FechaInicio = DateOnly.ParseExact(schedulerequest.FechaInicio, "dd/MM/yyyy", null);
+                        schedule.FechaInicio = DateOnly.ParseExact(fechainicio, "dd/MM/yyyy", null);
                         _dbContext.Cronogramas.Update(schedule);
                     }
                     await _dbContext.SaveEfContextChanges("APP");
