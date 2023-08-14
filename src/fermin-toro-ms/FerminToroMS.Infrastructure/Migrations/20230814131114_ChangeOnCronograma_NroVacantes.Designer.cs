@@ -3,6 +3,7 @@ using System;
 using FerminToroMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FerminToroMS.Infrastructure.Migrations
 {
     [DbContext(typeof(FerminToroDbContext))]
-    partial class UCABPagaloTodoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230814131114_ChangeOnCronograma_NroVacantes")]
+    partial class ChangeOnCronograma_NroVacantes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,7 +111,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<int>("NroHoras")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("NroVacantes")
+                    b.Property<int>("NroVacantes")
                         .HasColumnType("integer");
 
                     b.Property<Guid>("PeriodoId")

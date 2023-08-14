@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Cargar Estudiantes";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Subir Estudiantes</h1>
+</div>
+
+<form method="post" enctype="multipart/form-data" asp-controller="Drive" asp-action="UploadStudentsCSVFile">
+    <div>
+        <label for="file">Seleccionar archivo(.CSV):</label>
+        <input type="file" name="file" id="file" />
+    </div>
+    <div>
+        <button type="submit">Subir archivo</button>
+    </div>
+</form>

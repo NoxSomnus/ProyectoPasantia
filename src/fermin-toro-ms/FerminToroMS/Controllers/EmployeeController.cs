@@ -2,6 +2,7 @@
 using FerminToroMS.Application.Exceptions;
 using FerminToroMS.Application.Queries;
 using FerminToroMS.Application.Requests;
+using FerminToroMS.Application.Responses;
 using FerminToroMS.Base;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -81,6 +82,46 @@ namespace FerminToroMS.Controllers
             {
                 _logger.LogError(ex, "Ocurrió un error al consultar los permisos");
                 return StatusCode(500, "Ocurrió un error al consultar los permisos. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        [HttpGet("AllEmployees")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> AllEmployees()
+        {
+            _logger.LogInformation("Entrando al metodo que consulta todos los empleados del sistema");
+            try
+            {
+                var query = new AllEmployeesQuery();
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los empleados");
+                return StatusCode(500, "Ocurrió un error al consultar los empleados. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        [HttpGet("byId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> byId([FromQuery] Guid id)
+        {
+            _logger.LogInformation("Entrando al metodo que consulta un empleado por Id");
+            try
+            {
+                var query = new EmployeeByIdQuery(id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los empleados");
+                return StatusCode(500, "Ocurrió un error al consultar los empleados. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
         }
 

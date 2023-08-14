@@ -25,15 +25,15 @@
                     }
                 </li>
                 <li id="usuarios-link">
-                    @using (Html.BeginForm("Add", "Employee", FormMethod.Post))
+                    @using (Html.BeginForm("AdminEmployee", "Admin", FormMethod.Post))
                     {
-                        <button id="boton-VerUsuarioss" type="submit">Añadir Empleado</button>
+                        <button id="boton-VerUsuarioss" type="submit">Administrar Empleados</button>
                     }
                 </li>
                 <li id="migration-link">
                     @using (Html.BeginForm("UploadCSVMigrationOptions", "Admin", FormMethod.Post))
                     {
-                        <button id="boton-VerUsuarios" type="submit">Migración</button>
+                        <button id="boton-VerUsuarios" type="submit">Administrar Migraciones</button>
                     }
                 </li>
             </ul>
