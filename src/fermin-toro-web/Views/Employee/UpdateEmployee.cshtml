@@ -7,7 +7,7 @@
 
 <div class="col-md-12 col-sm-12">
     <div class="contenedorlogin">
-        <form asp-action="AddAction" asp-controller="Employee" method="post">
+        <form asp-action="UpdateAction" asp-controller="Employee" method="post">
             <div>
                 <label>Permisos asignados</label>
 
@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <button type="button" id="mostrar-formulario">Mostrar formulario</button>
+            <button type="button" id="mostrar-formulario">Cambiar datos básicos</button>
 
             <script>
                 document.getElementById("mostrar-formulario").addEventListener("click", function (event) {
@@ -63,7 +63,9 @@
                     formulario.style.display = formulario.style.display === "none" ? "block" : "none";
                 });
             </script>
+
             <div class="form-group">
+                <br />
                 <label>Es Administrador</label>
                 <input type="checkbox" asp-for="esAdmin" class="form-check-input">
             </div>
@@ -76,7 +78,7 @@
                 <input type="checkbox" asp-for="esDirector" class="form-check-input">
             </div>
             <div class="botones">
-                <button type="submit" class="btn btn-success">Registrar Empleado</button>
+                <button type="submit" class="btn btn-success">Actualizar Empleado</button>
                 <a class="btn btn-danger" asp-area="" asp-controller="Admin" asp-action="MenuAdministrador">Cancelar</a>
             </div>
         </form>

@@ -94,6 +94,46 @@ namespace FerminToroWeb.Controllers
             }
         }
 
+        public async Task<IActionResult> UpdateAction(UpdateEmployeeModel _usuario)
+        {
+            try
+            {
+                var permissionsAssigned = new List<AssignPermissionRequest>();
+                foreach (var permissions in _usuario.permisos_asignados)
+                {
+                    var permiso = new AssignPermissionRequest { PermisoId = permissions.IdPermiso };
+                    permissionsAssigned.Add(permiso);
+                }
+                var apiUrl = apiurl.ApiUrl + "/employee/update";
+                var requestBody = new
+                {
+                    cedula = _usuario.Cedula,
+                    nombre = _usuario.Nombre,
+                    apellido = _usuario.Apellido,
+                    correo = _usuario.Correo,
+                    username = _usuario.Username,
+                    esAdmin = _usuario.esAdmin,
+                    esDirector = _usuario.esDirector,
+                    esInstructor = _usuario.esInstructor,
+                    permisos = permissionsAssigned
+                };
+                var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                }); // Serializa el body a formato JSON
+                var response = await _httpClient.PatchAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                return RedirectToAction("EmployeeAdded", "Messages");
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
+
         public async Task<IActionResult> AllEmployees() 
         {
             _verifySessionFilter.VerifySession(HttpContext);
