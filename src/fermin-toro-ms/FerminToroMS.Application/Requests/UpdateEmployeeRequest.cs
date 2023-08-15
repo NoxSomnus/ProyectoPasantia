@@ -14,7 +14,6 @@ namespace FerminToroMS.Application.Requests
         public string Apellido { get; set; } = null!;
         public string Correo { get; set; } = null!;
         public string Username { get; set; } = null!;
-        public string Password { get; set; } = null!;
         public bool esAdmin { get; set; }
         public bool esDirector { get; set; }
         public bool esInstructor { get; set; }

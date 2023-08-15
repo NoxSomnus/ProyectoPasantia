@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 
 namespace FerminToroMS.Application.Handlers.Commands
 {
+    /// <summary>
+    /// Manejador de comando que actualiza la informacion de los empleados en el sistema.
+    /// </summary>
     internal class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand, bool>
     {
         private readonly IFerminToroDbContext _dbContext;
@@ -79,6 +82,8 @@ namespace FerminToroMS.Application.Handlers.Commands
                 }
                 employee = UpdateRequestToEntity(employee,request._request);
                 UpdatePermissions(employee,request._request);
+                await _dbContext.SaveEfContextChanges("APP");
+                transaction.Commit();
                 return true;
             }
             catch (Exception ex)
@@ -104,23 +109,43 @@ namespace FerminToroMS.Application.Handlers.Commands
 
         private void UpdatePermissions(EmpleadoEntity employee, UpdateEmployeeRequest request) 
         {
-            var Deleted_Permissions = request.Permisos_Asignados.Except(request.Permisos_Nuevos).ToList();
-            var Final_Permissions = request.Permisos_Asignados.Union(request.Permisos_Nuevos).ToList();
-            Final_Permissions.RemoveAll(p=> Deleted_Permissions.Contains(p));
-            //Elimino todos los permisos originales de ese empleado
-            var empleadosPermisosAEliminar = _dbContext.Permisos_Empleados.Where(ep => ep.EmpleadoId == request.Id);
-            _dbContext.Permisos_Empleados.RemoveRange(empleadosPermisosAEliminar);
-
-            //Para luego volverlo a agregar segun el update
-            foreach (var permissions in Final_Permissions) 
+            /*if (request.Permisos_Nuevos == null || request.Permisos_Nuevos.Count == 0) 
             {
-                var permiso = new Empleado_PermisoEntity
+                var empleadosPermisosAEliminar = _dbContext.Permisos_Empleados.Where(ep => ep.EmpleadoId == request.Id);
+                _dbContext.Permisos_Empleados.RemoveRange(empleadosPermisosAEliminar);
+            }*/
+            if (request.Permisos_Asignados == null)
+            {
+                foreach (var permissions in request.Permisos_Nuevos)
                 {
-                    EmpleadoId = request.Id,
-                    PermisoId = permissions.PermisoId
-                };
-                _dbContext.Permisos_Empleados.Add(permiso);
-            }           
+                    var permiso = new Empleado_PermisoEntity
+                    {
+                        EmpleadoId = request.Id,
+                        PermisoId = permissions.PermisoId
+                    };
+                    _dbContext.Permisos_Empleados.Add(permiso);
+                }
+            }
+            else 
+            {
+                var Deleted_Permissions = request.Permisos_Asignados.Except(request.Permisos_Nuevos).ToList();
+                var Final_Permissions = request.Permisos_Asignados.Union(request.Permisos_Nuevos).ToList();
+                Final_Permissions.RemoveAll(p => Deleted_Permissions.Contains(p));
+                //Elimino todos los permisos originales de ese empleado
+                var empleadosPermisosAEliminar = _dbContext.Permisos_Empleados.Where(ep => ep.EmpleadoId == request.Id);
+                _dbContext.Permisos_Empleados.RemoveRange(empleadosPermisosAEliminar);
+
+                //Para luego volverlo a agregar segun el update
+                foreach (var permissions in Final_Permissions)
+                {
+                    var permiso = new Empleado_PermisoEntity
+                    {
+                        EmpleadoId = request.Id,
+                        PermisoId = permissions.PermisoId
+                    };
+                    _dbContext.Permisos_Empleados.Add(permiso);
+                }
+            }
         }
     }
 }

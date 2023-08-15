@@ -55,8 +55,11 @@ namespace FerminToroWeb.Controllers
                 var permissionsAssigned = new List<AssignPermissionRequest>();
                 foreach (var permissions in _usuario.permisos)
                 {
-                    var permiso = new AssignPermissionRequest { PermisoId = permissions.IdPermiso };
-                    permissionsAssigned.Add(permiso);
+                    if (permissions.Selected == true)
+                    {
+                        var permiso = new AssignPermissionRequest { PermisoId = permissions.IdPermiso };
+                        permissionsAssigned.Add(permiso);
+                    }
                 }
                 var apiUrl = apiurl.ApiUrl + "/employee/register";
                 var requestBody = new
@@ -99,14 +102,18 @@ namespace FerminToroWeb.Controllers
             try
             {
                 var permissionsAssigned = new List<AssignPermissionRequest>();
-                foreach (var permissions in _usuario.permisos_asignados)
+                if (_usuario.PermisosSeleccionados != null)
                 {
-                    var permiso = new AssignPermissionRequest { PermisoId = permissions.IdPermiso };
-                    permissionsAssigned.Add(permiso);
+                    foreach (var permissions in _usuario.PermisosSeleccionados)
+                    {
+                        var permiso = new AssignPermissionRequest { PermisoId = permissions };
+                        permissionsAssigned.Add(permiso);
+                    }
                 }
                 var apiUrl = apiurl.ApiUrl + "/employee/update";
                 var requestBody = new
                 {
+                    id = _usuario.Id,
                     cedula = _usuario.Cedula,
                     nombre = _usuario.Nombre,
                     apellido = _usuario.Apellido,
@@ -115,18 +122,44 @@ namespace FerminToroWeb.Controllers
                     esAdmin = _usuario.esAdmin,
                     esDirector = _usuario.esDirector,
                     esInstructor = _usuario.esInstructor,
-                    permisos = permissionsAssigned
+                    permisos_Asignados = _usuario.permisos_asignados,
+                    permisos_Nuevos = permissionsAssigned
                 };
                 var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore
                 }); // Serializa el body a formato JSON
-                var response = await _httpClient.PatchAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+                var response = await _httpClient.PutAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
                 if (!response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("SomethingWentWrongView", "Messages");
                 }
-                return RedirectToAction("EmployeeAdded", "Messages");
+                return RedirectToAction("EmployeeUpdated", "Messages");
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/employee/byid?id="+id;
+                var response = await _httpClient.DeleteAsync(apiUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return RedirectToAction("EmployeeNotFound", "Messages");
+                    }
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                return RedirectToAction("EmployeeDeleted", "Messages");
+
             }
             catch (HttpRequestException)
             {
@@ -175,6 +208,10 @@ namespace FerminToroWeb.Controllers
                 var response2 = await _httpClient.GetAsync(apiUrl2);
                 if (!response2.IsSuccessStatusCode)
                 {
+                    if (response2.StatusCode == HttpStatusCode.NotFound) 
+                    {
+                        return RedirectToAction("EmployeeNotFound", "Messages");
+                    }
                     return RedirectToAction("SomethingWentWrongView", "Messages");
                 }
                 var responseContent2 = await response2.Content.ReadAsStringAsync();

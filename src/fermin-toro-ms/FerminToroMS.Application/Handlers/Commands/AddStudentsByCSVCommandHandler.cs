@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace FerminToroMS.Application.Handlers.Commands
 {
+    /// <summary>
+    /// Manejador de comando que registra nuevos estudiantes en el sistema.
+    /// </summary>
     internal class AddStudentsByCSVCommandHandler : IRequestHandler<AddStudentsByCSVCommand, bool>
     {
         private readonly IFerminToroDbContext _dbContext;

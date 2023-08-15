@@ -13,18 +13,35 @@
 
             </div>
             <div id="permissions-container">
-                @foreach (var permiso in Model.permisos)
+                @for (int i = 0; i < Model.permisos.Count; i++)
                 {
-                    bool permisoAsignado = Model.permisos_asignados.Any(p => p.IdPermiso == permiso.IdPermiso);
+                    var permiso = Model.permisos[i];
+                    bool permisoAsignado = false;
+                    @if (Model.permisos_asignados != null)
+                    {
+                        permisoAsignado = Model.permisos_asignados.Any(p => p.IdPermiso == permiso.IdPermiso);
+                    }
+
+                    <input type="checkbox" name="PermisosSeleccionados" value="@permiso.IdPermiso" @(permisoAsignado ? "checked" : "") />
+                    <input type="hidden" name="permisos[@i].IdPermiso" value="@permiso.IdPermiso" />
                     <label>
-                        <input type="checkbox" name="permisos[@Model.permisos.IndexOf(permiso)].IdPermiso" value="@permiso.IdPermiso" @(permisoAsignado ? "checked" : "") />
-                        <input type="checkbox" name="permisos[@Model.permisos.IndexOf(permiso)].NombrePermiso" value="@permiso.NombrePermiso" hidden />
                         @permiso.NombrePermiso
                     </label>
+                }
+                @if (Model.permisos_asignados != null)
+                {
+                    @for (int i = 0; i < Model.permisos_asignados.Count; i++)
+                    {
+                        var permiso = Model.permisos_asignados[i];
+                        <input type="hidden" name="permisos_asignados[@i].IdPermiso" value="@permiso.IdPermiso" />
+                    }
                 }
             </div>
             <br />
             <div id="formulario" style="display: none;">
+                <div class="form-group">
+                    <input type="hidden" name="Id" value="@Model.Id"/>
+                </div>
                 <div class="form-group">
                     <label>Cédula</label>
                     <input type="text" name="Cedula" value="@Model.Cedula" class="form-control" placeholder="Cédula" data-val="true" data-val-required="El campo Cédula es requerido"
@@ -32,30 +49,29 @@
                            data-val-length="La longitud de la Cédula debe estar entre 7 y 9 caracteres.">
                     @Html.ValidationMessageFor(m => m.Cedula ,null, new { @class = "text-danger" })
                 </div>
+
                 <div class="form-group">
                     <label>Nombre</label>
-                    <input type="text" name="Name" value="@Model.Nombre" class="form-control" placeholder="Nombre" data-val="true" data-val-required="El campo Nombre es requerido">
+                    <input type="text" name="Nombre" value="@Model.Nombre" class="form-control" placeholder="Nombre" data-val="true" data-val-required="El campo Nombre es requerido">
                     @Html.ValidationMessageFor(m => m.Nombre ,null, new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <label>Apellido</label>
-                    <input type="text" name="LastName" value="@Model.Apellido" class="form-control" placeholder="Apellido" data-val="true" data-val-required="El campo Apellido es requerido">
+                    <input type="text" name="Apellido" value="@Model.Apellido" class="form-control" placeholder="Apellido" data-val="true" data-val-required="El campo Apellido es requerido">
                     @Html.ValidationMessageFor(m => m.Apellido ,null, new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <label>Usuario</label>
-                    <input type="text" name="UserName" value="@Model.Username" class="form-control" placeholder="Usuario" data-val="true" data-val-required="El campo Usuario es requerido">
+                    <input type="text" name="Username" value="@Model.Username" class="form-control" placeholder="Usuario" data-val="true" data-val-required="El campo Usuario es requerido">
                     @Html.ValidationMessageFor(m => m.Username ,null, new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <label>Correo</label>
-                    <input type="email" name="Email" value="@Model.Correo" class="form-control" placeholder="Email" data-val="true" data-val-required="El campo Correo es requerido">
+                    <input type="email" name="Correo" value="@Model.Correo" class="form-control" placeholder="Email" data-val="true" data-val-required="El campo Correo es requerido">
                     @Html.ValidationMessageFor(m => m.Correo ,null, new { @class = "text-danger" })
                 </div>
             </div>
-
             <button type="button" id="mostrar-formulario">Cambiar datos básicos</button>
-
             <script>
                 document.getElementById("mostrar-formulario").addEventListener("click", function (event) {
                     event.preventDefault(); // Evita la acción por defecto del botón

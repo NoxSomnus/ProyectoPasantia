@@ -57,6 +57,69 @@ namespace FerminToroMS.Controllers
         }
 
         /// <summary>
+        /// Método que actualiza empleados.
+        /// </summary>
+        /// <param name="request">Objeto JSON en el cuerpo de la solicitud con las propiedades necesarias 
+        /// para actaulizar un empleado.</param>
+        /// <returns>Un objeto JSON con la información de si la operacion fue exitosa.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Put con un objeto JSON en el cuerpo de la solicitud 
+        /// que contiene las propiedades necesarias para actualizar un empleado en el sistema.
+        /// El método devuelve un objeto JSON con la información del estado de la operacion.
+        /// </remarks>
+        [HttpPut("Update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Update([FromBody] UpdateEmployeeRequest request)
+        {
+            _logger.LogInformation("Entrando al metodo que actualiza datos de un empleado");
+            try
+            {
+                var command = new UpdateEmployeeCommand(request);
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al actualizar el empleado");
+                return StatusCode(500, "Ocurrió un error al actualizar al empleado. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
+        /// Método que borra un empleado por Id.
+        /// </summary>
+        /// <returns>Un bool que especifica si el empleado fue eliminado o no.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Delete 
+        /// </remarks>
+        [HttpDelete("byId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeletebyId([FromQuery] Guid id)
+        {
+            _logger.LogInformation("Entrando al metodo que consulta un empleado por Id");
+            try
+            {
+                var command = new DeleteEmployeeCommand(id);
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (UserIdNotFoundException ex)
+            {
+                _logger.LogError(ex, "Error EmployeeByIdQueryHandler.HandleAsync.", ex.Message);
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los empleados");
+                return StatusCode(500, "Ocurrió un error al consultar los empleados. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
         /// Método que consulta todos los permisos del sistema.
         /// </summary>
         /// <returns>Un lista de todos los permisos del sistema.</returns>
@@ -85,6 +148,14 @@ namespace FerminToroMS.Controllers
             }
         }
 
+        /// <summary>
+        /// Método que consulta todos los empleados del sistema.
+        /// </summary>
+        /// <returns>Un lista de todos los empleados del sistema.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Get 
+        /// El método devuelve una lista de todos los empleados del sistema.
+        /// </remarks>
         [HttpGet("AllEmployees")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -105,6 +176,14 @@ namespace FerminToroMS.Controllers
             }
         }
 
+        /// <summary>
+        /// Método que consulta un empleado por Id.
+        /// </summary>
+        /// <returns>Un objeto JSON con las propiedades del usuario y sus permisos.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Get 
+        /// El método objeto JSON con las propiedades del usuario y sus permisos.
+        /// </remarks>
         [HttpGet("byId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -117,6 +196,11 @@ namespace FerminToroMS.Controllers
                 var query = new EmployeeByIdQuery(id);
                 var response = await _mediator.Send(query);
                 return Ok(response);
+            }
+            catch (UserIdNotFoundException ex)
+            {
+                _logger.LogError(ex, "Error EmployeeByIdQueryHandler.HandleAsync.", ex.Message);
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

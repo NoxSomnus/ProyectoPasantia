@@ -40,7 +40,6 @@ namespace FerminToroWeb.Mappers
                 esDirector = employee.esDirector,
                 esInstructor = employee.esInstructor,
                 permisos_asignados = employee.permisos_asignados,
-                permisos_nuevos = employee.permisos_asignados,
                 permisos = _permisos
             };
             return model;

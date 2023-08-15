@@ -10,6 +10,6 @@ namespace FerminToroMS.Application.Responses
     {
         public Guid IdPermiso { get; set; }
         public string NombrePermiso { get; set; } = null!;
-
+        public bool Selected { get; set; }
     }
 }

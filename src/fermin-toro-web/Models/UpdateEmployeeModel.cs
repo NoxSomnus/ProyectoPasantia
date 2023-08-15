@@ -23,7 +23,7 @@ namespace FerminToroWeb.Models
         public bool esDirector { get; set; }
         public bool esInstructor { get; set; }
         public List<PermissionResponse>? permisos_asignados { get; set; }
-        public List<PermissionResponse>? permisos_nuevos { get; set; }
         public List<PermissionResponse> permisos { get; set; } = null!;
+        public List<Guid>? PermisosSeleccionados { get; set; }
     }
 }

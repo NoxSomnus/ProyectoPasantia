@@ -110,6 +110,5 @@ namespace FerminToroMS.Application.Handlers.Queries
                 throw;
             }
         }
-
     }
 }

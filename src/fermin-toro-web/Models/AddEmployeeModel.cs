@@ -32,20 +32,6 @@ namespace FerminToroWeb.Models
         public bool esAdmin { get; set; }
         public bool esInstructor { get; set; }
         public bool esDirector { get; set; }
-        public List<PermissionResponse> permisos { get; set; }
-
-        /*public AddEmployeeModel()
-        {
-            Email = "";
-            Password = "";
-            Name = "";
-            Cedula = "";
-            LastName = "";
-            UserName = "";
-            esAdmin = false;
-            esDirector = false;
-            esInstructor = false;
-            permisos = new List<PermissionResponse>();
-        }*/
+        public List<PermissionResponse> permisos { get; set; } = null!;
     }
 }
