@@ -1,3 +1,5 @@
+using FerminToroWeb.Filters;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,8 +7,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
+builder.Services.AddScoped<VerifySessionFilter>(); // Agregar esta línea
 var app = builder.Build();
 
 app.UseSession();

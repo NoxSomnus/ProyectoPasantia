@@ -27,15 +27,16 @@ namespace UCABPagaloTodoWeb.Controllers
             return View();
         }
 
-        public IActionResult LoginView()
-        {
 
-            return View(new LoginViewModel());
-        }
 
         public IActionResult Login()
         {
-
+            string sessionClosedMessage = HttpContext.Session.GetString("SessionClosedMessage");
+            if (!string.IsNullOrEmpty(sessionClosedMessage))
+            {
+                ViewBag.Message = sessionClosedMessage;
+                HttpContext.Session.Remove("SessionClosedMessage");
+            }
             return View(new LoginViewModel());
         }
 
@@ -58,15 +59,22 @@ namespace UCABPagaloTodoWeb.Controllers
                     var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
 
                     var esDirector = "No";
+                    var esAdmin = "No";
                     if (loginResponse.IsDirector)
                     {
                         esDirector = "Si";
                         HttpContext.Session.SetString("EsDirector", esDirector);
                     }
+                    if (loginResponse.IsAdmin)
+                    {
+                        esAdmin = "Si";
+                        HttpContext.Session.SetString("EsAdmin", esAdmin);
+                    }
                     HttpContext.Session.SetString("UserId", loginResponse.Id.ToString());
                     HttpContext.Session.SetString("Username", loginResponse.Username);
                     HttpContext.Session.SetString("EsDirector", esDirector);
-                    return RedirectToAction("MenuAdministrador","Admin"); 
+                    HttpContext.Session.SetString("EsAdmin", esAdmin);
+                    return RedirectToAction("MenuAdministrador","Admin"); //Luego cambiar esto para redirigir a las diferentes vistas
                 }
                 if (response.StatusCode == HttpStatusCode.Unauthorized) { return RedirectToAction("InvalidPasswordView", "Home"); }
                 if (response.StatusCode == HttpStatusCode.NotFound) { return RedirectToAction("UserNotFoundView", "Home"); }

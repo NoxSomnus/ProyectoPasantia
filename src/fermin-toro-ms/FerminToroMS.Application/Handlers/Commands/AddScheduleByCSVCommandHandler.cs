@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace FerminToroMS.Application.Handlers.Commands
 {
+    /// <summary>
+    /// Manejador de comando que registra nuevos cronogramas en el sistema.
+    /// </summary>
     internal class AddScheduleByCSVCommandHandler : IRequestHandler<AddScheduleByCSVCommand, bool>
     {
         private readonly IFerminToroDbContext _dbContext;

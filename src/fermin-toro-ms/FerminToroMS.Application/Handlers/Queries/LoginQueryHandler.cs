@@ -94,7 +94,19 @@ namespace FerminToroMS.Application.Handlers.Queries
                         Id = user.Id,
                         Username = user.Username,
                         Success = true,
-                        IsDirector = user.esDirector
+                        IsDirector = user.esDirector,
+                        IsAdmin = true
+                    };
+                }
+                if (user.esDirector)
+                {
+                    return new LoginResponse
+                    {
+                        Id = user.Id,
+                        Username = user.Username,
+                        Success = true,
+                        IsDirector = true,
+                        IsAdmin = true
                     };
                 }
                 return new LoginResponse

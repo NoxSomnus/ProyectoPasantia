@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Listado de empleados";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+
+@model IEnumerable<AllEmployeesModel>
+
+<style>
+    .employee-table {
+        border-collapse: collapse;
+    }
+
+        .employee-table th, .migration-table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+    .table-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50vh;
+    }
+
+    .close-button {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        background-color: white;
+        border: none;
+        outline: none;
+        position: relative;
+    }
+
+    .close-button::after,
+    .close-button::before {
+        content: "";
+        position: absolute;
+        width: 2px;
+        height: 24px;
+        background-color: red;
+        top: 3px;
+        left: 14px;
+        transform: rotate(45deg);
+    }
+
+    .close-button::before {
+        transform: rotate(-45deg);
+    }
+</style>
+
+
+<div class="text-center">
+    <h1 class="display-4">Administrar Empleados</h1>
+</div>
+
+<div class="table-container">
+    <table class="employee-table">
+        <thead>
+            <tr>
+                <th>Cedula</th>
+                <th>Nombre</th>
+                <th>Usuario</th>
+                <th>Administrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model)
+            {
+                var employeeId = employee.Id;
+                <tr>
+                    <td>@employee.Cedula</td>
+                    <td>@employee.Nombre</td>
+                    <td>@employee.Username</td>
+                    <td>
+                        <form asp-action="AllEmployees" asp-controller="Employee" method="get">
+                            <input type="hidden" name="id" value="@employee.Id" />
+                            <button type="submit" class="btn btn-primary" asp-route-id="@employee.Id">Administrar</button>
+                        </form>
+
+                        <form method="post" id="form-@employee.Id" onsubmit="return showAlert(this, event)" asp-action="Delete" asp-controller="Employee">
+                            <input type="hidden" name="id" value="@employee.Id" />
+                            <button type="submit" class="close-button"></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+        function showAlert(form, e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '¿Está seguro que quiere eliminar este usuario?',
+                text: 'Este cambio no se puede revertir',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+    </script>
+}

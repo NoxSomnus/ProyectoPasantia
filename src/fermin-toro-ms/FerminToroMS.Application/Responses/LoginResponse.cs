@@ -12,5 +12,6 @@ namespace FerminToroMS.Application.Responses
         public string Username { get; set; } = null!;
         public bool Success { get; set; }// indica si la conexion fue exitosa o no
         public bool IsDirector { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

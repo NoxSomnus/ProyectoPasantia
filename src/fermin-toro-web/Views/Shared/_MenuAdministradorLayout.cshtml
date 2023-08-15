@@ -25,15 +25,15 @@
                     }
                 </li>
                 <li id="usuarios-link">
-                    @using (Html.BeginForm("Add", "Employee", FormMethod.Post))
+                    @using (Html.BeginForm("AdminEmployee", "Admin", FormMethod.Post))
                     {
-                        <button id="boton-VerUsuarioss" type="submit">Añadir Empleado</button>
+                        <button id="boton-VerUsuarioss" type="submit">Administrar Empleados</button>
                     }
                 </li>
                 <li id="migration-link">
                     @using (Html.BeginForm("UploadCSVMigrationOptions", "Admin", FormMethod.Post))
                     {
-                        <button id="boton-VerUsuarios" type="submit">Migración</button>
+                        <button id="boton-VerUsuarios" type="submit">Administrar Migraciones</button>
                     }
                 </li>
             </ul>
@@ -72,6 +72,7 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/js/MenuAdministradorScript.js" sp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

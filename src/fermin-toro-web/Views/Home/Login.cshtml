@@ -2,7 +2,15 @@
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
 @model FerminToroWeb.Models.LoginViewModel
-
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        window.onload = function ()
+        {
+            alert("@ViewBag.Message")
+        }
+    </script>    
+}
 
 <main role="main" class="pb-3">
     <div class="container" id="container">
