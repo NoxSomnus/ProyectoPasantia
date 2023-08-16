@@ -17,11 +17,13 @@ namespace FerminToroWeb.Models
         [DataType(DataType.Password)]
         [Display(Name = "Contraseña")]
         public string Password { get; set; }
+        public bool Error { get; set; }
 
         public LoginViewModel()
         {
             Username = "";
             Password = "";
+            Error = false;
         }
     }
 }

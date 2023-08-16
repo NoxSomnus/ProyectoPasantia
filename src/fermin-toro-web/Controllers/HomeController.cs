@@ -2,6 +2,7 @@
 using FerminToroWeb.ApiUrlConfig;
 using FerminToroWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net;
@@ -40,6 +41,24 @@ namespace UCABPagaloTodoWeb.Controllers
             return View(new LoginViewModel());
         }
 
+        public IActionResult LoginWithoutPermission()
+        {
+            string sessionClosedMessage = HttpContext.Session.GetString("SessionClosedMessage");
+            if (!string.IsNullOrEmpty(sessionClosedMessage))
+            {
+                ViewBag.Message = sessionClosedMessage;
+                HttpContext.Session.Remove("SessionClosedMessage");
+            }
+            return View("~/Views/Home/Login.cshtml",
+                new LoginViewModel 
+                {
+                    Username = "",
+                    Password = "",
+                    Error = true
+                });
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> LoginAction(string username, string password)
         {
@@ -74,7 +93,7 @@ namespace UCABPagaloTodoWeb.Controllers
                     HttpContext.Session.SetString("Username", loginResponse.Username);
                     HttpContext.Session.SetString("EsDirector", esDirector);
                     HttpContext.Session.SetString("EsAdmin", esAdmin);
-                    return RedirectToAction("MenuAdministrador","Admin"); //Luego cambiar esto para redirigir a las diferentes vistas
+                    return RedirectToAction("VerifyLoginPermission", "Home"); 
                 }
                 if (response.StatusCode == HttpStatusCode.Unauthorized) { return RedirectToAction("InvalidPasswordView", "Home"); }
                 if (response.StatusCode == HttpStatusCode.NotFound) { return RedirectToAction("UserNotFoundView", "Home"); }
@@ -84,6 +103,34 @@ namespace UCABPagaloTodoWeb.Controllers
             {
                 return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
             }
+        }
+
+        public async Task<IActionResult> VerifyLoginPermission()
+        {
+            var Admin = HttpContext.Session.GetString("EsDirector");
+            var Director = HttpContext.Session.GetString("EsAdmin");
+            if (Admin == "Si" || Director == "Si") 
+            {
+                return RedirectToAction("MenuAdministrador", "Admin");
+            }
+            var UserId = HttpContext.Session.GetString("UserId");
+            var apiUrl = apiurl.ApiUrl + "/employee/checkpermission?userid=" + UserId + "&permissionname=" + "Iniciar Sesion";
+            var response = await _httpClient.GetAsync(apiUrl);
+            // Envía la solicitud POST con el body en formato JSON
+            if (!response.IsSuccessStatusCode)
+            {
+                    HttpContext.Session.Clear();
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+            }
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var Response = JsonConvert.DeserializeObject<GeneralResponse>(responseContent);
+            if (!Response.Success)
+            {
+                    HttpContext.Session.Clear();
+                    return RedirectToAction("LoginWithoutPermission", "Home");
+            }
+            return RedirectToAction("MenuAdministrador", "Admin"); //CAMBIAR PARA UNA VISTA DE EMPLEADO NO ADMIN
+
         }
 
         public IActionResult Logout()

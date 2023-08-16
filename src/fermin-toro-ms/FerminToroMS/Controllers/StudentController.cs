@@ -1,4 +1,5 @@
 ﻿using FerminToroMS.Application.Commands;
+using FerminToroMS.Application.Exceptions;
 using FerminToroMS.Application.Requests;
 using FerminToroMS.Base;
 using MediatR;
@@ -45,6 +46,32 @@ namespace FerminToroMS.Controllers
             {
                 _logger.LogError(ex, "Ocurrió un error al migrar los estudiantes");
                 return StatusCode(500, "Ocurrió un error al migrar los estudiantes. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+
+        }
+
+        [HttpPost("Register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Register([FromBody] StudentSignUpRequest request)
+        {
+            _logger.LogInformation("Entrando al metodo que registra estudiantes mediante carga de archivo csv");
+            try
+            {
+                var command = new StudentSignUpCommand(request);
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (DataAlreadyExistException ex)
+            {
+                _logger.LogError(ex, "Ha ocurrido un error: El estudiante ya esta registrado", ex.Message);
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al registrar el estudiante");
+                return StatusCode(500, "Ocurrió un error al registrar al estudiante. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
 
         }

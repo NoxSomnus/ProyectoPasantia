@@ -2,14 +2,28 @@
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
 @model FerminToroWeb.Models.LoginViewModel
+@if (Model.Error == true)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            Swal.fire({
+                title: 'No puede iniciar sesión',
+                text: "Comuniquese con un administrador para concederle el permiso",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Ok'
+            });
+        }
+    </script>
+}
+
 @if (ViewBag.Message != null)
 {
     <script type="text/javascript">
-        window.onload = function ()
-        {
+        window.onload = function () {
             alert("@ViewBag.Message")
         }
-    </script>    
+    </script>
 }
 
 <main role="main" class="pb-3">

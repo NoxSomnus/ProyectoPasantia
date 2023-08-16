@@ -20,7 +20,7 @@ namespace FerminToroMS.Core.Entities
         public string Correo { get; set; } = null!;
         [Column(Order = 6)]
         public string Telefono { get; set; } = null!;
-        public string CorreoSecundario { get; set; } = null!;
+        public string? CorreoSecundario { get; set; }
         public string Direccion_Hab { get; set; } = null!;
         public DateOnly? Fecha_Nac { get; set; }
         public int? Edad { get; set; }

@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Registro";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+@model FerminToroWeb.Models.StudentSignUpModel
+@if (Model.Error == true)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            Swal.fire({
+                title: 'No pudo registrarse',
+                text: "La cédula o el correo ya estan registrados",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Ok'
+            });
+        }
+    </script>
+}
+<main role="main" class="pb-3">
+    <div class="container" id="container">
+
+
+
+        <div class="form-container login-container">
+            @using (Html.BeginForm("SignUpAction", "Student", FormMethod.Post))
+            {
+                <h1>Registrarse</h1>
+                <input type="text" value="@Model.Cedula" placeholder="Cédula" name="Cedula" required>
+                <input type="text" value="@Model.Nombre" placeholder="Nombre" name="Nombre" required>
+                <input type="text" value="@Model.Apellido" placeholder="Apellido" name="Apellido" required>
+                <input type="text" value="@Model.Telefono" placeholder="Teléfono" name="Telefono" required>
+                <input type="email" value="@Model.Correo" placeholder="Correo" name="Correo" required>
+                <select name="rango_edad" id="rango_edad">
+                    <option value="Entre 14 - 18 años">Entre 14 - 18 años</option>
+                    <option value="Entre 19 - 26 años">Entre 19 - 26 años</option>
+                    <option value="Entre 27 - 59 años">Entre 27 - 59 años</option>
+                    <option value="Mayor a 60 años">Mayor a 60 años</option>
+                </select>
+                <input type="date" value="@Model.Fecha_Nac" id="Fecha_Nac" name="Fecha_Nac">
+                <input type="text" value="@Model.Direccion" placeholder="Dirección de Habitación" name="Direccion" required>
+                <button>Registrarse</button>
+            }
+        </div>
+
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-right">
+                    <img src="~/img/logos/Logo_dark_letras.png" class="logo" style="max-width: 420px; max-height: 420px;">
+                    <br />
+                    <br />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</main>
