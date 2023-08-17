@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Listado de empleados";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+
+@model IEnumerable<AllPeriodsModel>
+<link rel="stylesheet" href="~/css/AllEmployeeTableStyle.css" asp-append-version="true" />
+<div class="text-center">
+    <h1 class="display-4">Administrar Empleados</h1>
+</div>
+
+<div class="table-scroll">
+    <table id="main-table" class="main-table">
+        <thead>
+            <tr>
+                <th>Periodo</th>
+                <th>Año</th>
+                <th>Meses</th>
+                <th>Administrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var period in Model)
+            {
+                <tr>
+                    <td>@period.Nombre</td>
+                    <td>@period.Año</td>
+                    <td>@period.MesInicio + " " + @period.MesFin</td>
+                    <td>
+                        <form asp-action="AllEmployees" asp-controller="Employee" method="get">
+                            <input type="hidden" name="id" value="@period.Id" />
+                            <button type="submit" class="btn btn-primary" asp-route-id="@period.Id">Editar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

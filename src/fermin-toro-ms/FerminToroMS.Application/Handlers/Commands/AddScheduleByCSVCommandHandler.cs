@@ -86,7 +86,8 @@ namespace FerminToroMS.Application.Handlers.Commands
                             Id = periodId,
                             Año = schedulerequest.Año,
                             MesInicio = schedulerequest.Meses,
-                            NombrePeriodo = schedulerequest.NombrePerido
+                            NombrePeriodo = schedulerequest.NombrePerido,
+                            MesFin = schedulerequest.Meses
                         };
                         _dbContext.Periodos.Add(period);
                     }

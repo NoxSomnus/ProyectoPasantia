@@ -69,6 +69,11 @@ namespace FerminToroWeb.Controllers
             return View();
         }
 
+        public IActionResult FailedCSVRead()
+        {
+            return View();
+        }
+
         public IActionResult BadCSVFormat() 
         {
             return View("~/Views/Messages/FailedMessageView.cshtml", new ErrorMessageModel

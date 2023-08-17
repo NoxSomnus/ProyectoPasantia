@@ -33,8 +33,8 @@
             @using (Html.BeginForm("LoginAction", "Home", FormMethod.Post))
             {
                 <h1>Iniciar sesión</h1>
-                <input type="text" placeholder="Usuario" name="username">
-                <input type="password" placeholder="Contraseña" name="password">
+                <input type="text" placeholder="Usuario" name="username" required>
+                <input type="password" placeholder="Contraseña" name="password" required>
                 <div class="content">
                     <div class="pass-link">
                         <a href="@Url.Action("RecuperarClave", "RecuperarClave")">¿Has olvidado tu contraseña?</a>
@@ -50,7 +50,7 @@
                 <h1>¿Estudiante regular?</h1>
                 <p>Ingresa con el correo que te registraste a uno de los cursos</p>
                 <input type="text" placeholder="Correo" name="Correo" required>
-                <a href="@Url.Action("RecuperarClave", "RecuperarClave")">¿Estudiante nuevo ingreso?</a>
+                <a href="@Url.Action("SignUp", "Student")">¿Estudiante nuevo ingreso?</a>
                 <button>Entrar</button>
             }
         </div>

@@ -25,7 +25,7 @@ namespace FerminToroWeb.Controllers
         public IActionResult SignUpError(StudentSignUpModel _model)
         {
             _model.Error = true;
-            return View(_model);
+            return View("~/Views/Student/SignUp.cshtml",_model);
         }
 
         public async Task<IActionResult> SignUpAction(StudentSignUpModel _usuario)

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Empleados";
+    ViewData["Title"] = "Cronogramas";
     Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
 }
 <style>
@@ -22,7 +22,7 @@
 
 
 <div class="text-center">
-    <h1 class="display-4">Administración de Empleados</h1>
+    <h1 class="display-4">Administración de Cronogramas</h1>
 </div>
 
 <div class="table-container">
@@ -35,7 +35,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>Agregar Nuevo Empleado</td>
+                <td>Agregar Nuevo Periodo</td>
                 <td>
                     <form asp-action="Add" asp-controller="Employee">
                         <button class="btn btn-success" type="submit">Ir a opción</button>
@@ -44,9 +44,7 @@
             </tr>
             <tr>
                 <td>
-                    Ver lista de empleados
-                    <br />
-                    <p>(Modificar Información / Permisos)</p>
+                    Ver Cronogramas
                 </td>
                 <td>
                     <form asp-action="AllEmployees" asp-controller="Employee">
@@ -57,5 +55,3 @@
         </tbody>
     </table>
 </div>
-
-

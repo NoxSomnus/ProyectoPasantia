@@ -69,8 +69,7 @@ namespace FerminToroWeb.Controllers
                 {
                     return RedirectToAction("BadCSVFormat", "Messages"); 
                 }
-
-                return RedirectToAction("SomethingWentWrongView", "Messages");
+                return RedirectToAction("FailedCSVRead", "Messages");
             }
             return RedirectToAction("SuccessfulMessageView", "Messages");
         }
@@ -96,8 +95,7 @@ namespace FerminToroWeb.Controllers
                 {
                     return RedirectToAction("BadCSVFormat", "Messages");
                 }
-
-                return RedirectToAction("SomethingWentWrongView", "Messages");
+                return RedirectToAction("FailedCSVRead", "Messages");
             }
             return RedirectToAction("SuccessfulMessageView", "Messages");
         }
@@ -125,7 +123,7 @@ namespace FerminToroWeb.Controllers
                     return RedirectToAction("BadCSVFormat", "Messages");
                 }
 
-                return RedirectToAction("SomethingWentWrongView", "Messages");
+                return RedirectToAction("FailedCSVRead", "Messages");
             }
             return RedirectToAction("SuccessfulMessageView", "Messages");
         }

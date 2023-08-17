@@ -1,5 +1,6 @@
 ﻿using FerminToroMS.Application.Commands;
 using FerminToroMS.Application.Exceptions;
+using FerminToroMS.Application.Queries;
 using FerminToroMS.Application.Requests;
 using FerminToroMS.Base;
 using MediatR;
@@ -45,6 +46,39 @@ namespace FerminToroMS.Controllers
             catch (BadCSVRequest ex)
             {
                 _logger.LogError(ex, "Ocurrió un error al migrar los cronogramas");
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al migrar los cronogramas");
+                return StatusCode(500, "Ocurrió un error al migrar los cronogramas. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
+        /// Método que consulta todos los periodos registrados.
+        /// </summary>
+        /// <returns>Una objeto JSON que tiene una lista de la informacion de los periodos.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Get
+        /// </remarks>
+
+        [HttpGet("AllPeriods")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> AllPeriods()
+        {
+            _logger.LogInformation("Entrando al metodo que registra estudiantes mediante carga de archivo csv");
+            try
+            {
+                var query = new AllPeriodsQuery();
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (BadCSVRequest ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los periodos");
                 return BadRequest(ex.Message);
             }
             catch (Exception ex)

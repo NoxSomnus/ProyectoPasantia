@@ -22,22 +22,16 @@
 
 
 
-        <div class="form-container login-container">
+        <div class="form-container register-container">
             @using (Html.BeginForm("SignUpAction", "Student", FormMethod.Post))
             {
                 <h1>Registrarse</h1>
-                <input type="text" value="@Model.Cedula" placeholder="Cédula" name="Cedula" required>
-                <input type="text" value="@Model.Nombre" placeholder="Nombre" name="Nombre" required>
+                <input type="text" value="@Model.Cedula" placeholder="Cédula" name="Cedula" required pattern="[0-9]*" title="La Cédula debe contener solo números.">
+                <input type="text" value="@Model.Nombre" placeholder="Nombre" name="Nombre" required data-val="true" data-val-required="El campo Nombre es requerido">
                 <input type="text" value="@Model.Apellido" placeholder="Apellido" name="Apellido" required>
                 <input type="text" value="@Model.Telefono" placeholder="Teléfono" name="Telefono" required>
                 <input type="email" value="@Model.Correo" placeholder="Correo" name="Correo" required>
-                <select name="rango_edad" id="rango_edad">
-                    <option value="Entre 14 - 18 años">Entre 14 - 18 años</option>
-                    <option value="Entre 19 - 26 años">Entre 19 - 26 años</option>
-                    <option value="Entre 27 - 59 años">Entre 27 - 59 años</option>
-                    <option value="Mayor a 60 años">Mayor a 60 años</option>
-                </select>
-                <input type="date" value="@Model.Fecha_Nac" id="Fecha_Nac" name="Fecha_Nac">
+                <input type="date" value="@Model.Fecha_Nac" id="Fecha_Nac" name="Fecha_Nac" required>
                 <input type="text" value="@Model.Direccion" placeholder="Dirección de Habitación" name="Direccion" required>
                 <button>Registrarse</button>
             }

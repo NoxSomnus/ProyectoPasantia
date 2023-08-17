@@ -21,19 +21,25 @@
                 <li id="inicio-link">
                     @using (Html.BeginForm("MenuAdministrador", "Admin", FormMethod.Post))
                     {
-                        <button id="boton-Inicio" type="submit">Inicio</button>
+                        <button id="boton-Inicio" type="submit">Ir a<br />Inicio</button>
                     }
                 </li>
                 <li id="usuarios-link">
                     @using (Html.BeginForm("AdminEmployee", "Admin", FormMethod.Post))
                     {
-                        <button id="boton-VerUsuarioss" type="submit">Administrar Empleados</button>
+                        <button id="boton-VerUsuarioss" type="submit">Administrar<br /> Empleados</button>
+                    }
+                </li>
+                <li id="usuarios-link">
+                    @using (Html.BeginForm("AdminSchedule", "Admin", FormMethod.Post))
+                    {
+                        <button id="boton-VerUsuarioss" type="submit">Administrar <br/>Cronogramas</button>
                     }
                 </li>
                 <li id="migration-link">
                     @using (Html.BeginForm("UploadCSVMigrationOptions", "Admin", FormMethod.Post))
                     {
-                        <button id="boton-VerUsuarios" type="submit">Administrar Migraciones</button>
+                        <button id="boton-VerUsuarios" type="submit">Administrar<br /> Migraciones</button>
                     }
                 </li>
             </ul>
