@@ -56,6 +56,72 @@ namespace FerminToroMS.Controllers
         }
 
         /// <summary>
+        /// Método que añade un nuevo periodo.
+        /// </summary>
+        /// <param name="request">Objeto JSON en el cuerpo de la solicitud con las propiedades necesarias 
+        /// para añadir un periodo.</param>
+        /// <returns>Un bool con la información de si la operacion fue exitosa.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Post con un objeto JSON en el cuerpo de la solicitud 
+        /// </remarks>
+
+        [HttpPost("AddPeriod")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> AddPeriod([FromBody] AddPeriodRequest request)
+        {
+            _logger.LogInformation("Entrando al metodo que registra estudiantes mediante carga de archivo csv");
+            try
+            {
+                var command = new AddPeriodCommand(request);
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al agregar un nuevo periodo");
+                return StatusCode(500, "Ocurrió un error al agregar el periodo. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
+        /// Método que actualiza un periodo.
+        /// </summary>
+        /// <param name="request">Objeto JSON en el cuerpo de la solicitud con las propiedades necesarias 
+        /// para actualizar un periodo.</param>
+        /// <returns>Un bool con la información de si la operacion fue exitosa.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Patch con un objeto JSON en el cuerpo de la solicitud 
+        /// que contiene las propiedades necesarias para actualizar un periodo.
+        /// </remarks>
+
+        [HttpPut("UpdatePeriod")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> UpdatePeriod([FromBody] UpdatePeriodRequest request)
+        {
+            _logger.LogInformation("Entrando al metodo que registra estudiantes mediante carga de archivo csv");
+            try
+            {
+                var command = new UpdatePeriodCommand(request);
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (IdNotFoundException ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al actualizar el periodo");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al migrar los cronogramas");
+                return StatusCode(500, "Ocurrió un error al actualizar el periodo. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
         /// Método que consulta todos los periodos registrados.
         /// </summary>
         /// <returns>Una objeto JSON que tiene una lista de la informacion de los periodos.</returns>
@@ -76,10 +142,61 @@ namespace FerminToroMS.Controllers
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
-            catch (BadCSVRequest ex)
+            catch (Exception ex)
             {
-                _logger.LogError(ex, "Ocurrió un error al consultar los periodos");
-                return BadRequest(ex.Message);
+                _logger.LogError(ex, "Ocurrió un error al migrar los cronogramas");
+                return StatusCode(500, "Ocurrió un error al migrar los cronogramas. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
+        /// Método que consulta todos los periodos registrados de un año.
+        /// </summary>
+        /// <returns>Una objeto JSON que tiene una lista de la informacion de los periodos.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Get
+        /// </remarks>
+
+        [HttpGet("PeriodsbyYear")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> byYear([FromQuery] int año)
+        {
+            _logger.LogInformation("Entrando al metodo que registra estudiantes mediante carga de archivo csv");
+            try
+            {
+                var query = new AllPeriodsByYearQuery(año);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al migrar los cronogramas");
+                return StatusCode(500, "Ocurrió un error al migrar los cronogramas. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
+        /// Método que consulta todos los periodos registrados segun un rango de fecha.
+        /// </summary>
+        /// <returns>Una objeto JSON que tiene una lista de la informacion de los periodos.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Get
+        /// </remarks>
+
+        [HttpPost("PeriodsbyDate")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> byDate([FromBody] AllPeriodsByDateRequest request)
+        {
+            _logger.LogInformation("Entrando al metodo que registra estudiantes mediante carga de archivo csv");
+            try
+            {
+                var query = new AllPeriodsByDateQuery(request);
+                var response = await _mediator.Send(query);
+                return Ok(response);
             }
             catch (Exception ex)
             {

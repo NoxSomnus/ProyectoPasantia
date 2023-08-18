@@ -1,0 +1,100 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using FerminToroWeb.Models
+@{
+    ViewData["Title"] = "Agregar nuevo periodo";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+@model FerminToroWeb.Models.UpdatePeriodModel
+<div class="col-md-12 col-sm-12">
+    <div class="contenedorlogin">
+        <form asp-action="UpdatePeriodAction" asp-controller="Schedule" method="post">
+            <input type="hidden" value="@Model.Id" name="Id"/>
+            <div class="form-group">
+                <label>Nombre del Período</label>
+                <input type="text" name="NombrePeriodo" value="@Model.NombrePeriodo" class="form-control" placeholder="Nombre" required>
+            </div>
+            <div class="form-group">
+                <label>Año</label>
+                <input type="number" name="Año" value="@Model.Año" class="form-control" placeholder="Año" required pattern="[0-9]*" title="Solo se permite un número en este campo.">
+            </div>
+            <div class="form-group">
+                <label>Inicio</label>
+                <select name="MesInicio" id="mesInicioSelect">
+                    <option value="enero">Enero</option>
+                    <option value="febrero">Febrero</option>
+                    <option value="marzo">Marzo</option>
+                    <option value="abril">Abril</option>
+                    <option value="mayo">Mayo</option>
+                    <option value="junio">Junio</option>
+                    <option value="julio">Julio</option>
+                    <option value="agosto">Agosto</option>
+                    <option value="septiembre">Septiembre</option>
+                    <option value="octubre">Octubre</option>
+                    <option value="noviembre">Noviembre</option>
+                    <option value="diciembre">Diciembre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Fin</label>
+                <select name="MesFin" id="mesFinSelect">
+                    <option value="enero">Enero</option>
+                    <option value="febrero">Febrero</option>
+                    <option value="marzo">Marzo</option>
+                    <option value="abril">Abril</option>
+                    <option value="mayo">Mayo</option>
+                    <option value="junio">Junio</option>
+                    <option value="julio">Julio</option>
+                    <option value="agosto">Agosto</option>
+                    <option value="septiembre">Septiembre</option>
+                    <option value="octubre">Octubre</option>
+                    <option value="noviembre">Noviembre</option>
+                    <option value="diciembre">Diciembre</option>
+                </select>
+            </div>
+            <br />
+            <br />
+            <div class="botones">
+                <button type="submit" class="btn btn-success">Actualizar Periodo</button>
+                <a class="btn btn-danger" asp-area="" asp-controller="Admin" asp-action="AdminSchedule">Cancelar</a>
+               
+            </div>
+        </form>
+    </div>
+</div>
+<div style="display: flex justify-content: flex-end">
+    <form method="post" id="form" onsubmit="return showAlert(this, event)" asp-action="" asp-controller="">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+    </form>
+</div>
+
+@section Scripts{
+    @{
+        <script>
+            var mesInicio = "@Model.MesInicio";
+            var mesFin = "@Model.MesFin";
+
+            document.getElementById("mesInicioSelect").value = mesInicio;
+            document.getElementById("mesFinSelect").value = mesFin;
+        </script>
+        <script>
+            function mostrarAlerta(form, e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: '¿Está seguro que quiere eliminar este usuario?',
+                    text: 'Este cambio no se puede revertir',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, eliminar',
+                    cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
+        </script>
+    }
+}

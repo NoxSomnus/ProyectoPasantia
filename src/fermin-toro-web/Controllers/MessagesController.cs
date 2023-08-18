@@ -24,11 +24,31 @@ namespace FerminToroWeb.Controllers
             });
         }
 
+        public IActionResult PeriodAdded()
+        {
+            return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
+            {
+                Message = "Periodo Creado",
+                NextStep = "Haga click para volver al inicio",
+                ButtonContent = "Inicio"
+            });
+        }
+
         public IActionResult EmployeeUpdated()
         {
             return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
             {
                 Message = "Información y permisos del empleado actualizados",
+                NextStep = "Haga click para volver al inicio",
+                ButtonContent = "Inicio"
+            });
+        }
+
+        public IActionResult PeriodUpdated()
+        {
+            return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
+            {
+                Message = "Periodo Actualizado",
                 NextStep = "Haga click para volver al inicio",
                 ButtonContent = "Inicio"
             });

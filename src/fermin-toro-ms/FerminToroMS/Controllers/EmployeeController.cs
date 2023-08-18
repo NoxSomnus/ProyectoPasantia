@@ -80,6 +80,11 @@ namespace FerminToroMS.Controllers
                 var response = await _mediator.Send(command);
                 return Ok(response);
             }
+            catch (UserIdNotFoundException ex) 
+            {
+                _logger.LogError(ex, "Error UpdateEmployeeCommandHandler.HandleAsync. {Mensaje}", ex.Message);
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Ocurrió un error al actualizar el empleado");
