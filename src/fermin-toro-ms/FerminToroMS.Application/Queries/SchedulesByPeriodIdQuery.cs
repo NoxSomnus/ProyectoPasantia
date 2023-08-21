@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 namespace FerminToroMS.Application.Queries
 {
-    public class ScheduleByDateQuery : IRequest<ScheduleResponse>
+    public class SchedulesByPeriodIdQuery : IRequest<List<ScheduleResponse>>
     {
-        //implementar query
+        public Guid PeriodId { get; set; }
+        public SchedulesByPeriodIdQuery(Guid periodId)
+        {
+            PeriodId = periodId;
+        }
     }
 }

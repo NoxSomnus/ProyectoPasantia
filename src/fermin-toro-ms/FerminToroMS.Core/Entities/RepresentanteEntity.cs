@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FerminToroMS.Application.Requests
+namespace FerminToroMS.Core.Entities
 {
-    public class AddStudentRequest
+    public class RepresentanteEntity : BaseEntity
     {
-        public string Cedula { get; set; } = null!;
+        [Column(Order = 2)]
         public string Nombre { get; set; } = null!;
+        [Column(Order = 3)]
         public string Apellido { get; set; } = null!;
+        [Column(Order = 4)]
         public string Correo { get; set; } = null!;
-        public string CorreoSecundario { get; set; } = null!;
+        [Column(Order = 5)]
         public string Telefono { get; set; } = null!;
-        public string Direccion { get; set; } = null!;
-        public int Edad { get; set; }
-        public string Rango_Edad { get; set; } = null!;
     }
 }

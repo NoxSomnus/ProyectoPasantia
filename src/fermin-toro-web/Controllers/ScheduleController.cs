@@ -72,6 +72,35 @@ namespace FerminToroWeb.Controllers
             }
         }
 
+        public async Task<IActionResult> DeletePeriodAction(string _password, string _userId, string _periodId)
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/schedule/updateperiod";
+                var requestBody = new
+                {
+                    periodId = _periodId,
+                    userId = _userId,
+                    password = _password
+                };
+                var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                }); // Serializa el body a formato JSON
+                var response = await _httpClient.PostAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                return RedirectToAction("PeriodUpdated", "Messages");
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
+
         public async Task<IActionResult> AddPeriodAction(AddPeriodModel period)
         {
             _verifySessionFilter.VerifySession(HttpContext);
@@ -173,6 +202,27 @@ namespace FerminToroWeb.Controllers
                 var Response = JsonConvert.DeserializeObject<List<PeriodResponse>>(responseContent);
                 var model = _mapper.MapPeriodResponseToModel(Response);
                 return View("~/Views/Schedule/AllPeriods.cshtml", model);
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> AllPeriods(string id)
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/schedule/schedulebyperiodid?request="+id;
+                var response = await _httpClient.GetAsync(apiUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var Response = JsonConvert.DeserializeObject<List<ScheduleResponse>>(responseContent);
+                return View("~/Views/Schedule/AllSchedulesByPeriodId.cshtml",Response);
             }
             catch (HttpRequestException)
             {

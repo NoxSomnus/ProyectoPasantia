@@ -90,13 +90,13 @@ namespace FerminToroMS.Application.Handlers.Commands
                             Edad = studentrequest.Edad,
                             Telefono = studentrequest.Telefono,
                             Rango_Edad = studentrequest.Rango_Edad,
-                            Es_Regular = studentrequest.Es_Regular,                            
+                            Es_Regular = false,                            
                         };
                         _dbContext.Estudiantes.Add(estudiante);
                     }
                     else 
                     {
-                        student.Es_Regular = studentrequest.Es_Regular;
+                        student.Es_Regular = true;
                         student.Edad = studentrequest.Edad;
                         student.Rango_Edad = student.Rango_Edad;
                         student.Telefono = student.Telefono;

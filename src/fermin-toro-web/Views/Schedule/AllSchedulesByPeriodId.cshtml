@@ -1,0 +1,141 @@
+﻿@using FerminToroMS.Application.Responses;
+@{
+    ViewData["Title"] = "Periodos";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+
+@model IEnumerable<ScheduleResponse>
+<link rel="stylesheet" href="~/css/AllPeriodsTable.css" asp-append-version="true" />
+@if (@Model.FirstOrDefault() == null)
+{
+    <div class="text-center">
+        <h1 class="display-4">Cronograma no creado</h1>
+    </div>
+    <form method="post" id="crearcronograma" asp-action="" asp-controller="">
+        <div style="display: flex; justify-content: center;">
+            <button type="submit" class="btn btn-primary">Crear nuevo cronograma</button>
+        </div>
+    </form>
+
+}
+else{
+    <div class="text-center">
+        <h1 class="display-4">Cronograma del @Model.FirstOrDefault().PeriodName</h1>
+    </div>
+
+    <div>
+        <h3>Aplicar Filtro</h3>
+        <form>
+            <label>Por Turno</label>
+            <select name="byturno">
+                <option value="100">Seleccionar...</option>
+                <option value="0">Matutino</option>
+                <option value="1">Vespertino</option>
+                <option value="2">Nocturno</option>
+                <option value="3">Sabatino</option>
+            </select>
+            <label>Por Modalidad</label>
+            <select name="bymodalidad">
+                <option value="100">Seleccionar...</option>
+                <option value="0">Presencial</option>
+                <option value="1">Online</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Aplicar Filtro</button>
+        </form>
+
+        <!-- <a asp-action="AllPeriods" asp-controller="Schedule" style="float: right" class="btn btn-primary">Sin Filtros</a>-->
+
+    </div>
+
+    <!-- Table -->
+    <div class="table-scroll">
+        <div>
+            <table id="main-table" class="main-table">
+                <thead>
+                    <tr>
+                        <th>Programa</th>
+                        <th>Modulo</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                        <th>Horario</th>
+                        <th>Turno</th>
+                        <th>Regularidad</th>
+                        <th>Modalidad</th>
+                        <th>Duración</th>
+                        <th>Nro Vacantes</th>
+                        <th>Horas</th>
+                        <th>Instructor Asignado</th>
+                    </tr>
+                </thead>
+                <tbody class="letters-colortd">
+                    @foreach (var schedule in Model)
+                    {
+                        <tr>
+                            <td>@schedule.CourseName</td>
+                            <td>@schedule.ModulName</td>
+                            <td>@schedule.Fecha_Inicio</td>
+                            <td>@schedule.Fecha_Fin</td>
+                            <td>@schedule.Horario</td>
+                            <td>@schedule.Turno</td>
+                            <td>@schedule.Regularidad</td>
+                            <td>@schedule.Modalidad</td>
+                            <td>@schedule.Duracion</td>
+                            <td>@schedule.NroVacantes</td>
+                            <td>@schedule.Horas</td>
+                            @if (schedule.InstructorAsignado != null)
+                            {
+                                <td>@schedule.InstructorAsignado</td>
+                            }
+                            else{
+                                <td>No asignado</td>
+                            }           
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+@section Scripts{
+    @{
+        <script>
+            function mostrarModalaño() {
+                $('#exampleModalaño').modal('show');
+            }
+        </script>
+        <script>
+            function mostrarModaldate() {
+                $('#exampleModaldate').modal('show');
+            }
+        </script>
+        <script>
+            function enviarFormulario() {
+                var form = document.getElementById("searchForm");
+                form.submit();
+            }
+        </script>
+        <script>
+            function enviarFormulario2() {
+                var fechainicioInput = document.getElementById("fechainicio");
+                var fechafinInput = document.getElementById("fechafin");
+
+                if (fechainicioInput.checkValidity() && fechafinInput.checkValidity()) {
+                    var form = document.getElementById("searchForm2");
+                    form.submit();
+                } else {
+                    alert("Por favor, completa los campos de fecha correctamente.");
+                }
+            }
+        </script>
+        <script>
+            function actualizarUltimoDia() {
+                var fechafinInput = document.getElementById("fechafin");
+                var fechaSeleccionada = new Date(fechafinInput.value);
+                var ultimoDia = new Date(fechaSeleccionada.getFullYear(), fechaSeleccionada.getMonth() + 1, 0).getDate();
+
+                fechafinInput.value = fechaSeleccionada.getFullYear() + "-" + (fechaSeleccionada.getMonth() + 1).toString().padStart(2, "0") + "-" + ultimoDia.toString().padStart(2, "0");
+            }
+        </script>
+
+    }
+}

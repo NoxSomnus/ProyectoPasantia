@@ -101,7 +101,7 @@
 
                         </td>
                         <td>
-                            <form asp-action="AllPeriods" asp-controller="Schedule" method="get">
+                            <form asp-action="AllSchedulesByPeriodId" asp-controller="Schedule" method="get">
                                 <input type="hidden" name="id" value="@period.Id" />
                                 <button type="submit" class="btn btn-primary" asp-route-id="@period.Id">Ver Cronograma</button>
                             </form>

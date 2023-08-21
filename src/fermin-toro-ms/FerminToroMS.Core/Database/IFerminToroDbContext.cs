@@ -27,6 +27,7 @@ namespace FerminToroMS.Core.Database
         DbSet<PromocionEntity> Promociones { get; }
         DbSet<PaisesEntity> Paises { get; }
         DbSet<EstadosVnzlaEntity> Estados_Venezuela { get; }
+        DbSet<RepresentanteEntity> Representantes { get; }
         DbContext DbContext
         {
             get;

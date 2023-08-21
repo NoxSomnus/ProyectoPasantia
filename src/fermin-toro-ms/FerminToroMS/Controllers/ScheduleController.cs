@@ -204,5 +204,45 @@ namespace FerminToroMS.Controllers
                 return StatusCode(500, "Ocurrió un error al migrar los cronogramas. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
         }
+
+        [HttpGet("ScheduleByPeriodId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> ScheduleByPeriodId([FromQuery] Guid request)
+        {
+            _logger.LogInformation("Entrando al metodo que registra estudiantes mediante carga de archivo csv");
+            try
+            {
+                var query = new SchedulesByPeriodIdQuery(request);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los cronogramas");
+                return StatusCode(500, "Ocurrió un error al consultar los cronogramas. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+        [HttpPost("SchedulesWithFilters")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> ScheduleWithFilters([FromBody] SchedulesWithFiltersRequest request)
+        {
+            _logger.LogInformation("Entrando al metodo que registra estudiantes mediante carga de archivo csv");
+            try
+            {
+                var query = new SchedulesWithFiltersQuery(request);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los cronogramas");
+                return StatusCode(500, "Ocurrió un error al consultar los cronogramas. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
     }
 }

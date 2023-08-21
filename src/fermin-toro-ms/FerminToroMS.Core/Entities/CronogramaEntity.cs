@@ -26,7 +26,7 @@ namespace FerminToroMS.Core.Entities
         public EmpleadoEntity? Instructor { get; set; }
         //Relacion con inscripciones y Promociones
         public ICollection<InscripcionEntity>? Inscripciones { get; set; }
-        public ICollection<PromocionEntity>? Promociones { get; set; } 
-        public int? NroVacantes { get; set; }
+        public ICollection<PromocionEntity>? Promociones { get; set; }
+        public int NroVacantes { get; set; } = 0;
     }
 }
