@@ -36,6 +36,13 @@ namespace FerminToroWeb.Controllers
             return View();
         }
 
+        public IActionResult AdminStudent()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+
+            return View();
+        }
+
         public IActionResult UploadCSVMigrationOptions()
         {
             _verifySessionFilter.VerifySession(HttpContext);

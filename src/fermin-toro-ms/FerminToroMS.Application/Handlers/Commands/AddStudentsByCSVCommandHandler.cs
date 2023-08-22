@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,9 +72,34 @@ namespace FerminToroMS.Application.Handlers.Commands
 
             try
             {
+                string yearsRange = "";
+                int? age = null;
+                DateTime birthDate;
+                DateTime actualDate = DateTime.Now; TimeSpan difference;
                 _logger.LogInformation("AddStudentsByCSVCommandHandler.HandleAsync");
                 foreach (var studentrequest in request._request.Students)
                 {
+                    birthDate = DateTime.Now.Date;
+                    if (studentrequest.Edad == null && (studentrequest.Fecha_Nac == "" || studentrequest.Fecha_Nac == string.Empty)) 
+                    {
+                        yearsRange = "";
+                        age = null;
+                    }
+                    if (studentrequest.Edad != null) 
+                    {
+                        if (studentrequest.Edad < 18) { yearsRange = "Entre 14 - 18 años"; }
+                        if (studentrequest.Edad >= 19 && studentrequest.Edad <= 26) yearsRange = "Entre 19 - 26 años";
+                        if (studentrequest.Edad >= 27 && studentrequest.Edad <= 59) yearsRange = "Entre 27 - 59 años";
+                        if (studentrequest.Edad >= 60) yearsRange = "Mayor a 60 años";
+                        age = studentrequest.Edad;
+                    }
+                    if (studentrequest.Edad == null && (studentrequest.Fecha_Nac != "" || studentrequest.Fecha_Nac != string.Empty)) 
+                    {
+                        DateTime.TryParseExact(studentrequest.Fecha_Nac, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out birthDate);
+                        difference = actualDate.Subtract(birthDate);
+                        double edad = difference.TotalDays / 365.25;
+                        age = (int)Math.Floor(edad);
+                    }
                     var studentId = Guid.NewGuid();
                     var student = _dbContext.Estudiantes.FirstOrDefault(c => c.Cedula == studentrequest.Cedula);
                     if (student == null)
@@ -87,18 +113,22 @@ namespace FerminToroMS.Application.Handlers.Commands
                             Correo = studentrequest.Correo,
                             CorreoSecundario = studentrequest.CorreoSecundario,
                             Direccion_Hab = studentrequest.Direccion,
-                            Edad = studentrequest.Edad,
+                            Edad = age,
                             Telefono = studentrequest.Telefono,
-                            Rango_Edad = studentrequest.Rango_Edad,
+                            Rango_Edad = yearsRange,
                             Es_Regular = false,                            
                         };
+                        if (birthDate != DateTime.Now.Date) 
+                        {
+                            estudiante.Fecha_Nac = birthDate;
+                        }
                         _dbContext.Estudiantes.Add(estudiante);
                     }
                     else 
                     {
                         student.Es_Regular = true;
-                        student.Edad = studentrequest.Edad;
-                        student.Rango_Edad = student.Rango_Edad;
+                        student.Edad = age;
+                        student.Rango_Edad = yearsRange;
                         student.Telefono = student.Telefono;
                         _dbContext.Estudiantes.Update(student);
                     }

@@ -1,4 +1,7 @@
-﻿using FerminToroWeb.ApiUrlConfig;
+﻿using FerminToroMS.Application.Responses;
+using FerminToroWeb.ApiUrlConfig;
+using FerminToroWeb.Filters;
+using FerminToroWeb.Mappers;
 using FerminToroWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -12,11 +15,16 @@ namespace FerminToroWeb.Controllers
     {
         private readonly ApiUrlConfigClass apiurl;
         private HttpClient _httpClient;
-        public StudentController()
+        private readonly VerifySessionFilter _verifySessionFilter;
+        private MapperResponseToModels _mapper;
+        public StudentController(ILogger<ScheduleController> logger)
         {
             apiurl = new ApiUrlConfigClass();
             _httpClient = new HttpClient();
+            _verifySessionFilter = new VerifySessionFilter();
+            _mapper = new MapperResponseToModels();
         }
+        
         public IActionResult SignUp()
         {
             return View(new StudentSignUpModel());
@@ -58,6 +66,49 @@ namespace FerminToroWeb.Controllers
                     return RedirectToAction("SomethingWentWrongView", "Messages");
                 }
                 return RedirectToAction("EmployeeAdded", "Messages");
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
+
+        public async Task<IActionResult> AllStudents()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/student/allstudents";
+                var response = await _httpClient.GetAsync(apiUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var Response = JsonConvert.DeserializeObject<List<AllStudentsResponse>>(responseContent);                
+                return View(Response);
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> StudentDetail(string id)
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/student/byid?id=" + id;
+                var response = await _httpClient.GetAsync(apiUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var Response = JsonConvert.DeserializeObject<StudentResponse>(responseContent);
+                return View("~/Views/Student/StudentDetail.cshtml", Response);
             }
             catch (HttpRequestException)
             {

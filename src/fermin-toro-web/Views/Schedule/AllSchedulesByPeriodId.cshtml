@@ -25,28 +25,59 @@ else{
 
     <div>
         <h3>Aplicar Filtro</h3>
-        <form>
-            <label>Por Turno</label>
-            <select name="byturno">
-                <option value="100">Seleccionar...</option>
-                <option value="0">Matutino</option>
-                <option value="1">Vespertino</option>
-                <option value="2">Nocturno</option>
-                <option value="3">Sabatino</option>
-            </select>
-            <label>Por Modalidad</label>
-            <select name="bymodalidad">
-                <option value="100">Seleccionar...</option>
-                <option value="0">Presencial</option>
-                <option value="1">Online</option>
-            </select>
-            <button type="submit" class="btn btn-primary">Aplicar Filtro</button>
-        </form>
-
-        <!-- <a asp-action="AllPeriods" asp-controller="Schedule" style="float: right" class="btn btn-primary">Sin Filtros</a>-->
-
+        <label>Por Turno</label>
+        <select name="byturno" id="turnoSelect">
+            <option value="">Seleccionar...</option>
+            <option value="Matutino">Matutino</option>
+            <option value="Vespertino">Vespertino</option>
+            <option value="Nocturno">Nocturno</option>
+            <option value="Sabatino">Sabatino</option>
+        </select>
+        <label>Por Modalidad</label>
+        <select name="bymodalidad" id="modalidadSelect">
+            <option value="">Seleccionar...</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Online">Online</option>
+        </select>
+        <label>Por Regularidad</label>
+        <select name="byregularidad" id="regularidadSelect">
+            <option value="">Seleccionar...</option>
+            <option value="Regular">Regular</option>
+            <option value="SemiIntesivo">SemiIntensivo</option>
+            <option value="Intensivo">Intensivo</option>
+        </select>
+        <label>Por Módulo</label>
+        <select name="bymodulo" id="moduloSelect">
+            <option value="">Seleccionar...</option>
+            @{
+                var opciones = new List<string>();
+            }
+            @foreach (var programs in Model)
+            {
+                if (!opciones.Contains(programs.ModulName))
+                {
+                    opciones.Add(programs.ModulName);
+                    <option value="@programs.ModulName">@programs.ModulName</option>
+                }
+            }
+        </select>
+        <br />
+        <label>Por Programa</label>
+        <select name="byprograma" id="programaSelect">
+            <option value="">Seleccionar...</option>
+            @{
+                opciones = new List<string>();
+            }
+            @foreach(var programs in Model)
+            {
+                if (!opciones.Contains(programs.CourseName))
+                {
+                    opciones.Add(programs.CourseName);
+                    <option value="@programs.CourseName">@programs.CourseName</option>
+                }
+            }
+        </select>
     </div>
-
     <!-- Table -->
     <div class="table-scroll">
         <div>
@@ -67,7 +98,7 @@ else{
                         <th>Instructor Asignado</th>
                     </tr>
                 </thead>
-                <tbody class="letters-colortd">
+                <tbody>
                     @foreach (var schedule in Model)
                     {
                         <tr>
@@ -96,46 +127,49 @@ else{
         </div>
     </div>
 }
-@section Scripts{
-    @{
-        <script>
-            function mostrarModalaño() {
-                $('#exampleModalaño').modal('show');
-            }
-        </script>
-        <script>
-            function mostrarModaldate() {
-                $('#exampleModaldate').modal('show');
-            }
-        </script>
-        <script>
-            function enviarFormulario() {
-                var form = document.getElementById("searchForm");
-                form.submit();
-            }
-        </script>
-        <script>
-            function enviarFormulario2() {
-                var fechainicioInput = document.getElementById("fechainicio");
-                var fechafinInput = document.getElementById("fechafin");
+@section Scripts {
+    <script>
+        // Capturar el evento de cambio en los select
+        document.getElementById("turnoSelect").addEventListener("change", filtrarRegistros);
+        document.getElementById("modalidadSelect").addEventListener("change", filtrarRegistros);
+        document.getElementById("regularidadSelect").addEventListener("change", filtrarRegistros);
+        document.getElementById("moduloSelect").addEventListener("change", filtrarRegistros);
+        document.getElementById("programaSelect").addEventListener("change", filtrarRegistros);
 
-                if (fechainicioInput.checkValidity() && fechafinInput.checkValidity()) {
-                    var form = document.getElementById("searchForm2");
-                    form.submit();
+        function filtrarRegistros() {
+            // Obtener los valores seleccionados en los select
+            var turno = document.getElementById("turnoSelect").value;
+            var modalidad = document.getElementById("modalidadSelect").value;
+            var regularidad = document.getElementById("regularidadSelect").value;
+            var modulo = document.getElementById("moduloSelect").value;
+            var programa = document.getElementById("programaSelect").value;
+
+            // Obtener la tabla y sus filas
+            var table = document.getElementById("main-table");
+            var rows = table.getElementsByTagName("tr");
+
+            // Recorrer las filas de la tabla
+            for (var i = 1; i < rows.length; i++) {
+                var row = rows[i];
+                var cells = row.getElementsByTagName("td");
+
+                // Obtener los valores de turno, modalidad, regularidad, módulo y programa en la fila actual
+                var turnoValue = cells[5].innerText;
+                var modalidadValue = cells[7].innerText;
+                var regularidadValue = cells[6].innerText;
+                var moduloValue = cells[1].innerText;
+                var programaValue = cells[0].innerText;
+                // Aplicar el filtro
+                if ((turno == "" || turnoValue == turno) && 
+                (modalidad == "" || modalidadValue == modalidad) && 
+                (regularidad == "" || regularidadValue == regularidad) &&
+                (modulo == "" || moduloValue == modulo) && 
+                (programa == "" || programaValue == programa)) {
+                    row.style.display = ""; // Mostrar la fila si cumple con el filtro
                 } else {
-                    alert("Por favor, completa los campos de fecha correctamente.");
+                    row.style.display = "none"; // Ocultar la fila si no cumple con el filtro
                 }
             }
-        </script>
-        <script>
-            function actualizarUltimoDia() {
-                var fechafinInput = document.getElementById("fechafin");
-                var fechaSeleccionada = new Date(fechafinInput.value);
-                var ultimoDia = new Date(fechaSeleccionada.getFullYear(), fechaSeleccionada.getMonth() + 1, 0).getDate();
-
-                fechafinInput.value = fechaSeleccionada.getFullYear() + "-" + (fechaSeleccionada.getMonth() + 1).toString().padStart(2, "0") + "-" + ultimoDia.toString().padStart(2, "0");
-            }
-        </script>
-
-    }
+        }
+    </script>
 }

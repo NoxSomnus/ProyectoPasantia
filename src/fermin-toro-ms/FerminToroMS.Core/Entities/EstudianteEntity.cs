@@ -22,7 +22,7 @@ namespace FerminToroMS.Core.Entities
         public string Telefono { get; set; } = null!;
         public string? CorreoSecundario { get; set; }
         public string Direccion_Hab { get; set; } = null!;
-        public DateOnly? Fecha_Nac { get; set; }
+        public DateTime? Fecha_Nac { get; set; }
         public int? Edad { get; set; }
         public string? Rango_Edad { get; set; }
         public bool Es_Regular { get; set; }

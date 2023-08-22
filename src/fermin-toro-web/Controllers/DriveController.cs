@@ -71,7 +71,7 @@ namespace FerminToroWeb.Controllers
                 }
                 return RedirectToAction("FailedCSVRead", "Messages");
             }
-            return RedirectToAction("SuccessfulMessageView", "Messages");
+            return RedirectToAction("UploadSuccesfulView", "Messages");
         }
         [HttpPost]
         public async Task<IActionResult> UploadSchedulesCSVFile(IFormFile file)
@@ -97,7 +97,7 @@ namespace FerminToroWeb.Controllers
                 }
                 return RedirectToAction("FailedCSVRead", "Messages");
             }
-            return RedirectToAction("SuccessfulMessageView", "Messages");
+            return RedirectToAction("UploadSuccesfulView", "Messages");
         }
 
         [HttpPost]
@@ -109,7 +109,7 @@ namespace FerminToroWeb.Controllers
             {
                 return RedirectToAction("UploadFailedView", "Messages");
             }
-            var apiUrl = apiurl.ApiUrl + ""; //PILA AQUI
+            var apiUrl = apiurl.ApiUrl + "/drive/processstudentscsvfile"; //PILA AQUI
             var requestBody = new { drivefileid = Id };
             var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
             {
@@ -125,7 +125,7 @@ namespace FerminToroWeb.Controllers
 
                 return RedirectToAction("FailedCSVRead", "Messages");
             }
-            return RedirectToAction("SuccessfulMessageView", "Messages");
+            return RedirectToAction("UploadSuccesfulView", "Messages");
         }
     }
 }

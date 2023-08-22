@@ -21,7 +21,7 @@ namespace FerminToroMS.Application.Mappers
                 Correo = request.Correo,
                 Direccion_Hab = request.Direccion,
                 Es_Regular = false,
-                Fecha_Nac = DateOnly.ParseExact(request.Fecha_Nac, "yyyy-MM-dd", null),
+                Fecha_Nac = DateTime.ParseExact(request.Fecha_Nac, "yyyy-MM-dd", null),
                 Rango_Edad = request.Rango_Edad,
                 Telefono = request.Telefono,
                 Porcentaje_Beca = 0

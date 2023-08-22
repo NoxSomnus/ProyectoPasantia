@@ -5,7 +5,7 @@ namespace FerminToroWeb.Controllers
 {
     public class MessagesController : Controller
     {
-        public IActionResult SuccessfulMessageView()
+        public IActionResult UploadSuccesfulView()
         {
             return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
             {   Message = "Archivo Subido con Éxito", 

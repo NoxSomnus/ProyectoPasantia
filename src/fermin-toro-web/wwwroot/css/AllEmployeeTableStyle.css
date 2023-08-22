@@ -27,7 +27,7 @@
 }
 
 .table-scroll thead th {
-    background: #000;
+    background: #306D74;
     color: #fff;
     position: -webkit-sticky;
     position: sticky;
@@ -35,11 +35,19 @@
     z-index: 2;
 }
 
+.table-scroll tbody td {
+    background: #BED0D8;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
 .close-button {
     width: 30px;
     height: 30px;
     padding: 0;
-    background-color: white;
+    background-color: #BED0D8;
     border: none;
     outline: none;
     position: relative;

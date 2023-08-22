@@ -25,6 +25,12 @@
                     }
                 </li>
                 <li id="usuarios-link">
+                    @using (Html.BeginForm("AdminStudent", "Admin", FormMethod.Post))
+                    {
+                        <button id="boton-VerUsuarioss" type="submit">Administrar<br /> Estudiantes</button>
+                    }
+                </li>
+                <li id="usuarios-link">
                     @using (Html.BeginForm("AdminEmployee", "Admin", FormMethod.Post))
                     {
                         <button id="boton-VerUsuarioss" type="submit">Administrar<br /> Empleados</button>
