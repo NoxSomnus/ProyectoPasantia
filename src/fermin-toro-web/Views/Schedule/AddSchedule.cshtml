@@ -1,0 +1,297 @@
+﻿@{
+    ViewData["Title"] = "Agregar nuevo cronograma";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+@model AddScheduleModel
+<form action="/Schedule/AddScheduleAction" method="post">
+    <table id="dataTable">
+        <input type="hidden" name="PeriodoId" value="@Model.PeriodoId" />
+        <thead>
+        <tr>
+            <th>Programa</th>
+            <th>Modulo</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Horario</th>
+            <th>Regularidad</th>
+            <th>Turno</th>
+            <th>Modalidad</th>
+            <th>Duración</th>
+            <th>Vacantes</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <label for="programa">Programa:</label>
+                    <select name="programa" id="programa">
+                        <option value="CCNA Version 7.0.">CCNA Version 7.0</option>
+                        <option value="CCNA Cybersecurity Operations Version 1.1.">CCNA Cybersecurity Operations Version 1.1</option>
+                        <option value="CCNP Versión 8.0.">CCNP Versión 8.0</option>
+                        <option value="DevNet Associate 1.0.">DevNet Associate 1.0</option>
+                        <option value="CCST Networking.">CCST Networking</option>
+                        <option value="CompTIA A+ IT Essentials.">CompTIA A+ IT Essentials</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="modulos">Módulos:</label>
+                    <select name="modulos" id="modulos">
+                        <option value="Modulo I">Módulo I</option>
+                        <option value="Modulo II">Módulo II</option>
+                        <option value="Modulo III">Módulo III</option>
+                        <option value="Modulo Único">Módulo Único</option>
+                        <option value="Modulo I (ENCOR)">Módulo I (ENCOR)</option>
+                        <option value="Modulo II (ENARSI)">Módulo II (ENARSI)</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="fechaInicio">Fecha de inicio:</label>
+                    <input type="date" name="fechaInicio" id="fechaInicio" required>
+                </td>
+                <td>
+                    <label for="fechaFin">Fecha de fin:</label>
+                    <input type="date" name="fechaFin" id="fechaFin" required>
+                </td>
+                <td>
+                    <label for="regularidad">Regularidad:</label>
+                    <select name="regularidad" id="regularidad">
+                        <option value="0">Regular</option>
+                        <option value="1">Intensivo</option>
+                        <option value="2">SemiIntensivo</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="turno">Turno:</label>
+                    <select name="turno" id="turno">
+                        <option value="0">Matutino</option>
+                        <option value="1">Vespertino</option>
+                        <option value="2">Nocturno</option>
+                        <option value="3">Sabatino</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="horario">Horario:</label>
+                    <select name="horario" id="horario">
+                        <option value="Lunes y Miercoles">Lunes y Miercoles</option>
+                        <option value="Martes y Jueves">Martes y Jueves</option>
+                        <option value="Lunes a Jueves">Lunes a Jueves</option>
+                        <option value="Lunes a Viernes">Lunes a Viernes</option>
+                        <option value="Sabados">Sabados</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="modalidad">Modalidad:</label>
+                    <select name="modalidad" id="modalidad">
+                        <option value="0">Presencial</option>
+                        <option value="1">Online</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="duracion">Duración:</label>
+                    <select name="duracion" id="duracion">
+                        <option value="8 semanas">8 semanas</option>
+                        <option value="6 semanas">6 semanas</option>
+                        <option value="4 semanas">4 semanas</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="vacantes">Vacantes:</label>
+                    <input type="number" name="vacantes" id="vacantes">
+                </td>
+            </tr>
+    </table>
+
+
+
+    <button type="submit">Enviar</button>
+</form>
+<button type="button" id="addRow">Añadir registro</button>
+
+@section Scripts{
+    @{
+        <script>
+            // Obtener el elemento select del programa y el elemento select de los módulos
+            var programaSelect = document.getElementById("programa");
+            var modulosSelect = document.getElementById("modulos");
+
+            // Definir una función para mostrar u ocultar los módulos dependiendo del programa seleccionado
+            function actualizarModulos() {
+                // Obtener el valor seleccionado del programa
+                var programaSeleccionado = programaSelect.value;
+
+                // Ocultar todos los elementos de la lista de módulos
+                for (var i = 0; i < modulosSelect.options.length; i++) {
+                    modulosSelect.options[i].style.display = "none";
+                }
+
+                // Mostrar los módulos correspondientes al programa seleccionado
+                if (programaSeleccionado === "CCNA Version 7.0.") {
+                    modulosSelect.options[0].style.display = "block"; // Modulo I
+                    modulosSelect.options[1].style.display = "block"; // Modulo II
+                    modulosSelect.options[2].style.display = "block"; // Modulo III
+                }
+                if (programaSeleccionado === "CCNA Cybersecurity Operations Version 1.1.") {
+                    modulosSelect.options[3].style.display = "block"; // Modulo Único
+                }
+                if (programaSeleccionado === "CCNP Versión 8.0.") {
+                    modulosSelect.options[4].style.display = "block"; // Modulo I (ENCOR)
+                    modulosSelect.options[5].style.display = "block"; // Modulo II (ENARSI)
+                }
+                if (programaSeleccionado === "DevNet Associate 1.0.") {
+                    modulosSelect.options[3].style.display = "block"; // Modulo Único
+                }
+                if (programaSeleccionado === "CCST Networking.") {
+                    modulosSelect.options[3].style.display = "block"; // Modulo Único
+                }
+                if (programaSeleccionado === "CompTIA A+ IT Essentials.") {
+                    modulosSelect.options[3].style.display = "block"; // Modulo Único
+                }
+
+                if (modulosSelect.selectedIndex >= 0 && modulosSelect.options[modulosSelect.selectedIndex].style.display === "none") {
+                    // Buscar el primer módulo disponible y seleccionarlo
+                    for (var i = 0; i < modulosSelect.options.length; i++) {
+                        if (modulosSelect.options[i].style.display === "block") {
+                            modulosSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Llamar a la función actualizarModulos cuando se selecciona una opción en el programa
+            programaSelect.addEventListener("change", actualizarModulos);
+
+            // Llamar a la función actualizarModulos al cargar la página para mostrar los módulos iniciales
+            actualizarModulos();
+        </script>
+
+        <script>
+            // Obtener el elemento select de la regularidad y el elemento select de los turnos
+            var regularidadSelect = document.getElementById("regularidad");
+            var turnoSelect = document.getElementById("turno");
+            var horarioSelect = document.getElementById("horario");
+
+            // Definir una función para mostrar u ocultar los módulos dependiendo del programa seleccionado
+            function actualizarTurnos() {
+                var regularidadSeleccionada = regularidadSelect.value;
+
+                // Ocultar todos los elementos de la lista de módulos
+                for (var i = 0; i < turnoSelect.options.length; i++) {
+                    turnoSelect.options[i].style.display = "none";
+                }
+                for (var i = 0; i < horarioSelect.options.length; i++) {
+                    horarioSelect.options[i].style.display = "none";
+                }
+
+                // Mostrar los módulos correspondientes al programa seleccionado
+                if (regularidadSeleccionada === "0") {
+                    turnoSelect.options[0].style.display = "block"; // Matutino
+                    turnoSelect.options[1].style.display = "block"; // Vespertino
+                    turnoSelect.options[2].style.display = "block"; // Nocturno
+                    horarioSelect.options[0].style.display = "block"; // Lunes y Miercoles
+                    horarioSelect.options[1].style.display = "block"; // Lunes y Martes
+                }
+
+                if (regularidadSeleccionada === "1") {
+                    turnoSelect.options[0].style.display = "block"; // Matutino
+                    turnoSelect.options[1].style.display = "block"; // Vespertino
+                    turnoSelect.options[2].style.display = "block"; // Nocturno
+                    horarioSelect.options[2].style.display = "block"; // Lunes a Jueves
+                    horarioSelect.options[3].style.display = "block"; // Lunes y Viernes
+                }
+
+                if (regularidadSeleccionada === "2") {
+                    turnoSelect.options[3].style.display = "block"; // Sabatino
+                    horarioSelect.options[4].style.display = "block"; // Sabados
+                }
+
+
+                if (turnoSelect.selectedIndex >= 0 && turnoSelect.options[turnoSelect.selectedIndex].style.display === "none") {
+                    // Buscar el primer módulo disponible y seleccionarlo
+                    for (var i = 0; i < turnoSelect.options.length; i++) {
+                        if (turnoSelect.options[i].style.display === "block") {
+                            turnoSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    for (var i = 0; i < horarioSelect.options.length; i++) {
+                        if (horarioSelect.options[i].style.display === "block") {
+                            horarioSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Llamar a la función actualizarModulos cuando se selecciona una opción en el programa
+            regularidadSelect.addEventListener("change", actualizarTurnos);
+
+            // Llamar a la función actualizarTurnos al cargar la página para mostrar los módulos iniciales
+            actualizarTurnos();
+        </script>
+
+
+        <script type="text/javascript">
+            window.onload = function () {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'El período ha sido creado',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok'
+                })
+            }
+        </script>
+        <script>
+            document.getElementById('addRow').addEventListener('click', function () {
+                var table = document.getElementById('dataTable');
+
+                var newRow = document.createElement('tr');
+
+                var programaCell = document.createElement('td');
+                programaCell.innerHTML = document.getElementById('programa').outerHTML;
+                newRow.appendChild(programaCell);
+
+                var moduloCell = document.createElement('td');
+                moduloCell.innerHTML = document.getElementById('modulos').outerHTML;
+                newRow.appendChild(moduloCell);
+
+                var inicioCell = document.createElement('td');
+                inicioCell.innerHTML = document.getElementById('fechaInicio').outerHTML;
+                newRow.appendChild(inicioCell);
+
+                var finCell = document.createElement('td');
+                finCell.innerHTML = document.getElementById('fechaFin').outerHTML;
+                newRow.appendChild(finCell);
+
+                var regularidadCell = document.createElement('td');
+                regularidadCell.innerHTML = document.getElementById('regularidad').outerHTML;
+                newRow.appendChild(regularidadCell);
+
+                var turnocell = document.createElement('td');
+                turnocell.innerHTML = document.getElementById('turno').outerHTML;
+                newRow.appendChild(turnocell);
+
+                var horariocell = document.createElement('td');
+                horariocell.innerHTML = document.getElementById('horario').outerHTML;
+                newRow.appendChild(horariocell);
+
+                var modalidadcell = document.createElement('td');
+                modalidadcell.innerHTML = document.getElementById('modalidad').outerHTML;
+                newRow.appendChild(modalidadcell);
+
+                var duracioncell = document.createElement('td');
+                duracioncell.innerHTML = document.getElementById('duracion').outerHTML;
+                newRow.appendChild(duracioncell);
+
+                var vacantescell = document.createElement('td');
+                vacantescell.innerHTML = document.getElementById('vacantes').outerHTML;
+                newRow.appendChild(vacantescell);
+                table.appendChild(newRow);
+            });
+        </script>
+
+
+    }
+}

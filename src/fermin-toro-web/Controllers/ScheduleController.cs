@@ -34,6 +34,21 @@ namespace FerminToroWeb.Controllers
             var model = new AddPeriodModel();
             return View(model);
         }
+        public IActionResult AddSchedule(string periodoid)
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            var model = new AddScheduleModel { PeriodoId = periodoid };
+            return View("~/Views/Schedule/AddSchedule.cshtml",model);
+        }
+
+        [HttpPost]
+        public void AddScheduleAction(string PeriodoId, List<string> programa, List<string> modulos,
+            List<string> fechaInicio, List<string> fechaFin, List<string> regularidad,
+            List<string> turno, List<string> horario, List<string> modalidad, List<string> duracion,
+            List<string> vacantes)
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+        }
 
         public IActionResult UpdateView(UpdatePeriodModel model)
         {
@@ -109,6 +124,7 @@ namespace FerminToroWeb.Controllers
                 var apiUrl = apiurl.ApiUrl + "/schedule/addperiod";
                 var requestBody = new
                 {
+                    newId = Guid.NewGuid().ToString(),
                     periodName = period.NombrePeriodo,
                     year = period.Año,
                     startMonth = period.MesInicio,
@@ -123,7 +139,7 @@ namespace FerminToroWeb.Controllers
                 {
                     return RedirectToAction("SomethingWentWrongView", "Messages");
                 }
-                return RedirectToAction("PeriodAdded", "Messages");
+                return AddSchedule(requestBody.newId);
             }
             catch (HttpRequestException)
             {

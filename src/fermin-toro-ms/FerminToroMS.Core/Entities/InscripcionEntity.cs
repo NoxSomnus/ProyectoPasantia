@@ -15,6 +15,8 @@ namespace FerminToroMS.Core.Entities
         public string? NotaAcademica { get; set; }
         public Guid CronogramaId { get; set; }
         public CronogramaEntity Cronograma { get; set; } = null!;
+        public Guid EstudianteId { get; set; }
+        public EstudianteEntity Estudiante { get; set; } = null!;
         public ICollection<DeudasEntity>? Deudas { get; set; }
         public ICollection<PagoEntity>? Pagos { get; set; }
     }

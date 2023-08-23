@@ -131,7 +131,7 @@ namespace FerminToroMS.Application.Handlers.Commands
                             ModuloId = modul.Id,
                             PeriodoId = period.Id
                         };
-                        if (schedulerequest.FechaFin != "")
+                        if (schedulerequest.FechaFin != "" || schedulerequest.FechaFin != null)
                         {
                             schedule.FechaFin = DateOnly.ParseExact(schedulerequest.FechaFin, "dd/MM/yyyy", null);
                         }

@@ -8,6 +8,7 @@ namespace FerminToroMS.Application.Requests
 {
     public class AddPeriodRequest
     {
+        public Guid newId { get; set; }
         public string PeriodName { get; set; } = null!;
         public int Year { get; set; }
         public string StartMonth { get; set; } = null!;

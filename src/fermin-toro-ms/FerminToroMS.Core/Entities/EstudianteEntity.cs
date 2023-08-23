@@ -33,5 +33,6 @@ namespace FerminToroMS.Core.Entities
         public ICollection<AbonoEntity>? Abonos { get; set; }
         public Guid? RepresentanteId { get; set; }
         public RepresentanteEntity? Representante { get; set; }
+        public ICollection<InscripcionEntity>? Inscripciones { get; set; }
     }
 }

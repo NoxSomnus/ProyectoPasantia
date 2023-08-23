@@ -28,6 +28,7 @@ namespace FerminToroMS.Application.Mappers
         {
             var period = new PeriodoEntity
             {
+                Id = request.newId,
                 NombrePeriodo = request.PeriodName,
                 Año = request.Year,
                 MesInicio = request.StartMonth,
