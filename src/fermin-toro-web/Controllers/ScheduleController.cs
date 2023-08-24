@@ -1,5 +1,6 @@
 ﻿using FerminToroMS.Application.Responses;
 using FerminToroWeb.ApiUrlConfig;
+using FerminToroWeb.CustomClasses;
 using FerminToroWeb.Filters;
 using FerminToroWeb.Mappers;
 using FerminToroWeb.Models;
@@ -42,12 +43,52 @@ namespace FerminToroWeb.Controllers
         }
 
         [HttpPost]
-        public void AddScheduleAction(string PeriodoId, List<string> programa, List<string> modulos,
-            List<string> fechaInicio, List<string> fechaFin, List<string> regularidad,
-            List<string> turno, List<string> horario, List<string> modalidad, List<string> duracion,
-            List<string> vacantes)
+        public async Task<IActionResult> AddScheduleAction(string PeriodoId, List<string> programa, List<string> modulos,
+            List<string> fechaInicio, List<string> fechaFin, List<int> regularidad,
+            List<int> turno, List<string> horario, List<int> modalidad, List<int> duracion,
+            List<int> vacantes)
         {
-            _verifySessionFilter.VerifySession(HttpContext);
+            var cronogramas = new List<ScheduleDataToCreate>();
+            for (int i = 0; i < programa.Count; i++) 
+            {
+                var cronograma = new ScheduleDataToCreate 
+                {
+                    Programa = programa[i],
+                    Modulo = modulos[i],
+                    FechaInicio = fechaInicio[i],
+                    FechaFin = fechaFin[i],
+                    Regularidad = regularidad[i],
+                    Turno = turno[i],
+                    Horario = horario[i],
+                    Modalidad = modalidad[i],
+                    Duracion = duracion[i],
+                    Vacantes = vacantes[i]
+                };
+                cronogramas.Add(cronograma);
+            }
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/schedule/addschedule";
+                var requestBody = new
+                {
+                    periodId = PeriodoId,
+                    schedules = cronogramas
+                };
+                var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                }); // Serializa el body a formato JSON
+                var response = await _httpClient.PostAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                return RedirectToAction("ScheduleAdded", "Messages");
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
         }
 
         public IActionResult UpdateView(UpdatePeriodModel model)

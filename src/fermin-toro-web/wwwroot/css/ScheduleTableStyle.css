@@ -1,0 +1,21 @@
+﻿.dataTable {
+    margin: 0 auto;
+    width: 100%;
+    table-layout: fixed;
+    overflow-x: auto;
+}
+    .dataTable select,
+    .dataTable input {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .dataTable th {
+        text-align: center;
+        vertical-align: middle;
+    }
+    .dataTable td select {
+        width: 100%;
+        font-size: 13px;
+    }

@@ -34,6 +34,16 @@ namespace FerminToroWeb.Controllers
             });
         }
 
+        public IActionResult ScheduleAdded()
+        {
+            return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
+            {
+                Message = "Cronograma Creado",
+                NextStep = "Haga click para volver al inicio",
+                ButtonContent = "Inicio"
+            });
+        }
+
         public IActionResult EmployeeUpdated()
         {
             return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FerminToroMS.Application.Requests
 {
-    public class ScheduleByDateRequest 
+    public class CreateScheduleRequest
     {
-        public DateOnly StartDate { get; set; }
-        public DateOnly EndDate { get; set; }
+        public Guid PeriodId { get; set; }
+        public List<ScheduleDataToCreate> Schedules { get; set; } = null!;
     }
 }

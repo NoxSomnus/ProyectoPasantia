@@ -1,4 +1,5 @@
-﻿using FerminToroMS.Application.Responses;
+﻿using FerminToroMS.Application.Requests;
+using FerminToroMS.Application.Responses;
 using FerminToroMS.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,26 @@ namespace FerminToroMS.Application.Mappers
                 };
                 response.Add(scheduleResponse);
             }
+            return response;
+        }
+        public static CronogramaEntity MapRequestToEntitySchedule(ScheduleDataToCreate schedule, 
+            Guid modulId, Guid periodId)
+        {
+            var response = new CronogramaEntity
+            {
+                Id = Guid.NewGuid(),
+                FechaInicio = DateOnly.ParseExact(schedule.FechaInicio, "yyyy-MM-dd", null),
+                FechaFin = DateOnly.ParseExact(schedule.FechaFin, "yyyy-MM-dd", null),
+                Regularidad = schedule.Regularidad,
+                Turno = schedule.Turno,
+                Horario_Dias = schedule.Horario,
+                Modalidad = schedule.Modalidad,
+                Duracion_Semanas = schedule.Duracion,
+                NroVacantes = schedule.Vacantes,
+                NroHoras = 80,
+                PeriodoId = periodId,
+                ModuloId = modulId
+            };           
             return response;
         }
     }

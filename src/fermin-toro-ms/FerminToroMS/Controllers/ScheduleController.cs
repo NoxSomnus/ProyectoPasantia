@@ -85,6 +85,37 @@ namespace FerminToroMS.Controllers
             }
         }
 
+
+        [HttpPost("AddSchedule")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> AddSchedule([FromBody] CreateScheduleRequest request)
+        {
+            _logger.LogInformation("Entrando al metodo que registra los registros de un cronograma");
+            try
+            {
+                var command = new CreateScheduleCommand(request);
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (DataNotFoundException ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al agregar el cronograma");
+                return NotFound(ex.Message);
+            }
+            catch (IdNotFoundException ex) 
+            {
+                _logger.LogError(ex, "Ocurrió un error al agregar el cronograma");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al agregar un nuevo cronograma");
+                return StatusCode(500, "Ocurrió un error al agregar el cronograma. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
         /// <summary>
         /// Método que actualiza un periodo.
         /// </summary>
