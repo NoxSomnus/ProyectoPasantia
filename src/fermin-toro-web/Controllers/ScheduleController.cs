@@ -35,21 +35,58 @@ namespace FerminToroWeb.Controllers
             var model = new AddPeriodModel();
             return View(model);
         }
-        public IActionResult AddSchedule(string periodoid)
+        public async Task<IActionResult> AddSchedule(string periodoid)
         {
             _verifySessionFilter.VerifySession(HttpContext);
-            var model = new AddScheduleModel { PeriodoId = periodoid };
-            return View("~/Views/Schedule/AddSchedule.cshtml",model);
+            try 
+            {
+                var apiUrl = apiurl.ApiUrl + "/employee/allinstructors";
+                var response = await _httpClient.GetAsync(apiUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var Response = JsonConvert.DeserializeObject<List<AllInstructorsResponse>>(responseContent);
+                var model = new AddScheduleModel { PeriodoId = periodoid, FromCreatePeriod = true, instructores = Response};
+                return View("~/Views/Schedule/AddSchedule.cshtml", model);
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }           
+        }
+
+        public async Task<IActionResult> AddScheduleFromPeriodsList(string periodoid)
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/employee/allinstructors";
+                var response = await _httpClient.GetAsync(apiUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var Response = JsonConvert.DeserializeObject<List<AllInstructorsResponse>>(responseContent);
+                var model = new AddScheduleModel { PeriodoId = periodoid, FromCreatePeriod = false, instructores = Response };
+                return View("~/Views/Schedule/AddSchedule.cshtml", model);
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> AddScheduleAction(string PeriodoId, List<string> programa, List<string> modulos,
             List<string> fechaInicio, List<string> fechaFin, List<int> regularidad,
             List<int> turno, List<string> horario, List<int> modalidad, List<int> duracion,
-            List<int> vacantes)
+            List<int> vacantes, List<string> instructor)
         {
             var cronogramas = new List<ScheduleDataToCreate>();
-            for (int i = 0; i < programa.Count; i++) 
+            for (int i = 1; i < programa.Count; i++) 
             {
                 var cronograma = new ScheduleDataToCreate 
                 {
@@ -62,7 +99,8 @@ namespace FerminToroWeb.Controllers
                     Horario = horario[i],
                     Modalidad = modalidad[i],
                     Duracion = duracion[i],
-                    Vacantes = vacantes[i]
+                    Vacantes = vacantes[i],
+                    InstructorId = instructor[i]
                 };
                 cronogramas.Add(cronograma);
             }
@@ -180,14 +218,14 @@ namespace FerminToroWeb.Controllers
                 {
                     return RedirectToAction("SomethingWentWrongView", "Messages");
                 }
-                return AddSchedule(requestBody.newId);
+                return await AddSchedule(requestBody.newId);
             }
             catch (HttpRequestException)
             {
                 return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
             }
         }
-
+        [HttpGet]
         public async Task<IActionResult> AllPeriods()
         {
             _verifySessionFilter.VerifySession(HttpContext);
@@ -265,7 +303,7 @@ namespace FerminToroWeb.Controllers
                 return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
             }
         }
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> AllPeriods(string id)
         {
             _verifySessionFilter.VerifySession(HttpContext);
@@ -279,12 +317,15 @@ namespace FerminToroWeb.Controllers
                 }
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var Response = JsonConvert.DeserializeObject<List<ScheduleResponse>>(responseContent);
-                return View("~/Views/Schedule/AllSchedulesByPeriodId.cshtml",Response);
+                var model = new ScheduleByPeriodIdModel { PeriodoId = id, schedules = Response };
+                return View("~/Views/Schedule/AllSchedulesByPeriodId.cshtml",model);
             }
             catch (HttpRequestException)
             {
                 return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
             }
         }
+
+
     }
 }

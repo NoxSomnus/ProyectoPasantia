@@ -82,7 +82,9 @@ namespace FerminToroMS.Application.Handlers.Queries
                         Turno = c.Turno.ToString(),
                         Regularidad = c.Regularidad.ToString(),
                         Duracion = c.Duracion_Semanas,
-                        NroVacantes = c.NroVacantes
+                        NroVacantes = c.NroVacantes,
+                        InstructorAsignado = c.InstructorId != null && c.Instructor != null ? c.Instructor.Nombre + " " + c.Instructor.Apellido : null ,
+                        InstructorId = c.InstructorId != null ? c.InstructorId : null
                     }).ToListAsync();
                 return schedules;
             }

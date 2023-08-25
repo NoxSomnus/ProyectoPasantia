@@ -20,8 +20,8 @@ namespace FerminToroMS.Application.Responses
         public string? Fecha_Fin { get; set; }
         public int Horas { get; set; }
         public string Modalidad { get; set; } = null!;
+        public Guid? InstructorId { get; set; }
         public string? InstructorAsignado { get; set; }
-        public string? InstructorAsistente { get; set; }
         public int NroVacantes { get; set; }
     }
 }

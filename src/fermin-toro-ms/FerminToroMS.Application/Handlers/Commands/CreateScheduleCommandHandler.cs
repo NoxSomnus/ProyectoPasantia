@@ -86,7 +86,17 @@ namespace FerminToroMS.Application.Handlers.Commands
                     {
                         throw new DataNotFoundException("Modulo no encontrado: " + schedule.Modulo + " del curso: " + schedule.Programa);
                     }
-                    _dbContext.Cronogramas.Add(CronogramasMapper.MapRequestToEntitySchedule(schedule, modulId.Id, period.Id));
+                    if (schedule.InstructorId == "No Asignado")
+                    {
+                        _dbContext.Cronogramas.Add(CronogramasMapper.MapRequestToEntitySchedule(schedule, modulId.Id, period.Id));
+                    }
+                    else
+                    {
+                        Guid instructorRequestId = Guid.Parse(schedule.InstructorId);
+                        var instructor = _dbContext.Empleados.FirstOrDefault(e => e.Id == instructorRequestId);
+                        if (instructor == null) throw new IdNotFoundException("No se encontro el instructor");
+                        _dbContext.Cronogramas.Add(CronogramasMapper.MapRequestToEntitySchedule(schedule, modulId.Id, period.Id, instructor.Id));
+                    }
                 }
                 await _dbContext.SaveEfContextChanges("APP");
                 transaction.Commit();

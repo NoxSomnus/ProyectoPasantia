@@ -4,14 +4,15 @@
     Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
 }
 
-@model IEnumerable<ScheduleResponse>
+@model ScheduleByPeriodIdModel
 <link rel="stylesheet" href="~/css/AllPeriodsTable.css" asp-append-version="true" />
-@if (@Model.FirstOrDefault() == null)
+@if (@Model.schedules.FirstOrDefault() == null)
 {
     <div class="text-center">
         <h1 class="display-4">Cronograma no creado</h1>
     </div>
-    <form method="post" id="crearcronograma" asp-action="" asp-controller="">
+    <form method="post" id="crearcronograma" asp-action="AddScheduleFromPeriodsList" asp-controller="Schedule">
+        <input type="hidden" name="periodoid" value="@Model.PeriodoId"/>
         <div style="display: flex; justify-content: center;">
             <button type="submit" class="btn btn-primary">Crear nuevo cronograma</button>
         </div>
@@ -20,7 +21,7 @@
 }
 else{
     <div class="text-center">
-        <h1 class="display-4">Cronograma del @Model.FirstOrDefault().PeriodName</h1>
+        <h1 class="display-4">Cronograma del @Model.schedules.FirstOrDefault().PeriodName</h1>
     </div>
 
     <div>
@@ -52,7 +53,7 @@ else{
             @{
                 var opciones = new List<string>();
             }
-            @foreach (var programs in Model)
+            @foreach (var programs in Model.schedules)
             {
                 if (!opciones.Contains(programs.ModulName))
                 {
@@ -68,7 +69,7 @@ else{
             @{
                 opciones = new List<string>();
             }
-            @foreach(var programs in Model)
+            @foreach (var programs in Model.schedules)
             {
                 if (!opciones.Contains(programs.CourseName))
                 {
@@ -99,7 +100,7 @@ else{
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var schedule in Model)
+                    @foreach (var schedule in Model.schedules)
                     {
                         <tr>
                             <td>@schedule.CourseName</td>

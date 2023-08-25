@@ -1,8 +1,15 @@
-﻿.dataTable {
+﻿body {
+    margin: 0; /* Elimina el margen horizontal predeterminado del body */
+}
+
+.dataTable {
     margin: 0 auto;
     width: 100%;
     table-layout: fixed;
     overflow-x: auto;
+    padding: 10px;
+    border: 10px solid #fff;
+
 }
     .dataTable select,
     .dataTable input {
@@ -12,10 +19,40 @@
         border-radius: 4px;
     }
     .dataTable th {
+        background: #306D74;
+        color: #fff;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 2;
         text-align: center;
         vertical-align: middle;
     }
+
     .dataTable td select {
         width: 100%;
         font-size: 13px;
+    }
+.close-button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    outline: none;
+    position: relative;
+}
+    .close-button::after,
+    .close-button::before {
+        content: "";
+        position: absolute;
+        width: 2px;
+        height: 24px;
+        background-color: red;
+        top: 3px;
+        left: 14px;
+        transform: rotate(45deg);
+    }
+
+    .close-button::before {
+        transform: rotate(-45deg);
     }

@@ -101,7 +101,7 @@
 
                         </td>
                         <td>
-                            <form asp-action="AllSchedulesByPeriodId" asp-controller="Schedule" method="get">
+                            <form asp-action="AllSchedulesByPeriodId" asp-controller="Schedule" method="post">
                                 <input type="hidden" name="id" value="@period.Id" />
                                 <button type="submit" class="btn btn-primary" asp-route-id="@period.Id">Ver Cronograma</button>
                             </form>
@@ -149,7 +149,12 @@
                     var form = document.getElementById("searchForm2");
                     form.submit();
                 } else {
-                    alert("Por favor, completa los campos de fecha correctamente.");
+                    Swal.fire({
+                        title: 'Completa los campos de fecha correctamente',
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
                 }
             }
         </script>

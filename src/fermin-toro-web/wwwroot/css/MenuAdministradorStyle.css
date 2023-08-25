@@ -157,7 +157,7 @@ nav ul {
 
 table {
     border-collapse: collapse;
-    width: 80%;
+    width: 100%;
     margin: 0 auto; /* Agregando esta línea */
     margin-bottom: 20px;
 }

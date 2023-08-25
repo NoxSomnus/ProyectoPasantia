@@ -4,7 +4,7 @@
 }
 @model AddScheduleModel
 <link rel="stylesheet" href="~/css/ScheduleTableStyle.css" asp-append-version="true" />
-<form action="/Schedule/AddScheduleAction" method="post" id="myForm" onsubmit="removeHiddenElements()">
+<form action="/Schedule/AddScheduleAction" method="post" id="myForm" onsubmit="enviarform(this)">
     <table id="dataTable" class="dataTable">
         <input type="hidden" name="PeriodoId" value="@Model.PeriodoId" />
         <thead>
@@ -19,13 +19,14 @@
             <th>Modalidad</th>
             <th>Duración</th>
             <th>Vacantes</th>
+            <th>Instructor</th>
             <th> X </th>
         </tr>
         </thead>
         <tbody>
-            <tr id="row_1">
+            <tr id="row_1" hidden>
                 <td>
-                    <select name="programa" id="programa_1" data-row-id="1" onchange="onProgramaChange(event)">
+                    <select name="programa" id="programa_1" data-row-id="1">
                         <option value="CCNA Version 7.0.">CCNA Version 7.0</option>
                         <option value="CCNA Cybersecurity Operations Version 1.1.">CCNA Cybersecurity Operations Version 1.1</option>
                         <option value="CCNP Versión 8.0.">CCNP Versión 8.0</option>
@@ -35,7 +36,7 @@
                     </select>
                 </td>
                 <td>
-                    <select name="modulos" id="modulos_1" data-row-id="1" >
+                    <select name="modulos" id="modulos_1" data-row-id="1">
                         <option value="Modulo I">Módulo I</option>
                         <option value="Modulo II">Módulo II</option>
                         <option value="Modulo III">Módulo III</option>
@@ -88,58 +89,153 @@
                     </select>
                 </td>
                 <td>
-                    <input type="number" name="vacantes" id="vacantes_1" data-row-id="1" required min="0">
+                    <input type="number" value="0" name="vacantes" id="vacantes_1" data-row-id="1" required min="0">
                 </td>
                 <td>
-                    <button type="button" onclick="hideRow(this,event)">Ocultar</button>
+                    <select name="instructor" id="instructor_1" data-row-id="1">
+                        <option value="No Asignado">No Asignado</option>
+                        @if (Model.instructores != null)
+                        {
+                            foreach (var instructor in Model.instructores)
+                            {
+                                <option value="@instructor.InstructorId">@instructor.InstructorName</option>
+                            }
+                        }
+                    </select>
+                </td>
+                <td>
+                    <button type="button">Ocultar</button>
+                </td>
+            </tr>
+            <tr id="row_2" style="background: #fff">
+                <td>
+                    <select name="programa" id="programa_2" data-row-id="2" onchange="onProgramaChange(event)">
+                        <option value="CCNA Version 7.0.">CCNA Version 7.0</option>
+                        <option value="CCNA Cybersecurity Operations Version 1.1.">CCNA Cybersecurity Operations Version 1.1</option>
+                        <option value="CCNP Versión 8.0.">CCNP Versión 8.0</option>
+                        <option value="DevNet Associate 1.0.">DevNet Associate 1.0</option>
+                        <option value="CCST Networking.">CCST Networking</option>
+                        <option value="CompTIA A+ IT Essentials.">CompTIA A+ IT Essentials</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="modulos" id="modulos_2" data-row-id="2" >
+                        <option value="Modulo I">Módulo I</option>
+                        <option value="Modulo II">Módulo II</option>
+                        <option value="Modulo III">Módulo III</option>
+                        <option value="Modulo Único">Módulo Único</option>
+                        <option value="Modulo I (ENCOR)">Módulo I (ENCOR)</option>
+                        <option value="Modulo II (ENARSI)">Módulo II (ENARSI)</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="date" name="fechaInicio" id="fechaInicio_2" data-row-id="2" required>
+                </td>
+                <td>
+                    <input type="date" name="fechaFin" id="fechaFin_2" required data-row-id="2">
+                </td>
+                <td>
+                    <select name="regularidad" id="regularidad_2" data-row-id="2" onchange="onRegularidadChange(event)">
+                        <option value="0">Regular</option>
+                        <option value="1">Intensivo</option>
+                        <option value="2">SemiIntensivo</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="turno" id="turno_2" data-row-id="2">
+                        <option value="0">Matutino</option>
+                        <option value="1">Vespertino</option>
+                        <option value="2">Nocturno</option>
+                        <option value="3">Sabatino</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="horario" id="horario_2" data-row-id="2">
+                        <option value="Lunes y Miercoles">Lunes y Miercoles</option>
+                        <option value="Martes y Jueves">Martes y Jueves</option>
+                        <option value="Lunes a Jueves">Lunes a Jueves</option>
+                        <option value="Lunes a Viernes">Lunes a Viernes</option>
+                        <option value="Sabados">Sabados</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="modalidad" id="modalidad_2" data-row-id="2">
+                        <option value="0">Presencial</option>
+                        <option value="1">Online</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="duracion" id="duracion_2" data-row-id="2">
+                        <option value="8">8 semanas</option>
+                        <option value="6">6 semanas</option>
+                        <option value="4">4 semanas</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="number" value="0" name="vacantes" id="vacantes_2" data-row-id="2" required min="0">
+                </td>
+                <td>
+                    <select name="instructor" id="instructor_2" data-row-id="2">
+                        <option value="No Asignado">No Asignado</option>
+                        @if (Model.instructores != null) {
+                            foreach (var instructor in Model.instructores) {
+                                <option value="@instructor.InstructorId">@instructor.InstructorName</option>
+                            }
+                        }
+                    </select>
+                </td>
+                <td>
+                    <button type="button" class="close-button" id="button_2" data-row-id="2" onclick="eliminarFila(this,event)"> </button>
                 </td>
             </tr>
     </table>
-    <button type="submit">Enviar</button>
+    <button type="submit" id="enviarbutton" >Enviar</button>
 </form>
 <button type="button" id="addRow">Añadir registro</button>
 
 @section Scripts{
     @{
-        <script type="text/javascript">
-            window.onload = function () {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'El período ha sido creado',
-                    showConfirmButton: true,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Ok'
-                });
-                actualizarTurnos(1);
-                actualizarModulos(1);
-            }
-        </script>
+        @if(Model.FromCreatePeriod == true){
+            <script type="text/javascript">
+                window.onload = function () {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'El período ha sido creado',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                    actualizarTurnos(1);
+                    actualizarModulos(1);
+                }
+            </script>
+        }
         <script>
-            function hideRow(button, e)
-            {
+            function eliminarFila(button, e) {
                 e.preventDefault();
-                let row = button.parentNode.parentNode;
-                row.style.display = 'none';
+                let fila = button.parentNode.parentNode;
+                fila.remove();
             }
-        </script>
-        <script>
-            function removeHiddenElements() {
-                let form = document.getElementById('myForm');
-                let formData = new FormData(form);
 
-                // Elimina los elementos hidden del FormData
-                let hiddenElements = document.querySelectorAll('input[type="hidden"]');
-                hiddenElements.forEach(function (element) {
-                    if (element.name != "PeriodoId") {
-                        formData.delete(element.name);
-                    }
-                });
+            document.getElementById('enviarbutton').addEventListener('click', function () {
+                var vacantes = document.getElementById('vacantes_2').value;
+                var fechaInicio = document.getElementById('fechaInicio_2').value;
+                var fechaFin = document.getElementById('fechaFin_2').value;
 
-                form.dataset = formData;
-                form.submit();
-            }
+                if (vacantes.trim() === '' || fechaInicio.trim() === '' || fechaFin.trim() === '') {
+                    Swal.fire({
+                        title: 'Complete todos los campos requeridos',
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                } else {
+                    document.getElementById('myForm').submit();
+                }
+            });
         </script>
+       
         /*<script>
             function actualizarModulos(row) {
                 var programaSelect = document.getElementById("programa_" + row);
@@ -289,12 +385,10 @@
         </script>
        
         <script>
+        var nuevorowid = 3
             document.getElementById('addRow').addEventListener('click', function () {
                 var table = document.getElementById('dataTable');
-                var rowCount = table.rows.length;
-                rowCount;
-
-
+                var rowCount = nuevorowid++
                 var newRow = document.createElement('tr');
 
                 var programaCell = newRow.insertCell();
@@ -377,26 +471,36 @@
                 vacantescell.innerHTML = clonedSelect.outerHTML;
                 newRow.appendChild(vacantescell);
 
+                var instructorcell = newRow.insertCell();
+                originalSelect = document.getElementById("instructor_1");
+                clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "instructor_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                instructorcell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(instructorcell);
+
                 // Create a new button element
                 var buttonCell = newRow.insertCell();
                 var button = document.createElement('button');
                 button.setAttribute("id", "button_" + rowCount);
                 button.setAttribute("data-row-id", rowCount);
                 button.setAttribute("type", "button"); // Establecer el tipo del botón como "button"
-                button.innerHTML = "Eliminar"; // Establecer el texto del botón
+                button.innerHTML = " "; // Establecer el texto del botón
+                button.classList.add("close-button");
 
                 button.addEventListener('click', function () {
                     var rowId = this.getAttribute("data-row-id");
-                    var rowToHide = document.getElementById("row_" + rowId);
-                    rowToHide.style.display = "none";
-                    console.log("Row hidden: " + rowId);
+                    var rowToRemove = document.getElementById("row_" + rowId);
+
+                    if (rowToRemove) {
+                        rowToRemove.remove();
+                    }
                 });
 
                 buttonCell.appendChild(button);
                 newRow.appendChild(buttonCell);
 
                 newRow.setAttribute("id", "row_" + rowCount);
-
                 table.appendChild(newRow);
             });
         </script>

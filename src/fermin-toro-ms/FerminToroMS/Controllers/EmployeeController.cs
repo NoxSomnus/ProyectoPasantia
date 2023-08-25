@@ -181,6 +181,26 @@ namespace FerminToroMS.Controllers
             }
         }
 
+        [HttpGet("AllInstructors")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> AllInstructors()
+        {
+            _logger.LogInformation("Entrando al metodo que consulta todos los empleados del sistema");
+            try
+            {
+                var query = new AllInstructorsQuery();
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los instructores");
+                return StatusCode(500, "Ocurrió un error al consultar los instructores. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
         /// <summary>
         /// Método que consulta un empleado por Id.
         /// </summary>

@@ -12,5 +12,6 @@
         public int Modalidad { get; set; }
         public int Duracion { get; set; }
         public int Vacantes { get; set; }
+        public string InstructorId { get; set; } = null!;
     }
 }

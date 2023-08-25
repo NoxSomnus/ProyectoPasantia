@@ -67,7 +67,7 @@ namespace FerminToroMS.Application.Handlers.Queries
             try
             {
                 _logger.LogInformation("AllPeriodsQueryHandler.HandleAsync");
-                var periods = await _dbContext.Periodos.OrderByDescending(c => c.CreatedAt)
+                var periods = await _dbContext.Periodos.OrderByDescending(c => c.Año).ThenByDescending(c => c.CreatedAt)
                     .Select(c => new PeriodResponse()
                     {
                         PeriodId = c.Id,
