@@ -118,7 +118,7 @@
                         </select>
                     </td>
                     <td>
-                        <input type="date" name="fechaInicio" id="fechaInicio_@i" data-row-id="@i" required value="fechaInicio">
+                        <input type="date" name="fechaInicio" id="fechaInicio_@i" data-row-id="@i" required value="@Model.schedules[i].Fecha_Inicio">
                     </td>
                     <td>
                         <input type="date" name="fechaFin" id="fechaFin_@i" required data-row-id="@i" value="@Model.schedules[i].Fecha_Fin">

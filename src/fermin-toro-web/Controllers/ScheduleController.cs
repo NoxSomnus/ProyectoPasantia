@@ -145,7 +145,7 @@ namespace FerminToroWeb.Controllers
                 if (model.schedules[i].Fecha_Fin != null) 
                 {
                     var fechaFin = DateTime.ParseExact(model.schedules[i].Fecha_Fin, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                    model.schedules[i].Fecha_Fin = fechaInicio.ToString("yyyy-MM-dd");
+                    model.schedules[i].Fecha_Fin = fechaFin.ToString("yyyy-MM-dd");
                 }       
             }
             return View(model);
