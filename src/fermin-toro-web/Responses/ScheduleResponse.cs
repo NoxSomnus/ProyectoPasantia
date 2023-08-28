@@ -8,6 +8,7 @@ namespace FerminToroMS.Application.Responses
 {
     public class ScheduleResponse
     {
+        public Guid ScheduleId { get; set; }
         public Guid PeriodId { get; set; }
         public string PeriodName { get; set; } = null!;
         public string CourseName { get; set; } = null!;

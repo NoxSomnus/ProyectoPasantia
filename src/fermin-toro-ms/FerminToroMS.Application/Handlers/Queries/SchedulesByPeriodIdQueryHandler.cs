@@ -70,12 +70,13 @@ namespace FerminToroMS.Application.Handlers.Queries
                 var schedules = await _dbContext.Cronogramas.Where(c => c.PeriodoId == request.PeriodId).OrderBy(c => c.FechaInicio)
                     .Select(c => new ScheduleResponse()
                     {
+                        ScheduleId = c.Id,
                         PeriodId = c.PeriodoId,
                         PeriodName = c.Periodo.NombrePeriodo,
                         CourseName = c.Modulo.Curso.Nombre,
                         ModulName = c.Modulo.Nombre,
-                        Fecha_Inicio = c.FechaInicio.ToString(),
-                        Fecha_Fin = c.FechaFin.ToString(),
+                        Fecha_Inicio = c.FechaInicio.ToString("dd/MM/yyyy"),
+                        Fecha_Fin = c.FechaFin.HasValue ? c.FechaFin.Value.ToString("dd/MM/yyyy") : string.Empty,
                         Horario = c.Horario_Dias,
                         Horas = 80,
                         Modalidad = c.Modalidad.ToString(),

@@ -135,6 +135,22 @@ namespace FerminToroWeb.Controllers
             return View(model);
         }
 
+        public IActionResult UpdateScheduleView(ScheduleByPeriodIdModel model)
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            for (int i = 0; i < model.schedules.Count; i++) 
+            {
+                var fechaInicio = DateTime.ParseExact(model.schedules[i].Fecha_Inicio, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                model.schedules[i].Fecha_Inicio = fechaInicio.ToString("yyyy-MM-dd");
+                if (model.schedules[i].Fecha_Fin != null) 
+                {
+                    var fechaFin = DateTime.ParseExact(model.schedules[i].Fecha_Fin, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    model.schedules[i].Fecha_Fin = fechaInicio.ToString("yyyy-MM-dd");
+                }       
+            }
+            return View(model);
+        }
+
         public async Task<IActionResult> UpdatePeriodAction(UpdatePeriodModel period)
         {
             _verifySessionFilter.VerifySession(HttpContext);

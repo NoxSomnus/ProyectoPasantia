@@ -14,7 +14,7 @@ namespace FerminToroMS.Core.Entities
         [Column(Order = 3)]
         public string Apellido { get; set; } = null!;
         [Column(Order = 4)]
-        public string Correo { get; set; } = null!;
+        public string? Correo { get; set; }
         [Column(Order = 5)]
         public string Telefono { get; set; } = null!;
     }

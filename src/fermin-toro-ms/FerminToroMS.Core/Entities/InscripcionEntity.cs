@@ -9,7 +9,7 @@ namespace FerminToroMS.Core.Entities
 {
     public class InscripcionEntity : BaseEntity
     {
-        public string EstadoSolvencia { get; set; } = null!;
+        public string? EstadoSolvencia { get; set; }
         public bool FueraVenezuela { get; set; }
         public string? EstadoVenezuela { get; set; }
         public string? NotaAcademica { get; set; }
@@ -17,6 +17,8 @@ namespace FerminToroMS.Core.Entities
         public CronogramaEntity Cronograma { get; set; } = null!;
         public Guid EstudianteId { get; set; }
         public EstudianteEntity Estudiante { get; set; } = null!;
+        public int NroInscripcion { get; set; }
+        public DateTime FechaInscripcion { get; set; }
         public ICollection<DeudasEntity>? Deudas { get; set; }
         public ICollection<PagoEntity>? Pagos { get; set; }
     }

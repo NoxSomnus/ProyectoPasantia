@@ -3,6 +3,7 @@ using System;
 using FerminToroMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FerminToroMS.Infrastructure.Migrations
 {
     [DbContext(typeof(FerminToroDbContext))]
-    partial class UCABPagaloTodoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230828133958_ChangeOnInscripcionAndRepresentante")]
+    partial class ChangeOnInscripcionAndRepresentante
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -495,6 +497,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("EstadoSolvencia")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("EstadoVenezuela")
@@ -502,9 +505,6 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.Property<Guid>("EstudianteId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime>("FechaInscripcion")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("FueraVenezuela")
                         .HasColumnType("boolean");

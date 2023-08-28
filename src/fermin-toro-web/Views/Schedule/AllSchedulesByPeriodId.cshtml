@@ -78,7 +78,33 @@ else{
                 }
             }
         </select>
+        <div>
+            <form method="post" id="crearcronograma" asp-action="UpdateScheduleView" asp-controller="Schedule">
+                <div style="display: flex; justify-content: right;">
+                    @for (int i = 0; i < Model.schedules.Count; i++)
+                    {
+                        <input type="hidden" asp-for="schedules[i].CourseName" />
+                        <input type="hidden" asp-for="schedules[i].Modalidad" />
+                        <input type="hidden" asp-for="schedules[i].NroVacantes" />
+                        <input type="hidden" asp-for="schedules[i].ModulName" />
+                        <input type="hidden" asp-for="schedules[i].Duracion" />
+                        <input type="hidden" asp-for="schedules[i].Fecha_Fin" />
+                        <input type="hidden" asp-for="schedules[i].Fecha_Inicio" />
+                        <input type="hidden" asp-for="schedules[i].Horario" />
+                        <input type="hidden" asp-for="schedules[i].Horas" />
+                        <input type="hidden" asp-for="schedules[i].Regularidad" />
+                        <input type="hidden" asp-for="schedules[i].InstructorAsignado" />
+                        <input type="hidden" asp-for="schedules[i].InstructorId" />
+                        <input type="hidden" asp-for="schedules[i].ScheduleId" />
+                        <input type="hidden" asp-for="schedules[i].Turno" />
+                    }
+                    <input name="PeriodoId" value="@Model.PeriodoId" hidden />
+                    <button type="submit" class="btn btn-primary">Editar</button>
+                </div>
+            </form>
+        </div>
     </div>
+
     <!-- Table -->
     <div class="table-scroll">
         <div>
