@@ -116,7 +116,7 @@ namespace FerminToroMS.Application.Handlers.Commands
                             CronogramaId = schedule.Id,
                             EstudianteId = student.Id,
                             NroInscripcion = inscripcionrequest.NroInscription,
-                            FueraVenezuela = false ? schedule.Modalidad == 0 : true,
+                            FueraVenezuela = schedule.Modalidad == 0 ? false : true,
                             EstadoSolvencia = "Solvente",
                             FechaInscripcion = DateTime.ParseExact(inscripcionrequest.InscriptionDate, "dd/MM/yyyy", null),
                         };

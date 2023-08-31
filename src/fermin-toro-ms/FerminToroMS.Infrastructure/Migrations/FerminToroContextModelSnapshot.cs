@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FerminToroMS.Infrastructure.Migrations
 {
     [DbContext(typeof(FerminToroDbContext))]
-    partial class UCABPagaloTodoDbContextModelSnapshot : ModelSnapshot
+    partial class FerminToroContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -78,6 +78,10 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnOrder(1);
 
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -92,6 +96,9 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.Property<DateOnly>("FechaInicio")
                         .HasColumnType("date");
+
+                    b.Property<bool>("Habilitado")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Horario_Dias")
                         .IsRequired()
@@ -152,6 +159,10 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NombreCompleto")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -565,6 +576,10 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnOrder(1);
 
+                    b.Property<string>("CodigoExamen")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -574,7 +589,15 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<Guid>("CursoId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Diminutivo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NombreCompleto")
                         .IsRequired()
                         .HasColumnType("text");
 

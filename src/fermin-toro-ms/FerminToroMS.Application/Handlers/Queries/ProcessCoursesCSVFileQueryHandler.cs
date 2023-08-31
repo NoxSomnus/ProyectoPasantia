@@ -105,7 +105,11 @@ namespace FerminToroMS.Application.Handlers.Queries
                                 AddCourseRequest course = new AddCourseRequest
                                 {
                                     CourseName = columns[0],
-                                    ModulName = columns[1]
+                                    ModulName = columns[1],
+                                    CourseCompleteName = columns[2],
+                                    ExamCode = columns[3],
+                                    ModulFullName = columns[4],
+                                    Diminutivo = columns[5]
                                 };
                                 courses.Add(course);
                             }

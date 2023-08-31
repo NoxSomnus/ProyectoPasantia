@@ -67,7 +67,7 @@ namespace FerminToroMS.Application.Handlers.Queries
             try
             {
                 _logger.LogInformation("AllPeriodsQueryHandler.HandleAsync");
-                var schedules = await _dbContext.Cronogramas.Where(c => c.PeriodoId == request.PeriodId).OrderBy(c => c.FechaInicio)
+                var schedules = await _dbContext.Cronogramas.Where(c => c.PeriodoId == request.PeriodId).OrderByDescending(c => c.Habilitado).ThenBy(c=>c.FechaInicio)
                     .Select(c => new ScheduleResponse()
                     {
                         ScheduleId = c.Id,
@@ -85,7 +85,8 @@ namespace FerminToroMS.Application.Handlers.Queries
                         Duracion = c.Duracion_Semanas,
                         NroVacantes = c.NroVacantes,
                         InstructorAsignado = c.InstructorId != null && c.Instructor != null ? c.Instructor.Nombre + " " + c.Instructor.Apellido : null ,
-                        InstructorId = c.InstructorId != null ? c.InstructorId : null
+                        InstructorId = c.InstructorId != null ? c.InstructorId : null,
+                        Habilitado = c.Habilitado
                     }).ToListAsync();
                 return schedules;
             }

@@ -85,32 +85,15 @@ namespace FerminToroWeb.Controllers
             List<int> turno, List<string> horario, List<int> modalidad, List<int> duracion,
             List<int> vacantes, List<string> instructor)
         {
-            var cronogramas = new List<ScheduleDataToCreate>();
-            for (int i = 1; i < programa.Count; i++) 
-            {
-                var cronograma = new ScheduleDataToCreate 
-                {
-                    Programa = programa[i],
-                    Modulo = modulos[i],
-                    FechaInicio = fechaInicio[i],
-                    FechaFin = fechaFin[i],
-                    Regularidad = regularidad[i],
-                    Turno = turno[i],
-                    Horario = horario[i],
-                    Modalidad = modalidad[i],
-                    Duracion = duracion[i],
-                    Vacantes = vacantes[i],
-                    InstructorId = instructor[i]
-                };
-                cronogramas.Add(cronograma);
-            }
+            
             try
             {
                 var apiUrl = apiurl.ApiUrl + "/schedule/addschedule";
                 var requestBody = new
                 {
                     periodId = PeriodoId,
-                    schedules = cronogramas
+                    schedules = ScheduleDataMapper.ScheduleDataToAddMap(programa,modulos,fechaInicio,fechaFin,
+                    regularidad,turno,horario,modalidad,duracion,vacantes,instructor)
                 };
                 var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
                 {
@@ -135,20 +118,75 @@ namespace FerminToroWeb.Controllers
             return View(model);
         }
 
-        public IActionResult UpdateScheduleView(ScheduleByPeriodIdModel model)
+        public async Task<IActionResult> UpdateScheduleView(ScheduleByPeriodIdModel model)
         {
             _verifySessionFilter.VerifySession(HttpContext);
-            for (int i = 0; i < model.schedules.Count; i++) 
+            try
             {
-                var fechaInicio = DateTime.ParseExact(model.schedules[i].Fecha_Inicio, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                model.schedules[i].Fecha_Inicio = fechaInicio.ToString("yyyy-MM-dd");
-                if (model.schedules[i].Fecha_Fin != null) 
+                var apiUrl = apiurl.ApiUrl + "/employee/allinstructors";
+                var response = await _httpClient.GetAsync(apiUrl);
+                if (!response.IsSuccessStatusCode)
                 {
-                    var fechaFin = DateTime.ParseExact(model.schedules[i].Fecha_Fin, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                    model.schedules[i].Fecha_Fin = fechaFin.ToString("yyyy-MM-dd");
-                }       
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var Response = JsonConvert.DeserializeObject<List<AllInstructorsResponse>>(responseContent);
+                for (int i = 0; i < model.schedules.Count; i++)
+                {
+
+                    var fechaInicio = DateTime.ParseExact(model.schedules[i].Fecha_Inicio, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    model.schedules[i].Fecha_Inicio = fechaInicio.ToString("yyyy-MM-dd");
+                    if (model.schedules[i].Fecha_Fin != null)
+                    {
+                        var fechaFin = DateTime.ParseExact(model.schedules[i].Fecha_Fin, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        model.schedules[i].Fecha_Fin = fechaFin.ToString("yyyy-MM-dd");
+                    }
+                }
+                var updatemodel = new UpdateScheduleModel
+                {
+                    PeriodoId = model.PeriodoId,
+                    schedules = model.schedules,
+                    instructors = Response
+                };
+                updatemodel.schedules.OrderByDescending(s => s.Habilitado);
+                return View(updatemodel);
             }
-            return View(model);
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateScheduleAction(string PeriodoId, List<string> ScheduleId,List<string> programa, List<string> modulos,
+            List<string> fechaInicio, List<string> fechaFin, List<string> regularidad,
+            List<string> turno, List<string> horario, List<string> modalidad, List<int> duracion,
+            List<int> vacantes, List<string> instructor, List<bool> habilitado)
+        {       
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/schedule/updateschedule";
+                var requestBody = new
+                {
+                    periodId = PeriodoId,
+                    schedules = ScheduleDataMapper.ScheduleDataToUpdateMap(
+                        PeriodoId,ScheduleId,programa,modulos,fechaInicio,fechaFin,regularidad,turno,horario,
+                        modalidad,duracion,vacantes,instructor,habilitado)
+                };
+                var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                }); // Serializa el body a formato JSON
+                var response = await _httpClient.PutAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                return RedirectToAction("ScheduleAdded", "Messages");
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
         }
 
         public async Task<IActionResult> UpdatePeriodAction(UpdatePeriodModel period)

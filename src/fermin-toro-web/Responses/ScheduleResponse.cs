@@ -24,5 +24,6 @@ namespace FerminToroMS.Application.Responses
         public Guid? InstructorId { get; set; }
         public string? InstructorAsignado { get; set; }
         public int NroVacantes { get; set; }
+        public bool Habilitado { get; set; }
     }
 }

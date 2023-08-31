@@ -22,7 +22,6 @@ namespace FerminToroMS.Infrastructure.Services
             UserCredential credential;
             using (var stream = new FileStream("client_secret_813929318264-3ogiponul0mg3gj9ue7ckr5ojg639t1i.apps.googleusercontent.com.json", FileMode.Open, FileAccess.Read))
             {
-                var baa = "aa";
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                 GoogleClientSecrets.Load(stream).Secrets,
                 Scopes,

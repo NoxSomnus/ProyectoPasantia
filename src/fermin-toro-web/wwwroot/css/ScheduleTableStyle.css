@@ -1,22 +1,33 @@
 ﻿body {
     margin: 0; /* Elimina el margen horizontal predeterminado del body */
 }
-
 .dataTable {
     margin: 0 auto;
     width: 100%;
     table-layout: fixed;
     overflow-x: auto;
     padding: 10px;
-    border: 10px solid #fff;
-
+    border: 5px solid #fff;
 }
-    .dataTable select,
-    .dataTable input {
+    .dataTable select {
         width: 100%;
-        padding: 5px;
+        height: 40px;
+        position: -webkit-sticky;
+        position: sticky;
         border: 1px solid #ccc;
         border-radius: 4px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+    .dataTable input {
+        width: 100%;
+        height: 40px;
+        position: -webkit-sticky;
+        position: sticky;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-align: center;
+        box-sizing: border-box;
     }
     .dataTable th {
         background: #306D74;
@@ -34,6 +45,7 @@
         font-size: 13px;
     }
 .close-button {
+    margin: 0 auto;
     width: 30px;
     height: 30px;
     padding: 0;
@@ -56,3 +68,20 @@
     .close-button::before {
         transform: rotate(-45deg);
     }
+.button-column {
+    width: 60px;
+}
+
+.vacantes-column {
+    width: 90px;
+}
+
+.habilitado-column {
+    width: 100px;
+}
+
+.cell-with-button {
+    width: 20%;
+    text-align: center; /* Centrar contenido horizontalmente */
+    vertical-align: middle; /* Centrar contenido verticalmente */
+}

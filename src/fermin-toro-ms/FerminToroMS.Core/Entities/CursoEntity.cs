@@ -10,6 +10,7 @@ namespace FerminToroMS.Core.Entities
     {
         public string Nombre { get; set; } = null!;
         public ICollection<ModuloEntity>? Modulos { get; set; }
+        public string NombreCompleto { get; set; } = null!;
         public ICollection<Precio_Mod_TurnoEntity>? Precios { get; set; }
     }
 }

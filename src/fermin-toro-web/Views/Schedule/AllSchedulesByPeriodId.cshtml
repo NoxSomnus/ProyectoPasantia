@@ -5,7 +5,7 @@
 }
 
 @model ScheduleByPeriodIdModel
-<link rel="stylesheet" href="~/css/AllPeriodsTable.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/AllSchedulesByPeriodId.css" asp-append-version="true" />
 @if (@Model.schedules.FirstOrDefault() == null)
 {
     <div class="text-center">
@@ -44,7 +44,7 @@ else{
         <select name="byregularidad" id="regularidadSelect">
             <option value="">Seleccionar...</option>
             <option value="Regular">Regular</option>
-            <option value="SemiIntesivo">SemiIntensivo</option>
+            <option value="SemiIntensivo">SemiIntensivo</option>
             <option value="Intensivo">Intensivo</option>
         </select>
         <label>Por Módulo</label>
@@ -97,6 +97,7 @@ else{
                         <input type="hidden" asp-for="schedules[i].InstructorId" />
                         <input type="hidden" asp-for="schedules[i].ScheduleId" />
                         <input type="hidden" asp-for="schedules[i].Turno" />
+                        <input type="hidden" asp-for="schedules[i].Habilitado" />
                     }
                     <input name="PeriodoId" value="@Model.PeriodoId" hidden />
                     <button type="submit" class="btn btn-primary">Editar</button>
@@ -106,19 +107,20 @@ else{
     </div>
 
     <!-- Table -->
-    <div class="table-scroll">
+    <div class="schedule-table">
         <div>
             <table id="main-table" class="main-table">
                 <thead>
                     <tr>
+                        <th>Inscripciones</th>
+                        <th>Modalidad</th>
                         <th>Programa</th>
                         <th>Modulo</th>
+                        <th>Turno</th>
                         <th>Inicio</th>
                         <th>Fin</th>
                         <th>Horario</th>
-                        <th>Turno</th>
                         <th>Regularidad</th>
-                        <th>Modalidad</th>
                         <th>Duración</th>
                         <th>Nro Vacantes</th>
                         <th>Horas</th>
@@ -128,24 +130,33 @@ else{
                 <tbody>
                     @foreach (var schedule in Model.schedules)
                     {
-                        <tr>
-                            <td>@schedule.CourseName</td>
-                            <td>@schedule.ModulName</td>
-                            <td>@schedule.Fecha_Inicio</td>
-                            <td>@schedule.Fecha_Fin</td>
-                            <td>@schedule.Horario</td>
-                            <td>@schedule.Turno</td>
-                            <td>@schedule.Regularidad</td>
-                            <td>@schedule.Modalidad</td>
-                            <td>@schedule.Duracion</td>
-                            <td>@schedule.NroVacantes</td>
-                            <td>@schedule.Horas</td>
+                        <tr class="@(schedule.Habilitado ? "active" : "inactive")">
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">
+                                @if(schedule.Habilitado)
+                                {
+                                    <a href="/Inscription/InscriptionByScheduleId?scheduleId=@schedule.ScheduleId" class="btn btn-primary">Ver Inscripciones</a>
+                                }else
+                                {
+                                    <p>Cerrado</p>
+                                }
+                            </td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Modalidad</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.CourseName</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.ModulName</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Turno</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Fecha_Inicio</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Fecha_Fin</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Horario</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Regularidad</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Duracion semanas</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.NroVacantes</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Horas</td>
                             @if (schedule.InstructorAsignado != null)
                             {
-                                <td>@schedule.InstructorAsignado</td>
+                                <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.InstructorAsignado</td>
                             }
                             else{
-                                <td>No asignado</td>
+                                <td class="@(schedule.Habilitado ? "active" : "inactive")">No asignado</td>
                             }           
                         </tr>
                     }
@@ -181,11 +192,11 @@ else{
                 var cells = row.getElementsByTagName("td");
 
                 // Obtener los valores de turno, modalidad, regularidad, módulo y programa en la fila actual
-                var turnoValue = cells[5].innerText;
-                var modalidadValue = cells[7].innerText;
-                var regularidadValue = cells[6].innerText;
-                var moduloValue = cells[1].innerText;
-                var programaValue = cells[0].innerText;
+                var turnoValue = cells[4].innerText;
+                var modalidadValue = cells[1].innerText;
+                var regularidadValue = cells[8].innerText;
+                var moduloValue = cells[3].innerText;
+                var programaValue = cells[2].innerText;
                 // Aplicar el filtro
                 if ((turno == "" || turnoValue == turno) && 
                 (modalidad == "" || modalidadValue == modalidad) && 
