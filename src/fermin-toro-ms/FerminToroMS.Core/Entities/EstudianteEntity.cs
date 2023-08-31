@@ -20,16 +20,19 @@ namespace FerminToroMS.Core.Entities
         public string Correo { get; set; } = null!;
         [Column(Order = 6)]
         public string Telefono { get; set; } = null!;
-        public string CorreoSecundario { get; set; } = null!;
+        public string? CorreoSecundario { get; set; }
         public string Direccion_Hab { get; set; } = null!;
-        public DateOnly? Fecha_Nac { get; set; }
+        public DateTime? Fecha_Nac { get; set; }
         public int? Edad { get; set; }
-        public string Rango_Edad { get; set; } = null!;
+        public string? Rango_Edad { get; set; }
         public bool Es_Regular { get; set; }
         public int Porcentaje_Beca { get; set; }
         public string? Codigo_Verificacion { get; set; }
         public ICollection<ModuloEntity>? ModulosAprobados { get; set; }
         public ICollection<DeudasEntity>? Deudas { get; set; }
         public ICollection<AbonoEntity>? Abonos { get; set; }
+        public Guid? RepresentanteId { get; set; }
+        public RepresentanteEntity? Representante { get; set; }
+        public ICollection<InscripcionEntity>? Inscripciones { get; set; }
     }
 }

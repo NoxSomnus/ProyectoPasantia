@@ -10,5 +10,9 @@ namespace FerminToroMS.Application.Requests
     {
         public string CourseName { get; set; } = null!;
         public string ModulName { get; set; } = null!;
+        public string CourseCompleteName { get; set; } = null!;
+        public string ExamCode { get; set; } = null!;
+        public string ModulFullName { get; set; } = null!;
+        public string Diminutivo { get; set; } = null!;
     }
 }

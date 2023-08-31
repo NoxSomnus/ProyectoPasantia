@@ -15,7 +15,7 @@
 }
 
 nav {
-    background: #3f3f3f;
+    background: #306D74;
     width: 100%;
     padding: 10px 10%;
     display: flex;
@@ -31,12 +31,12 @@ nav {
 
 .logo-wrap {
     display: flex;
-    align-items: center;
+    align-items:center;
 }
 
 .user-type {
     margin-left: 30px;
-    font-size: 25px;
+    font-size: 20px;
     color: #fff;
 }
 
@@ -77,6 +77,7 @@ nav ul {
     max-height: 0px;
     overflow: hidden;
     transition: max-height 0.5s;
+    z-index: 10;
 }
 
 .sub-menu-wrap.open-menu {
@@ -156,7 +157,7 @@ nav ul {
 
 table {
     border-collapse: collapse;
-    width: 80%;
+    width: 100%;
     margin: 0 auto; /* Agregando esta línea */
     margin-bottom: 20px;
 }

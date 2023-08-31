@@ -1,0 +1,90 @@
+﻿.schedule-table {
+    position: relative;
+    max-width: 1280px;
+    z-index: 1;
+    margin: auto;
+    overflow-y: scroll;
+    height: 350px;
+}
+
+    .schedule-table table {
+        width: 100%;
+        margin: auto;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+.table-wrap {
+    position: relative;
+}
+
+.gray-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: gray;
+}
+
+.green-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: green;
+}
+
+.yellow-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: yellow;
+}
+
+
+
+.schedule-table th,
+.schedule-table td {
+    padding: 5px 20px;
+    border: 1px solid #000;
+    background: #fff;
+
+    vertical-align: top;
+}
+
+.schedule-table thead th {
+    background: #133946;
+    color: #fff;
+
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.active {
+    background: #BED0D8 !important;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.inactive {
+    background: #306D74 !important;
+    color: #fff;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.inactive td::before {
+    content: "";
+    position: absolute;
+    bottom: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: red;
+}
+    
+
+

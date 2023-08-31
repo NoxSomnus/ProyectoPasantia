@@ -73,18 +73,24 @@ namespace FerminToroMS.Application.Handlers.Commands
         private async Task<bool> HandleAsync(UpdateEmployeeCommand request)
         {
             var transaction = _dbContext.BeginTransaction();
-            try 
+            try
             {
-                var employee = await _dbContext.Empleados.FirstOrDefaultAsync(c=>c.Id == request._request.Id);
-                if (employee == null) 
+                var employee = await _dbContext.Empleados.FirstOrDefaultAsync(c => c.Id == request._request.Id);
+                if (employee == null)
                 {
                     throw new UserIdNotFoundException("No se encontró el usuario a actualizar");
                 }
-                employee = UpdateRequestToEntity(employee,request._request);
-                UpdatePermissions(employee,request._request);
+                employee = UpdateRequestToEntity(employee, request._request);
+                UpdatePermissions(employee, request._request);
                 await _dbContext.SaveEfContextChanges("APP");
                 transaction.Commit();
                 return true;
+            }
+            catch (UserIdNotFoundException ex) 
+            {
+                _logger.LogError(ex, "Error UpdateEmployeeCommandHandler.HandleAsync. {Mensaje}", ex.Message);
+                transaction.Rollback();
+                throw;
             }
             catch (Exception ex)
             {

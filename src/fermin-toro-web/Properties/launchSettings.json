@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "UCABPagaloTodoWeb": {
+    "FerminToroWeb": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

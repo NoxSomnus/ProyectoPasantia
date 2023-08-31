@@ -10,7 +10,7 @@ namespace FerminToroWeb.Filters
             // Verificar si la sesión ha sido borrada o no existe
             if (context.Session == null || !context.Session.Keys.Any())
             {
-                context.Session.SetString("SessionClosedMessage", "Acceso cerrado por inactividad");
+                context.Session.SetString("SessionClosedMessage", "Conexion Cerrada");
                 // Redirigir al inicio de sesión
                 context.Response.Redirect("/");
             }

@@ -80,6 +80,11 @@ namespace FerminToroMS.Controllers
                 var response = await _mediator.Send(command);
                 return Ok(response);
             }
+            catch (UserIdNotFoundException ex) 
+            {
+                _logger.LogError(ex, "Error UpdateEmployeeCommandHandler.HandleAsync. {Mensaje}", ex.Message);
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Ocurrió un error al actualizar el empleado");
@@ -173,6 +178,26 @@ namespace FerminToroMS.Controllers
             {
                 _logger.LogError(ex, "Ocurrió un error al consultar los empleados");
                 return StatusCode(500, "Ocurrió un error al consultar los empleados. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        [HttpGet("AllInstructors")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> AllInstructors()
+        {
+            _logger.LogInformation("Entrando al metodo que consulta todos los empleados del sistema");
+            try
+            {
+                var query = new AllInstructorsQuery();
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los instructores");
+                return StatusCode(500, "Ocurrió un error al consultar los instructores. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
         }
 

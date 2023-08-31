@@ -28,6 +28,21 @@ namespace FerminToroWeb.Controllers
             
             return View();
         }
+
+        public IActionResult AdminSchedule()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+
+            return View();
+        }
+
+        public IActionResult AdminStudent()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+
+            return View();
+        }
+
         public IActionResult UploadCSVMigrationOptions()
         {
             _verifySessionFilter.VerifySession(HttpContext);
@@ -48,6 +63,11 @@ namespace FerminToroWeb.Controllers
 
         //------------------------------------------------------------------
         public IActionResult UploadStudentsCSVView()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            return View();
+        }
+        public IActionResult UploadInscriptionsCSVView()
         {
             _verifySessionFilter.VerifySession(HttpContext);
             return View();

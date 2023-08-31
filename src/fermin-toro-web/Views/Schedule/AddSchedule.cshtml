@@ -1,0 +1,557 @@
+﻿@{
+    ViewData["Title"] = "Agregar nuevo cronograma";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+@model AddScheduleModel
+<link rel="stylesheet" href="~/css/ScheduleTableStyle.css" asp-append-version="true" />
+<form action="/Schedule/AddScheduleAction" method="post" id="myForm" onsubmit="return validarFormulario()">
+    <div>
+        <table id="dataTable" class="dataTable">
+            <input type="hidden" name="PeriodoId" value="@Model.PeriodoId" />
+            <thead>
+            <tr>
+                <th>Programa</th>
+                <th>Modulo</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Regularidad</th>
+                <th>Turno</th>
+                <th>Horario</th>
+                <th>Modalidad</th>
+                <th>Duración</th>
+                    <th class="vacantes-column">Vacantes</th>
+                <th>Instructor</th>
+                    <th class="button-column"> X </th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr id="row_1" data-row-id="1" hidden>
+                    <td>
+                        <select name="programa" id="programa_1" data-row-id="1">
+                            <option value="CCNA Version 7.0.">CCNA Version 7.0</option>
+                            <option value="CCNA Cybersecurity Operations Version 1.1.">CCNA Cybersecurity Operations Version 1.1</option>
+                            <option value="CCNP Versión 8.0.">CCNP Versión 8.0</option>
+                            <option value="DevNet Associate 1.0.">DevNet Associate 1.0</option>
+                            <option value="CCST Networking.">CCST Networking</option>
+                            <option value="CompTIA A+ IT Essentials.">CompTIA A+ IT Essentials</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="modulos" id="modulos_1" data-row-id="1">
+                            <option value="Modulo I">Módulo I</option>
+                            <option value="Modulo II">Módulo II</option>
+                            <option value="Modulo III">Módulo III</option>
+                            <option value="Modulo Único">Módulo Único</option>
+                            <option value="Modulo I (ENCOR)">Módulo I (ENCOR)</option>
+                            <option value="Modulo II (ENARSI)">Módulo II (ENARSI)</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="date" value="2021-12-01" name="fechaInicio" id="fechaInicio_1" data-row-id="1" required>
+                    </td>
+                    <td>
+                        <input type="date" value="2021-12-01" name="fechaFin" id="fechaFin_1" required data-row-id="1">
+                    </td>
+                    <td>
+                        <select name="regularidad" id="regularidad_1" data-row-id="1" onchange="onRegularidadChange(event)">
+                            <option value="0">Regular</option>
+                            <option value="1">Intensivo</option>
+                            <option value="2">SemiIntensivo</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="turno" id="turno_1" data-row-id="1">
+                            <option value="0">Matutino</option>
+                            <option value="1">Vespertino</option>
+                            <option value="2">Nocturno</option>
+                            <option value="3">Sabatino</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="horario" id="horario_1" data-row-id="1">
+                            <option value="Lunes y Miercoles">Lunes y Miercoles</option>
+                            <option value="Martes y Jueves">Martes y Jueves</option>
+                            <option value="Lunes a Jueves">Lunes a Jueves</option>
+                            <option value="Lunes a Viernes">Lunes a Viernes</option>
+                            <option value="Sabados">Sabados</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="modalidad" id="modalidad_1" data-row-id="1">
+                            <option value="0">Presencial</option>
+                            <option value="1">Online</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="duracion" id="duracion_1" data-row-id="1">
+                            <option value="8">8 semanas</option>
+                            <option value="6">6 semanas</option>
+                            <option value="4">4 semanas</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" value="0" name="vacantes" id="vacantes_1" data-row-id="1" required min="0">
+                    </td>
+                    <td>
+                        <select name="instructor" id="instructor_1" data-row-id="1">
+                            <option value="No Asignado">No Asignado</option>
+                            @if (Model.instructores != null)
+                            {
+                                foreach (var instructor in Model.instructores)
+                                {
+                                    <option value="@instructor.InstructorId">@instructor.InstructorName</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button">Ocultar</button>
+                    </td>
+                </tr>
+                <tr id="row_2" data-row-id="2" style="background: #fff">
+                    <td>
+                        <select name="programa" id="programa_2" data-row-id="2">
+                            <option value="CCNA Version 7.0.">CCNA Version 7.0</option>
+                            <option value="CCNA Cybersecurity Operations Version 1.1.">CCNA Cybersecurity Operations Version 1.1</option>
+                            <option value="CCNP Versión 8.0.">CCNP Versión 8.0</option>
+                            <option value="DevNet Associate 1.0.">DevNet Associate 1.0</option>
+                            <option value="CCST Networking.">CCST Networking</option>
+                            <option value="CompTIA A+ IT Essentials.">CompTIA A+ IT Essentials</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="modulos" id="modulos_2" data-row-id="2" >
+                            <option value="Modulo I">Módulo I</option>
+                            <option value="Modulo II">Módulo II</option>
+                            <option value="Modulo III">Módulo III</option>
+                            <option value="Modulo Único">Módulo Único</option>
+                            <option value="Modulo I (ENCOR)">Módulo I (ENCOR)</option>
+                            <option value="Modulo II (ENARSI)">Módulo II (ENARSI)</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="date" name="fechaInicio" id="fechaInicio_2" data-row-id="2" required>
+                    </td>
+                    <td>
+                        <input type="date" name="fechaFin" id="fechaFin_2" required data-row-id="2">
+                    </td>
+                    <td>
+                        <select name="regularidad" id="regularidad_2" data-row-id="2" onchange="onRegularidadChange(event)">
+                            <option value="0">Regular</option>
+                            <option value="1">Intensivo</option>
+                            <option value="2">SemiIntensivo</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="turno" id="turno_2" data-row-id="2">
+                            <option value="0">Matutino</option>
+                            <option value="1">Vespertino</option>
+                            <option value="2">Nocturno</option>
+                            <option value="3">Sabatino</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="horario" id="horario_2" data-row-id="2">
+                            <option value="Lunes y Miercoles">Lunes y Miercoles</option>
+                            <option value="Martes y Jueves">Martes y Jueves</option>
+                            <option value="Lunes a Jueves">Lunes a Jueves</option>
+                            <option value="Lunes a Viernes">Lunes a Viernes</option>
+                            <option value="Sabados">Sabados</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="modalidad" id="modalidad_2" data-row-id="2">
+                            <option value="0">Presencial</option>
+                            <option value="1">Online</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="duracion" id="duracion_2" data-row-id="2">
+                            <option value="8">8 semanas</option>
+                            <option value="6">6 semanas</option>
+                            <option value="4">4 semanas</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" value="0" name="vacantes" id="vacantes_2" data-row-id="2" required min="0">
+                    </td>
+                    <td>
+                        <select name="instructor" id="instructor_2" data-row-id="2">
+                            <option value="No Asignado">No Asignado</option>
+                            @if (Model.instructores != null) {
+                                foreach (var instructor in Model.instructores) {
+                                    <option value="@instructor.InstructorId">@instructor.InstructorName</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                    <td class="cell-with-button">
+                        <button type="button" class="close-button" id="button_2" data-row-id="2" onclick="eliminarFila(this,event)"> </button>
+                    </td>
+                </tr>
+        </table>
+    </div>
+    <button type="button" onclick="validarFormulario()" class="btn btn-success">Crear cronograma</button>
+</form>
+<button type="button" id="addRow">Añadir registro</button>
+
+@section Scripts{
+    @{
+        @if(Model.FromCreatePeriod == true){
+            <script type="text/javascript">
+                window.onload = function () {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'El período ha sido creado',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                    actualizarTurnos(1);
+                    actualizarModulos(1);
+                }
+            </script>
+        }
+        <script>
+            // Obtén el elemento padre de la tabla
+            let tabla = document.getElementById('dataTable');
+
+            tabla.addEventListener('change', function (event) {
+                let elementoModificado = event.target;
+
+                // Verifica si el elemento modificado es un elemento de programa
+                if (elementoModificado.getAttribute('name') === 'programa') {
+                    let fila = elementoModificado.closest('tr');
+                    let programaSelect = fila.querySelector('[name="programa"]');
+                    let modulosSelect = fila.querySelector('[name="modulos"]');
+
+                    let programaSeleccionado = programaSelect.value;
+
+                    switch (programaSeleccionado) {
+                        case 'CCNA Version 7.0.':
+                            for (let i = 0; i < modulosSelect.options.length; i++) {
+                                let modulo = modulosSelect.options[i];
+                                if (modulo.value === 'Modulo I' || modulo.value === 'Modulo II' || modulo.value === 'Modulo III') {
+                                    modulo.style.display = 'block';
+                                } else {
+                                    modulo.style.display = 'none';
+                                }
+                            }
+                            break;
+                        case 'CCNA Cybersecurity Operations Version 1.1.':
+                            for (let i = 0; i < modulosSelect.options.length; i++) {
+                                let modulo = modulosSelect.options[i];
+                                if (modulo.value === 'Modulo Único') {
+                                    modulo.style.display = 'block';
+                                } else {
+                                    modulo.style.display = 'none';
+                                }
+                            }
+                            break;
+                        case 'CCNP Versión 8.0.':
+                            for (let i = 0; i < modulosSelect.options.length; i++) {
+                                let modulo = modulosSelect.options[i];
+                                if (modulo.value === 'Modulo I (ENCOR)' || modulo.value === 'Modulo II (ENARSI)') {
+                                    modulo.style.display = 'block';
+                                } else {
+                                    modulo.style.display = 'none';
+                                }
+                            }
+                            break;
+                        case 'DevNet Associate 1.0.':
+                            for (let i = 0; i < modulosSelect.options.length; i++) {
+                                let modulo = modulosSelect.options[i];
+                                if (modulo.value === 'Modulo Único') {
+                                    modulo.style.display = 'block';
+                                } else {
+                                    modulo.style.display = 'none';
+                                }
+                            }
+                            break;
+                        case 'CCST Networking.':
+                            for (let i = 0; i < modulosSelect.options.length; i++) {
+                                let modulo = modulosSelect.options[i];
+                                if (modulo.value === 'Modulo Único') {
+                                    modulo.style.display = 'block';
+                                } else {
+                                    modulo.style.display = 'none';
+                                }
+                            }
+                            break;
+                        case 'CompTIA A+ IT Essentials.':
+                            for (let i = 0; i < modulosSelect.options.length; i++) {
+                                let modulo = modulosSelect.options[i];
+                                if (modulo.value === 'Modulo Único') {
+                                    modulo.style.display = 'block';
+                                } else {
+                                    modulo.style.display = 'none';
+                                }
+                            }
+                            break;
+
+                    }
+                    if (modulosSelect.selectedIndex >= 0 && modulosSelect.options[modulosSelect.selectedIndex].style.display === 'none') {
+                        // Buscar el primer módulo disponible y seleccionarlo
+                        for (var i = 0; i < modulosSelect.options.length; i++) {
+                            if (modulosSelect.options[i].style.display === 'block') {
+                                modulosSelect.selectedIndex = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+            });
+        </script>
+        <script>
+            function eliminarFila(button, e) {
+                e.preventDefault();
+                let fila = button.parentNode.parentNode;
+                fila.remove();
+            }
+            function validarFormulario() {
+                const form = document.getElementById('myForm'); // Reemplaza 'myForm' con el id de tu formulario
+
+                // Seleccionar todos los elementos <input> dentro del formulario
+                const inputs = form.querySelectorAll('input');
+
+                // Iterar sobre cada input y realizar la validación
+                for (let i = 0; i < inputs.length; i++) {
+                    const input = inputs[i];
+
+                    // Realizar la validación según tus requisitos
+                    if (!input.value) {
+                        Swal.fire({
+                            title: 'Complete todos los campos requeridos',
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                        });
+                        console.log(`El campo ${input.name} está vacío`);
+                        return false;
+                    }
+                }
+
+                // Si todos los campos están validados, realizar el envío del formulario
+                form.submit();
+            }
+          
+        </script>
+       
+        
+
+        <script>
+            function onRegularidadChange(event) {
+                var selectElement = event.target;
+                var rowId = selectElement.dataset.rowId;
+                actualizarTurnos(rowId);
+            }
+        </script>
+
+        <script>
+
+            // Definir una función para mostrar u ocultar los módulos dependiendo del programa seleccionado
+            function actualizarTurnos(row) {
+                var regularidadSelect = document.getElementById("regularidad_" + row);
+                var turnoSelect = document.getElementById("turno_" + row);
+                var horarioSelect = document.getElementById("horario_" + row);
+                var duracionSelect = document.getElementById("duracion_" + row);
+                var regularidadSeleccionada = regularidadSelect.value;
+
+                // Ocultar todos los elementos de la lista de módulos
+                for (var i = 0; i < turnoSelect.options.length; i++) {
+                    turnoSelect.options[i].style.display = "none";
+                }
+                for (var i = 0; i < horarioSelect.options.length; i++) {
+                    horarioSelect.options[i].style.display = "none";
+                }
+                for (var i = 0; i < duracionSelect.options.length; i++) {
+                    duracionSelect.options[i].style.display = "none";
+                }
+
+                // Mostrar los módulos correspondientes al programa seleccionado
+                if (regularidadSeleccionada === "0") {
+                    turnoSelect.options[0].style.display = "block"; // Matutino
+                    turnoSelect.options[1].style.display = "block"; // Vespertino
+                    turnoSelect.options[2].style.display = "block"; // Nocturno
+                    horarioSelect.options[0].style.display = "block"; // Lunes y Miercoles
+                    horarioSelect.options[1].style.display = "block"; // Lunes y Martes
+                    duracionSelect.options[0].style.display = "block"; // 8 semanas
+                }
+
+                if (regularidadSeleccionada === "1") {
+                    turnoSelect.options[0].style.display = "block"; // Matutino
+                    turnoSelect.options[1].style.display = "block"; // Vespertino
+                    turnoSelect.options[2].style.display = "block"; // Nocturno
+                    horarioSelect.options[2].style.display = "block"; // Lunes a Jueves
+                    horarioSelect.options[3].style.display = "block"; // Lunes y Viernes
+                    duracionSelect.options[2].style.display = "block"; // 4 semanas
+                }
+
+                if (regularidadSeleccionada === "2") {
+                    turnoSelect.options[3].style.display = "block"; // Sabatino
+                    horarioSelect.options[4].style.display = "block"; // Sabados
+                    duracionSelect.options[1].style.display = "block"; // 6 semanas
+                }
+
+
+                if (turnoSelect.selectedIndex >= 0 && turnoSelect.options[turnoSelect.selectedIndex].style.display === "none") {
+                    // Buscar el primer módulo disponible y seleccionarlo
+                    for (var i = 0; i < turnoSelect.options.length; i++) {
+                        if (turnoSelect.options[i].style.display === "block") {
+                            turnoSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+                if (horarioSelect.selectedIndex >= 0 && horarioSelect.options[horarioSelect.selectedIndex].style.display === "none") {
+                    for (var i = 0; i < horarioSelect.options.length; i++) {
+                        if (horarioSelect.options[i].style.display === "block") {
+                            horarioSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+                if (duracionSelect.selectedIndex >= 0 && duracionSelect.options[duracionSelect.selectedIndex].style.display === "none") {
+                    for (var i = 0; i < duracionSelect.options.length; i++) {
+                        if (duracionSelect.options[i].style.display === "block") {
+                            duracionSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Llamar a la función actualizarModulos cuando se selecciona una opción en el programa
+            regularidadSelect.addEventListener("change", actualizarTurnos);
+
+        </script>
+       
+        <script>
+        var nuevorowid = 3
+            document.getElementById('addRow').addEventListener('click', function () {
+                var table = document.getElementById('dataTable');
+                var rowCount = nuevorowid++
+                var newRow = document.createElement('tr');
+
+                var programaCell = newRow.insertCell();
+                var originalSelect = document.getElementById("programa_1");
+                var clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "programa_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                programaCell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(programaCell);
+
+                var moduloCell = newRow.insertCell();
+                originalSelect = document.getElementById("modulos_1");
+                clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "modulo_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                moduloCell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(moduloCell);
+
+                var inicioCell = newRow.insertCell();
+                originalSelect = document.getElementById("fechaInicio_1");
+                clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "fechaInicio_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                clonedSelect.setAttribute("value", "");
+                inicioCell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(inicioCell);
+
+                var finCell = newRow.insertCell();
+                originalSelect = document.getElementById("fechaFin_1");
+                clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "fechaFin_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                clonedSelect.setAttribute("value", "");
+                finCell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(finCell);
+
+                var regularidadCell = newRow.insertCell();
+                originalSelect = document.getElementById("regularidad_1");
+                clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "regularidad_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                regularidadCell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(regularidadCell);
+
+                var turnocell = newRow.insertCell();
+                originalSelect = document.getElementById("turno_1");
+                clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "turno_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                turnocell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(turnocell);
+
+                var horariocell = newRow.insertCell();
+                originalSelect = document.getElementById("horario_1");
+                clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "horario_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                horariocell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(horariocell);
+
+                var modalidadcell = newRow.insertCell();
+                originalSelect = document.getElementById("modalidad_1");
+                clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "modalidad_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                modalidadcell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(modalidadcell);
+
+                var duracioncell = newRow.insertCell();
+                originalSelect = document.getElementById("duracion_1");
+                clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "duracion_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                duracioncell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(duracioncell);
+
+                var vacantescell = newRow.insertCell();
+                originalSelect = document.getElementById("vacantes_1");
+                clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "vacantes_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                vacantescell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(vacantescell);
+
+                var instructorcell = newRow.insertCell();
+                originalSelect = document.getElementById("instructor_1");
+                clonedSelect = originalSelect.cloneNode(true);
+                clonedSelect.setAttribute("id", "instructor_" + rowCount);
+                clonedSelect.setAttribute("data-row-id", rowCount);
+                instructorcell.innerHTML = clonedSelect.outerHTML;
+                newRow.appendChild(instructorcell);
+
+                // Create a new button element
+                var buttonCell = newRow.insertCell();
+                var button = document.createElement('button');
+                button.setAttribute("id", "button_" + rowCount);
+                button.setAttribute("data-row-id", rowCount);
+                button.setAttribute("type", "button"); // Establecer el tipo del botón como "button"
+                button.innerHTML = " "; // Establecer el texto del botón
+                button.classList.add("close-button");
+
+                button.addEventListener('click', function () {
+                    var rowId = this.getAttribute("data-row-id");
+                    var rowToRemove = document.getElementById("row_" + rowId);
+
+                    if (rowToRemove) {
+                        rowToRemove.remove();
+                    }
+                });
+
+                buttonCell.appendChild(button);
+                newRow.appendChild(buttonCell);
+
+                newRow.setAttribute("id", "row_" + rowCount);
+                newRow.setAttribute("data-row-id", rowCount);
+                table.appendChild(newRow);
+            });
+        </script>
+
+
+    }
+}

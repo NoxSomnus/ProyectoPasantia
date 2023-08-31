@@ -1,0 +1,162 @@
+﻿@using FerminToroMS.Application.Responses;
+@{
+    ViewData["Title"] = "Inscripciones";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+@model FerminToroMS.Application.Responses.AllInscriptionsResponse
+<link rel="stylesheet" href="~/css/InscriptionsStyle.css" asp-append-version="true" />
+<div class="info-table"> 
+    <div class="imgcell">
+        <img class="fermin-img" src="~/img/logos/Logo dark green.png">
+        <img class="cisco-img" src="~/img/logos/CiscoNetAcad_logo black.png">
+    </div>
+    <div class="programcell">
+        Programa @Model.CourseCompleteName
+     </div>
+    <div class="nullcell">
+        
+    </div>
+    <table>
+        <tr>
+            <td class="cell">
+                Programa: @Model.CourseName 
+            </td>
+            <td class="cell">
+                Fecha de Inicio: @Model.StartDate
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Instructor: @(Model.Instructor == "" ? "No Asignado" : Model.Instructor)
+            </td>
+            <td class="cell">
+                Fecha de Finalizacion: @Model.EndDate
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Instructor Asistente: No Asignado
+            </td>
+            <td class="cell">
+                Caga Horaria: 80 horas académicas
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Turno: @Model.Turno
+            </td>
+            <td class="cell">
+                Modalidad: @Model.Modalidad
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Horario: @Model.Horario
+            </td>
+            <td class="cell">
+                Nombre del Curso: Codigo del curso
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'Estudiantes')">Estudiantes</button>
+    <button class="tablinks" onclick="openTab(event, 'Pagos')">Pagos</button>
+</div>
+<div id="Estudiantes" class="tabcontent">
+    <div class="student-table">
+        <div>
+            <table id="student-table" class="student-table">
+                <thead>
+                    <tr>
+                        <th>N° Lista</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Cédula</th>
+                        <th>Teléfono</th>
+                        <th>Correo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model.Students)
+                    {
+                        <tr>
+                            <td>@(Model.Students.IndexOf(student) + 1)</td>
+                            <td>@student.Name</td>
+                            <td>@student.LastName</td>
+                            <td>@student.Cedula</td>
+                            <td>@student.CellPhone</td>
+                            <td>@student.Email</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="Pagos" class="tabcontent">
+    <div class="student-table">
+        <div>
+            <table id="student-table" class="student-table">
+                <thead>
+                    <tr>
+                        <th>N° Form</th>
+                        <th>Estudiante</th>
+                        <th>Ciudad</th>
+                        <th>Método de Pago</th>
+                        <th>Pago Completo</th>
+                        <th>Detalles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model.Students)
+                    {
+                        <tr class="fila">
+                            <td>@student.NroInscription</td>
+                            <td>@student.Name @student.LastName</td>
+                            <td>@student.NroInscription</td>
+                            <td>@student.NroInscription</td>
+                            <td>@student.NroInscription</td>
+                            <td><a href="">Detalles</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts 
+{
+    <script>
+        window.onload = function () {
+            var i, tabcontent, tablinks;
+            var tabName = "Estudiantes";
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+}

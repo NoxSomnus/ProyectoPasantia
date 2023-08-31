@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Estudiantes";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+<style>
+    .migration-table {
+        border-collapse: collapse;
+    }
+
+        .migration-table th, .migration-table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+    .table-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50vh;
+    }
+</style>
+
+
+<div class="text-center">
+    <h1 class="display-4">Administración de Estudiantes</h1>
+</div>
+
+<div class="table-container">
+    <table class="migration-table">
+        <thead>
+            <tr>
+                <th>Opción</th>
+                <th>Ir</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Agregar Nuevo Estudiante</td>
+                <td>
+                    <form asp-action="" asp-controller="">
+                        <button class="btn btn-success" type="submit">Ir a opción</button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Ver lista de estudiantes
+                    <br />
+                </td>
+                <td>
+                    <form asp-action="AllStudents" asp-controller="Student">
+                        <button class="btn btn-success" type="submit">Ir a opción</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

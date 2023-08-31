@@ -6,6 +6,7 @@ using FerminToroWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
+using System.Reflection;
 using System.Text;
 
 namespace FerminToroWeb.Controllers
@@ -25,7 +26,7 @@ namespace FerminToroWeb.Controllers
         }
 
         [Route("Employees/Add")]
-        public async Task<IActionResult> Add()
+        public async Task<IActionResult> Add(AddEmployeeModel modelCreated)
         {
             _verifySessionFilter.VerifySession(HttpContext);
             try
@@ -38,6 +39,12 @@ namespace FerminToroWeb.Controllers
                 }
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var Response = JsonConvert.DeserializeObject<List<PermissionResponse>>(responseContent);
+                if (modelCreated.Cedula != "")
+                {
+                    modelCreated.permisos = Response;
+                    modelCreated.Error = true;
+                    return View("~/Views/Employee/AddNewEmployee.cshtml", modelCreated);
+                }
                 var model = new AddEmployeeModel();
                 model.permisos = Response;
                 return View("~/Views/Employee/AddNewEmployee.cshtml", model);
@@ -85,7 +92,8 @@ namespace FerminToroWeb.Controllers
                 {
                     if (response.StatusCode == HttpStatusCode.Conflict)
                     {
-                        return RedirectToAction("EmployeeAlreadyExists", "Messages");
+                        _usuario.Error = true;
+                        return await Add(_usuario);
                     }
                     return RedirectToAction("SomethingWentWrongView", "Messages");
                 }

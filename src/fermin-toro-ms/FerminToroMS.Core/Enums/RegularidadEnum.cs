@@ -10,6 +10,6 @@ namespace FerminToroMS.Core.Enums
     {
         Regular,
         Intensivo,
-        SemiIntesivo
+        SemiIntensivo
     }
 }

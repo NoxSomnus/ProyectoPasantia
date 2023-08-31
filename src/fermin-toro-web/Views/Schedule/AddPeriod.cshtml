@@ -1,0 +1,61 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using FerminToroWeb.Models
+@{
+    ViewData["Title"] = "Agregar nuevo periodo";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+@model FerminToroWeb.Models.AddPeriodModel
+<div class="col-md-12 col-sm-12">
+    <div class="contenedorlogin">
+        <form asp-action="AddPeriodAction" asp-controller="Schedule" method="post">
+            <div class="form-group">
+                <label>Nombre del Período</label>
+                <input type="text" name="NombrePeriodo" class="form-control" placeholder="Nombre" required>
+            </div>
+            <div class="form-group">
+                <label>Año</label>
+                <input type="number" name="Año" class="form-control" placeholder="Año" required pattern="[0-9]*" title="Solo se permite un número en este campo.">   
+            </div>
+            <div class="form-group">
+                <label>Inicio</label>
+                <select name="MesInicio" >
+                    <option value="enero">Enero</option>
+                    <option value="febrero">Febrero</option>
+                    <option value="marzo">Marzo</option>
+                    <option value="abril">Abril</option>
+                    <option value="mayo">Mayo</option>
+                    <option value="junio">Junio</option>
+                    <option value="julio">Julio</option>
+                    <option value="agosto">Agosto</option>
+                    <option value="septiembre">Septiembre</option>
+                    <option value="octubre">Octubre</option>
+                    <option value="noviembre">Noviembre</option>
+                    <option value="diciembre">Diciembre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Fin</label>
+                <select name="MesFin" >
+                    <option value="enero">Enero</option>
+                    <option value="febrero">Febrero</option>
+                    <option value="marzo">Marzo</option>
+                    <option value="abril">Abril</option>
+                    <option value="mayo">Mayo</option>
+                    <option value="junio">Junio</option>
+                    <option value="julio">Julio</option>
+                    <option value="agosto">Agosto</option>
+                    <option value="septiembre">Septiembre</option>
+                    <option value="octubre">Octubre</option>
+                    <option value="noviembre">Noviembre</option>
+                    <option value="diciembre">Diciembre</option>
+                </select>
+            </div>
+            <br />
+            <br />
+            <div class="botones">
+                <button type="submit" class="btn btn-success">Añadir Periodo</button>
+                <a class="btn btn-danger" asp-area="" asp-controller="Admin" asp-action="AdminSchedule">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

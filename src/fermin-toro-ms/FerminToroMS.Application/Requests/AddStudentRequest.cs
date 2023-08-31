@@ -15,8 +15,7 @@ namespace FerminToroMS.Application.Requests
         public string CorreoSecundario { get; set; } = null!;
         public string Telefono { get; set; } = null!;
         public string Direccion { get; set; } = null!;
-        public int Edad { get; set; }
-        public string Rango_Edad { get; set; } = null!;
-        public bool Es_Regular { get; set; }
+        public int? Edad { get; set; }
+        public string Fecha_Nac { get; set; } = string.Empty;
     }
 }

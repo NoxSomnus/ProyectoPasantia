@@ -4,6 +4,7 @@ using FerminToroMS.Application.Responses;
 using FerminToroMS.Core.Database;
 using FerminToroMS.Core.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -86,10 +87,16 @@ namespace FerminToroMS.Application.Handlers.Commands
                         {
                             Id = courseId,
                             Nombre = courserequest.CourseName,
+                            NombreCompleto = courserequest.CourseCompleteName                           
                         };
                         _dbContext.Cursos.Add(curso);
                         course = curso;
                     }
+                    else {
+                        course.NombreCompleto = courserequest.CourseCompleteName;
+                        _dbContext.Cursos.Update(course);
+                    }
+                    
                     var modul = _dbContext.Modulos.FirstOrDefault(c => c.Nombre == courserequest.ModulName
                     && c.CursoId == course.Id);
                     if (modul == null)
@@ -97,15 +104,23 @@ namespace FerminToroMS.Application.Handlers.Commands
                         modul = new ModuloEntity
                         {
                             CursoId = course.Id,
-                            Nombre = courserequest.ModulName
+                            Nombre = courserequest.ModulName,
+                            CodigoExamen = courserequest.ExamCode,
+                            Diminutivo = courserequest.Diminutivo,
+                            NombreCompleto = courserequest.ModulFullName
                         };
                         _dbContext.Modulos.Add(modul);
                     }
+                    else 
+                    {
+                        modul.CodigoExamen = courserequest.ExamCode;
+                        modul.Diminutivo = courserequest.Diminutivo;
+                        modul.NombreCompleto = courserequest.ModulFullName;
+                        _dbContext.Modulos.Update(modul);
+                    }
                     await _dbContext.SaveEfContextChanges("APP");
                 }
-
                 transaction.Commit();
-
                 _logger.LogInformation("AddPermissionCommandHandler.HandleAsync {Response}", true);
                 return true;
             }

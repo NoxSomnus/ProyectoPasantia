@@ -5,12 +5,22 @@ namespace FerminToroWeb.Controllers
 {
     public class MessagesController : Controller
     {
-        public IActionResult UploadSuccessfulView()
+        public IActionResult UploadSuccesfulView()
         {
             return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
-            { Message = "Archivo Subido con Éxito", 
-              NextStep = "Haga click para volver al inicio",
-              ButtonContent = "Inicio"
+            {   Message = "Archivo Subido con Éxito", 
+                NextStep = "Haga click para volver al inicio",
+                ButtonContent = "Inicio"
+            });
+        }
+
+        public IActionResult UploadInscriptionsSuccesfulView()
+        {
+            return View("~/Views/Messages/UploadInscriptionsSuccesfulView.cshtml", new SuccesfulMessageModel
+            {
+                Message = "Archivo Subido con Éxito",
+                NextStep = "Haga click para volver al inicio",
+                ButtonContent = "Inicio"
             });
         }
 
@@ -24,11 +34,41 @@ namespace FerminToroWeb.Controllers
             });
         }
 
+        public IActionResult PeriodAdded()
+        {
+            return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
+            {
+                Message = "Periodo Creado",
+                NextStep = "Haga click para volver al inicio",
+                ButtonContent = "Inicio"
+            });
+        }
+
+        public IActionResult ScheduleAdded()
+        {
+            return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
+            {
+                Message = "Cronograma Creado",
+                NextStep = "Haga click para volver al inicio",
+                ButtonContent = "Inicio"
+            });
+        }
+
         public IActionResult EmployeeUpdated()
         {
             return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
             {
                 Message = "Información y permisos del empleado actualizados",
+                NextStep = "Haga click para volver al inicio",
+                ButtonContent = "Inicio"
+            });
+        }
+
+        public IActionResult PeriodUpdated()
+        {
+            return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
+            {
+                Message = "Periodo Actualizado",
                 NextStep = "Haga click para volver al inicio",
                 ButtonContent = "Inicio"
             });
@@ -65,6 +105,11 @@ namespace FerminToroWeb.Controllers
         }
 
         public IActionResult SomethingWentWrongView()
+        {
+            return View();
+        }
+
+        public IActionResult FailedCSVRead()
         {
             return View();
         }

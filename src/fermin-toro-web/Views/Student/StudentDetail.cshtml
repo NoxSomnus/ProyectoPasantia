@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Agregar nuevo empleado";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+
+@model FerminToroMS.Application.Responses.StudentResponse
+
+<div class="col-md-12 col-sm-12">
+    <div class="contenedorlogin">
+            <div>
+                <div class="form-group">
+                    <label>Cédula: @Model.Cedula</label>
+                </div>
+                <div class="form-group">
+                <label>Nombre: @Model.StudentName @Model.StudentLastName</label>
+                </div>
+                <div class="form-group">
+                <label>Correo: : @Model.StudentEmail</label>
+                </div>
+                <div class="form-group">
+                <label>Teléfono: : @Model.StudentCellPhone</label>
+                </div>
+                <div class="form-group">
+                    <label>Dirección de Habitación: @Model.StudentDirection</label>
+                </div>
+                <div class="form-group">
+                    @if(Model.StudentAge == null)
+                    {
+                        <label>Edad: No registrado</label>
+                    }else{
+                    <label>Edad: @Model.StudentAge</label>
+                    }
+                </div>
+                <div class="form-group">
+                    @if (Model.YearRange == string.Empty || Model.YearRange == "" || Model.YearRange == null)
+                    {
+                        <label>Rango de Edad: No registrado</label>
+                    }
+                    else
+                    {
+                        <label>Rango de Edad: @Model.YearRange</label>
+                    }
+                
+                </div>
+                <div class="form-group">
+                    <label>Procentaje de Beca: @Model.Beca %</label>
+                </div>
+            </div>
+    </div>
+</div>

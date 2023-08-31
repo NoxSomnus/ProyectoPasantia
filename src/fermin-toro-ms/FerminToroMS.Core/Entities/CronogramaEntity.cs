@@ -1,6 +1,7 @@
 ﻿using FerminToroMS.Core.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,10 @@ namespace FerminToroMS.Core.Entities
         public EmpleadoEntity? Instructor { get; set; }
         //Relacion con inscripciones y Promociones
         public ICollection<InscripcionEntity>? Inscripciones { get; set; }
-        public ICollection<PromocionEntity>? Promociones { get; set; } 
-        public int? NroVacantes { get; set; }
+        public ICollection<PromocionEntity>? Promociones { get; set; }
+        public int NroVacantes { get; set; } = 0;
+        [DefaultValue(true)]
+        public bool Habilitado { get; set; } = true;
+        public string Codigo { get; set; } = string.Empty;
     }
 }

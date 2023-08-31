@@ -86,7 +86,8 @@ namespace FerminToroMS.Application.Handlers.Commands
                             Id = periodId,
                             Año = schedulerequest.Año,
                             MesInicio = schedulerequest.Meses,
-                            NombrePeriodo = schedulerequest.NombrePerido
+                            NombrePeriodo = schedulerequest.NombrePerido,
+                            MesFin = schedulerequest.Meses
                         };
                         _dbContext.Periodos.Add(period);
                     }
@@ -130,7 +131,7 @@ namespace FerminToroMS.Application.Handlers.Commands
                             ModuloId = modul.Id,
                             PeriodoId = period.Id
                         };
-                        if (schedulerequest.FechaFin != "")
+                        if (schedulerequest.FechaFin != "" || schedulerequest.FechaFin != null)
                         {
                             schedule.FechaFin = DateOnly.ParseExact(schedulerequest.FechaFin, "dd/MM/yyyy", null);
                         }
