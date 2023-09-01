@@ -19,7 +19,7 @@
     <table>
         <tr>
             <td class="cell">
-                Programa: @Model.CourseName 
+                Programa: @Model.ModulCompleteName 
             </td>
             <td class="cell">
                 Fecha de Inicio: @Model.StartDate
@@ -46,7 +46,7 @@
                 Turno: @Model.Turno
             </td>
             <td class="cell">
-                Modalidad: @Model.Modalidad
+                Modalidad: @Model.Regularidad - @Model.Modalidad
             </td>
         </tr>
         <tr>
@@ -54,7 +54,7 @@
                 Horario: @Model.Horario
             </td>
             <td class="cell">
-                Nombre del Curso: Codigo del curso
+                Nombre del Curso: @Model.Code
             </td>
         </tr>
     </table>
@@ -64,6 +64,16 @@
     <button class="tablinks" onclick="openTab(event, 'Estudiantes')">Estudiantes</button>
     <button class="tablinks" onclick="openTab(event, 'Pagos')">Pagos</button>
 </div>
+@if (Model.Students.Count == 0)
+{
+    <div id="Estudiantes" class="tabcontent">
+        <h1 class="display-4">No hay estudiantes registrados aún</h1>
+    </div>
+    <div id="Pagos" class="tabcontent">
+        <h1 class="display-4">No hay estudiantes registrados aún</h1>
+    </div>
+}
+else{
 <div id="Estudiantes" class="tabcontent">
     <div class="student-table">
         <div>
@@ -127,7 +137,7 @@
         </div>
     </div>
 </div>
-
+}
 @section Scripts 
 {
     <script>

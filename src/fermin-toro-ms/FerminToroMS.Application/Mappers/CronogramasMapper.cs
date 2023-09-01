@@ -78,5 +78,31 @@ namespace FerminToroMS.Application.Mappers
             };           
             return response;
         }
+        public static string ExtractCode(CronogramaEntity schedule, string PeriodName, string ModulDiminutivo)
+        {
+            string[] Period = PeriodName.Split(' ');
+            string P = Period[0];
+            string number = Period[1];
+            char p = P[0];
+            char n = number[0];
+            string Turn = schedule.Turno.ToString();
+            char Turno = Turn[0];
+            string Horario = schedule.Horario_Dias;
+            string fechainicio = schedule.FechaInicio.ToString("dd-MM-yyyy");
+            string presencial = schedule.Modalidad == 0 ? "P-" : "";
+            if (Horario == "Sábados" || Horario == "Sabados")
+            {
+                char h = Horario[0];
+                string codeSAB = ModulDiminutivo + "-" + p + n + "-" + "SAB" + "-" + Turno + "-" + presencial + fechainicio;
+                return codeSAB;
+            }
+            string[] horario = Horario.Split(' ');
+            string h1 = horario[0].ToUpper();
+            string h2 = horario[2].ToUpper();
+            char H1 = h1[0];
+            char H2 = h2[0];
+            string code = ModulDiminutivo + "-" + p + n + "-" + H1 + "-" + H2 + "-" + Turno + "-" + presencial + fechainicio;
+            return code;
+        }
     }
 }

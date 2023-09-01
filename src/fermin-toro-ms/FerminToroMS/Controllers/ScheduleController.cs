@@ -296,5 +296,25 @@ namespace FerminToroMS.Controllers
                 return StatusCode(500, "Ocurrió un error al consultar los cronogramas. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
         }
+
+        [HttpPut("SetScheduleCode")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> SetScheduleCode()
+        {
+            _logger.LogInformation("Entrando al metodo que setea los valores del codigo de cronograma");
+            try
+            {
+                var command = new SetScheduleCodeCommand();
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al setear el codigo de los cronogramas");
+                return StatusCode(500, "Ocurrió un error al setear el codigo de los cronogramas. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
     }
 }
