@@ -1,5 +1,6 @@
 ﻿using FerminToroMS.Application.Commands;
 using FerminToroMS.Application.Exceptions;
+using FerminToroMS.Application.Mappers;
 using FerminToroMS.Application.Requests;
 using FerminToroMS.Core.Database;
 using FerminToroMS.Core.Entities;
@@ -91,15 +92,16 @@ namespace FerminToroMS.Application.Handlers.Commands
                             throw new IdNotFoundException("No se encontró el cronograma a actualizar");
                         }
                         cronograma = UpdateRequestToEntity(cronograma, schedule, modul.Id);
+                        cronograma.Codigo = CronogramasMapper.ExtractCode(cronograma, period.NombrePeriodo, modul.Diminutivo);
                         _dbContext.Cronogramas.Update(cronograma);
                     }
                     else //es una adicion al cronograma 
                     {
                         var cronograma = CreateNewCronograma(schedule, modul.Id, period.Id);
+                        cronograma.Codigo = CronogramasMapper.ExtractCode(cronograma, period.NombrePeriodo, modul.Diminutivo);
                         _dbContext.Cronogramas.Add(cronograma);
                     }
                 }
-                _dbContext.Periodos.Update(period);
                 await _dbContext.SaveEfContextChanges("APP");
                 transaction.Commit();
                 return true;

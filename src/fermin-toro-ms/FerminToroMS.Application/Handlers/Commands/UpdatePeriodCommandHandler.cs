@@ -1,5 +1,6 @@
 ﻿using FerminToroMS.Application.Commands;
 using FerminToroMS.Application.Exceptions;
+using FerminToroMS.Application.Mappers;
 using FerminToroMS.Application.Requests;
 using FerminToroMS.Core.Database;
 using FerminToroMS.Core.Entities;
@@ -77,6 +78,16 @@ namespace FerminToroMS.Application.Handlers.Commands
                 }
                 period = UpdateRequestToEntity(period, request._request);
                 _dbContext.Periodos.Update(period);
+                var schedules = _dbContext.Cronogramas.Where(c => c.PeriodoId == period.Id).ToList();
+                if (schedules.Count > 0)
+                {
+                    foreach (var schedule in schedules)
+                    {
+                        var modul = _dbContext.Modulos.FirstOrDefault(c=>c.Id == schedule.ModuloId);
+                        schedule.Codigo = CronogramasMapper.ExtractCode(schedule, period.NombrePeriodo, modul.Diminutivo);
+                        _dbContext.Cronogramas.Update(schedule);
+                    }
+                }
                 await _dbContext.SaveEfContextChanges("APP");
                 transaction.Commit();
                 return true;

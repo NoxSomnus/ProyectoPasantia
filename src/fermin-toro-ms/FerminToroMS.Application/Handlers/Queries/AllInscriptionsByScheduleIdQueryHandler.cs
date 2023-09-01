@@ -79,9 +79,10 @@ namespace FerminToroMS.Application.Handlers.Queries
                             .Where(c => c.Id == request.ScheduleId)
                             .Select(c => new AllInscriptionsResponse
                             {
-                                CourseName = c.Modulo.Curso.Nombre,
+                                ModulCompleteName = c.Modulo.NombreCompleto,
                                 CourseCompleteName = c.Modulo.Curso.NombreCompleto,
                                 ModulName = c.Modulo.Nombre,
+                                Code = c.Codigo,
                                 StartDate = c.FechaInicio.ToString("dd/MM/yyyy"),
                                 EndDate = c.FechaFin.HasValue ? c.FechaFin.Value.ToString("dd/MM/yyyy") : string.Empty,
                                 Horario = c.Horario_Dias,

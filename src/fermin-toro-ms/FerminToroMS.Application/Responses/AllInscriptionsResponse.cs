@@ -9,7 +9,8 @@ namespace FerminToroMS.Application.Responses
     public class AllInscriptionsResponse
     {
         public string CourseCompleteName { get; set; } = null!;
-        public string CourseName { get; set; } = null!;
+        public string ModulCompleteName { get; set; } = null!;
+        public string Code { get; set; } = null!;
         public string ModulName { get; set; } = null!;
         public string StartDate { get; set; } = null!;
         public string EndDate { get; set; } = null!;
