@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Detalles de Pago";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+<link rel="stylesheet" href="~/css/PaymentDetailsStyle.css" asp-append-version="true" />
+@model PaymentDetailsModel
+
+<div class="table-scroll">
+    <label>Estudiante: @Model.NombreEstudiante</label>
+    <br />
+    <label>Inscrito en: @Model.InscriptionCode</label>
+    @if (Model.Pagos == null)
+    {
+        <label>Este estudiante aun no ha realizado un pago</label>
+    }
+    else
+    {
+        <div>
+            <table id="main-table" class="main-table">
+                <thead>
+                    <tr>
+                        <th>Metodo de Pago</th>
+                        <th>Divisa</th>
+                        <th>Pago Completo</th>
+                        <th>Recibo</th>
+                        <th>Factura</th>
+                        <th>Pago Juridico</th>
+                        <th>Fecha de Pago</th>
+                        <th>Monto</th>
+                        <th>Comprobante</th>
+                        <th>Empresa Jurídica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pago in Model.Pagos)
+                    {
+                        <tr>
+                            <td>@pago.PaymentMethod</td>
+                            <td>@(pago.EnDivisa ? "Si" : "No")</td>
+                            <td>@(pago.CompletePayment ? "No" : "Si")</td>
+                            @if (pago.NroRecibo == null)
+                            {
+                                <td></td>                            
+                            }
+                            else
+                            {
+                                <td>
+                                   #@pago.NroRecibo
+                                </td>
+                                }
+                            @if (pago.NroFactura == null)
+                            {
+                                <td></td>
+                            }
+                            else
+                            {
+                                <td>
+                                    #@pago.NroFactura
+                                </td>
+                            }
+                            <td>@(pago.EsJuridico ? "Si" : "No")</td>
+                            <td>@pago.PaymentDate</td>
+                            <td>@pago.Mount</td>
+                            @if (pago.Comprobante == null)
+                            {
+                                <td>N/A</td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @pago.Comprobante
+                                </td>
+                            }
+                            @if (pago.EmpresaJuridica == null)
+                            {
+                                <td>N/A</td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <a href="">Detalles</a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <label>Total Pagado: @Model.Total</label>
+            <br>
+            <label>Por pagar: Aun falta implementar este cálculo</label>
+        </div>
+    }    
+</div>
+
