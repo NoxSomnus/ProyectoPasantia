@@ -72,11 +72,20 @@ namespace FerminToroMS.Application.Handlers.Commands
             try
             {
                 _logger.LogInformation("EmployeeByIdQueryHandler.HandleAsync");
-                var employee = await _dbContext.Empleados.FirstOrDefaultAsync(c => c.Id == request.EmployeeId);
+                var employee = await _dbContext.Empleados.Include(e => e.CronogramasAsignados)
+                                         .FirstOrDefaultAsync(c => c.Id == request.EmployeeId);
                 if (employee == null)
                 {
                     throw new UserIdNotFoundException("No se encontro el usuario");
                 }
+                if (employee.CronogramasAsignados != null) 
+                {
+                    foreach (var cronograma in employee.CronogramasAsignados)
+                    {
+                        cronograma.InstructorId = null;
+                    }
+                }
+
                 _dbContext.Empleados.Remove(employee);
                 await _dbContext.SaveEfContextChanges("APP");
                 transaction.Commit();

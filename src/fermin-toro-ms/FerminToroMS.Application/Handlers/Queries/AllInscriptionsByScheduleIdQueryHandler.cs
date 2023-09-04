@@ -99,6 +99,7 @@ namespace FerminToroMS.Application.Handlers.Queries
                 var inscriptions = await _dbContext.Inscripciones.Where(c => c.CronogramaId == schedule.Id).OrderBy(c => c.NroInscripcion)
                     .Select(c => new StudentRegiteredOnInscriptionResponse()
                     {
+                        InscriptionId = c.Id,
                         Cedula = c.Estudiante.Cedula,
                         Name = c.Estudiante.Nombre,
                         LastName = c.Estudiante.Apellido,

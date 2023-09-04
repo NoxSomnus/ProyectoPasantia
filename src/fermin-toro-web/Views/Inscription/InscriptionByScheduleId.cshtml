@@ -114,9 +114,6 @@ else{
                     <tr>
                         <th>N° Form</th>
                         <th>Estudiante</th>
-                        <th>Ciudad</th>
-                        <th>Método de Pago</th>
-                        <th>Pago Completo</th>
                         <th>Detalles</th>
                     </tr>
                 </thead>
@@ -125,11 +122,17 @@ else{
                     {
                         <tr class="fila">
                             <td>@student.NroInscription</td>
-                            <td>@student.Name @student.LastName</td>
-                            <td>@student.NroInscription</td>
-                            <td>@student.NroInscription</td>
-                            <td>@student.NroInscription</td>
-                            <td><a href="">Detalles</a></td>
+                            <td>@student.Name @student.LastName</td>                                                            
+                            <td>
+                                <form asp-action="Details" asp-controller="Payment" method="get">
+                                    <input value="@student.InscriptionId" name="InscriptionId" hidden>
+                                        <input value="@Model.Code" name="Inscription" hidden>
+                                    <input value="@student.Name" name="Nombre" hidden>
+                                    <input value="@student.LastName" name="Apellido" hidden>
+                                    <button type="submit">Detalles</button>
+                                </form>
+                                
+                            </td>
                         </tr>
                     }
                 </tbody>

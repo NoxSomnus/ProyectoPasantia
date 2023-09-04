@@ -8,6 +8,7 @@ namespace FerminToroMS.Application.Responses
 {
     public class StudentRegiteredOnInscriptionResponse
     {
+        public Guid InscriptionId { get; set; }
         public string Cedula { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string LastName { get; set; } = null!;

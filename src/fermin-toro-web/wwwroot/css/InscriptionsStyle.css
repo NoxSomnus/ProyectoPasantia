@@ -37,6 +37,13 @@
     top: 0;
     z-index: 2;
 }
+.student-table tbody td {
+    background: #BED0D8;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
 
 
 .row {
@@ -129,5 +136,7 @@
     border: 1px solid #ccc;
     border-top: none;
 }
+
+
 
 
