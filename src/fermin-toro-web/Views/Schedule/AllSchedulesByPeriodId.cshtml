@@ -164,6 +164,12 @@ else{
             </table>
         </div>
     </div>
+    <form method="get" id="crearcronograma" asp-action="PeriodSummary" asp-controller="Payment">
+        <input type="hidden" name="PeriodId" value="@Model.PeriodoId" />
+        <div style="display: flex; justify-content: center;">
+            <button type="submit" class="btn btn-primary">Summary</button>
+        </div>
+    </form>
 }
 @section Scripts {
     <script>

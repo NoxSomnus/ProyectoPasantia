@@ -18,5 +18,6 @@ namespace FerminToroMS.Application.Responses
         public int? NroRecibo { get; set; }
         public string? Comprobante { get; set; }
         public Guid? EmpresaJuridica { get; set; }
+        public string Comments { get; set;} = null!;
     }
 }

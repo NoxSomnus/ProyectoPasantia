@@ -1,0 +1,89 @@
+﻿.info-table {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.row {
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.imgcell {
+    max-height: 100px;
+    border: 1px solid black;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    background: #BED0D8;
+}
+/*
+.table {
+  display: flex;
+  flex-wrap: wrap;
+}
+*/
+.table {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.firstcell {
+    flex: 0 0 auto; /* Ancho automático al contenido de texto */
+    min-width: 0;
+    max-width: 100%;
+    border: 1px solid black;
+    padding: 10px;
+    vertical-align: middle !important;
+    justify-content: center;
+    text-align: center;
+    background-color: #306D74;
+    color: #fff;
+}
+
+.cell {
+    flex-grow: 1; /* Las celdas se expanden para llenar el espacio disponible */
+    min-width: 0;
+    max-width: 100%;
+    border: 1px solid black;
+    padding: 10px;
+    vertical-align: middle !important;
+    justify-content: center;
+    text-align: center;
+    background-color: #BED0D8;
+}
+
+.nullcell {
+    border: 1px solid black;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #BED0D8;
+}
+
+.programcell {
+    border: 1px solid black;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    background: #133946;
+    color: #fff;
+    justify-content: center;
+}
+
+.fermin-img {
+    width: 150px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.cisco-img {
+    width: 200px;
+    height: auto;
+    margin-right: 10px;
+    margin-left: auto;
+}

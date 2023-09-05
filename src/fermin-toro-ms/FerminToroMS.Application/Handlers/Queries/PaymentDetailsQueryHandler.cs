@@ -83,7 +83,8 @@ namespace FerminToroMS.Application.Handlers.Queries
                                 EsJuridico = c.EsJuridico,
                                 EnDivisa = c.EnDivisa,
                                 Comprobante = c.URLComprobante,
-                                EmpresaJuridica = c.EmpresaJuridicaId
+                                EmpresaJuridica = c.EmpresaJuridicaId,
+                                Comments = c.Comentarios == null ? " " : c.Comentarios
                             })
                             .ToListAsync();
                 return payments;
