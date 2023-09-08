@@ -16,5 +16,6 @@ namespace FerminToroMS.Core.Entities
         public CursoEntity Curso { get; set; } = null!;
         public ICollection<EstudianteEntity>? EstudiantesAprobados { get; set; }
         public ICollection<CronogramaEntity>? Cronogramas { get; set; }
+        public ICollection<Precio_Mod_TurnoEntity>? Precios { get; set; }
     }
 }

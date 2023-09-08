@@ -181,7 +181,12 @@ namespace FerminToroWeb.Controllers
                 {
                     return RedirectToAction("SomethingWentWrongView", "Messages");
                 }
-                return RedirectToAction("ScheduleAdded", "Messages");
+                if (habilitado.Any(elemento => elemento == false)) 
+                {
+                    var model = new ScheduleUpdatedSuccessfullyModel { SchedulesDisabled = true };
+                    return View("~/Views/Messages/ScheduleUpdatedSucessfully.cshtml", model);
+                }
+                return RedirectToAction("ScheduleUpdatedSucessfully", "Messages");
             }
             catch (HttpRequestException)
             {

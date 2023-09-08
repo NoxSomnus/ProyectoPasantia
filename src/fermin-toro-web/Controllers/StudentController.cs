@@ -94,6 +94,27 @@ namespace FerminToroWeb.Controllers
             }
         }
 
+        public async Task<IActionResult> SearchJuridicos()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/student/juridicos";
+                var response = await _httpClient.GetAsync(apiUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var Response = JsonConvert.DeserializeObject<List<AllStudentsResponse>>(responseContent);
+                return View("~/Views/Student/AllStudents.cshtml", Response);
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> StudentDetail(string id)
         {

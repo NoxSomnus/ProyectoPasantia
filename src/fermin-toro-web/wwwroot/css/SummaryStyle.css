@@ -26,10 +26,7 @@
   flex-wrap: wrap;
 }
 */
-.table {
-    display: flex;
-    flex-wrap: wrap;
-}
+
 
 .firstcell {
     flex: 0 0 auto; /* Ancho automático al contenido de texto */

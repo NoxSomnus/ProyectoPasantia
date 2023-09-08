@@ -5,6 +5,11 @@ namespace FerminToroWeb.Controllers
 {
     public class MessagesController : Controller
     {
+        public IActionResult ScheduleUpdatedSucessfully()
+        {
+            var model = new ScheduleUpdatedSuccessfullyModel { SchedulesDisabled = false };
+            return View("~/Views/Messages/ScheduleUpdatedSucessfully.cshtml", model);
+        }
         public IActionResult UploadSuccesfulView()
         {
             return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel

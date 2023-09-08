@@ -1,5 +1,4 @@
-﻿@using FerminToroMS.Application.Responses;
-@{
+﻿@{
     ViewData["Title"] = "Inscripciones";
     Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
 }
@@ -64,7 +63,7 @@
     <button class="tablinks" onclick="openTab(event, 'Estudiantes')">Estudiantes</button>
     <button class="tablinks" onclick="openTab(event, 'Pagos')">Pagos</button>
 </div>
-@if (Model.Students.Count == 0)
+@if (Model.Students.Count() == 0)
 {
     <div id="Estudiantes" class="tabcontent">
         <h1 class="display-4">No hay estudiantes registrados aún</h1>
@@ -77,7 +76,7 @@ else{
 <div id="Estudiantes" class="tabcontent">
     <div class="student-table">
         <div>
-            <table id="student-table" class="student-table">
+            <table>
                 <thead>
                     <tr>
                         <th>N° Lista</th>
@@ -95,7 +94,12 @@ else{
                             <td>@(Model.Students.IndexOf(student) + 1)</td>
                             <td>@student.Name</td>
                             <td>@student.LastName</td>
-                            <td>@student.Cedula</td>
+                            <td>
+                                <a href="/Student/StudentDetail?id=@student.StudentId">
+                                    @student.Cedula
+                                </a>
+
+                            </td>
                             <td>@student.CellPhone</td>
                             <td>@student.Email</td>
                         </tr>
@@ -109,11 +113,14 @@ else{
 <div id="Pagos" class="tabcontent">
     <div class="student-table">
         <div>
-            <table id="student-table" class="student-table">
+            <table>
                 <thead>
                     <tr>
                         <th>N° Form</th>
                         <th>Estudiante</th>
+                        <th>Modalidad Pago</th>
+                        <th>Natural / Juridico</th>
+                        <th>Pagado</th>
                         <th>Detalles</th>
                     </tr>
                 </thead>
@@ -122,11 +129,23 @@ else{
                     {
                         <tr class="fila">
                             <td>@student.NroInscription</td>
-                            <td>@student.Name @student.LastName</td>                                                            
+                            <td>@student.Name @student.LastName</td>
+                            @if (student.HasPayment)
+                            {
+                                    <td>@(student.ByCuota == true ? "Cuota" : "Completo")</td>
+                                    <td>@(student.EsJuridico == true ? "Jurídico" : "Natural")</td>
+                                }
+                                else
+                                {
+                                    <td>No ha pagado</td>
+                                    <td>No ha pagado</td>
+                                }
+
+                            <td>@student.TotalPaid</td>
                             <td>
                                 <form asp-action="Details" asp-controller="Payment" method="get">
                                     <input value="@student.InscriptionId" name="InscriptionId" hidden>
-                                        <input value="@Model.Code" name="Inscription" hidden>
+                                     <input value="@Model.Code" name="Inscription" hidden>
                                     <input value="@student.Name" name="Nombre" hidden>
                                     <input value="@student.LastName" name="Apellido" hidden>
                                     <button type="submit">Detalles</button>

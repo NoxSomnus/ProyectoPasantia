@@ -105,6 +105,34 @@ namespace FerminToroMS.Controllers
         }
 
         /// <summary>
+        /// Método que consulta todos los estudiantes juridicos del sistema.
+        /// </summary>
+        /// <returns>Un lista de todos los estudiantes juridicos del sistema.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Get 
+        /// El método devuelve una lista de todos los estudiantes juridicos del sistema.
+        /// </remarks>
+        [HttpGet("Juridicos")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Juridicos()
+        {
+            _logger.LogInformation("Entrando al metodo que consulta todos los estudiantes del sistema");
+            try
+            {
+                var query = new StudentsJuridicosQuery();
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los estudiantes");
+                return StatusCode(500, "Ocurrió un error al consultar los estudiantes. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
         /// Método que consulta un estudiante por Id.
         /// </summary>
         /// <returns>Un objeto JSON con las propiedades del estudiante.</returns>

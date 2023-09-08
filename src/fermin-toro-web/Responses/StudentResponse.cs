@@ -18,5 +18,6 @@ namespace FerminToroMS.Application.Responses
         public string? StudentAge { get; set; } = null!;
         public string? YearRange { get; set; } = null!;
         public int Beca { get; set;} = 0;
+        public List<ModulsSawByStudent>? ModulsSawByStudent { get; set; }
     }
 }

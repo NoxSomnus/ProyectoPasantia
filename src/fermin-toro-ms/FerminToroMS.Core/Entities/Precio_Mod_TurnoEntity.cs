@@ -12,6 +12,8 @@ namespace FerminToroMS.Core.Entities
         public ModalidadEnum Modalidad { get; set; }
         public TurnosEnum Turno { get; set; }
         public float Precio { get; set; }
-        public Guid CursoId { get; set; }
+        public Guid ModuloId { get; set; }
+        public ModuloEntity Modulo { get; set; } = null!;
+        public ICollection<CronogramaEntity>? Cronogramas { get; set; }
     }
 }

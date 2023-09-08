@@ -41,5 +41,40 @@ namespace FerminToroWeb.Controllers
                 return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
             }
         }
+
+        public async Task<IActionResult> ClosedScheduleInscriptions()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/inscription/freezedinscriptions";
+                var response = await _httpClient.GetAsync(apiUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var Response = JsonConvert.DeserializeObject<List<FreezedInscriptionResponse>>(responseContent);
+                var cerradas = Response.Where(c => c != null && c.PlanificacionCerrada == true);
+                apiUrl = apiurl.ApiUrl + "/schedule/schedulesenabled";
+                response = await _httpClient.GetAsync(apiUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                responseContent = await response.Content.ReadAsStringAsync();
+                var Response2 = JsonConvert.DeserializeObject<List<SchedulesEnabledResponse>>(responseContent);
+                var model = new ClosedScheduleInscriptionsModel 
+                { 
+                    Cerradas = cerradas,
+                    CronogramasDisponibles = Response2
+                };
+                return View(model);
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
     }
 }

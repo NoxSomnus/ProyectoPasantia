@@ -83,7 +83,7 @@ namespace FerminToroMS.Application.Handlers.Commands
                     }
                     var precio = new Precio_Mod_TurnoEntity
                     {
-                        CursoId = course.Id,
+                        ModuloId = course.Id,
                         Modalidad = pricerequest.Modalidad,
                         Turno = pricerequest.Turno,
                         Precio = pricerequest.Precio

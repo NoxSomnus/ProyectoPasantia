@@ -1,0 +1,49 @@
+﻿@{
+    Layout = "~/Views/Shared/_MensajeExitoLayout.cshtml";
+}
+@model ScheduleUpdatedSuccessfullyModel
+<body>
+
+    <div class="success-message">
+        <svg viewBox="0 0 76 76" class="success-message__icon icon-checkmark">
+            <circle cx="38" cy="38" r="36" />
+            <path fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M17.7,40.9l10.9,10.9l28.7-28.7" />
+        </svg>
+        <h1 class="success-message__title">Cronograma Actualizado con éxito</h1>
+        <div class="success-message__content">
+            <h4><b>Elija una de las opciones para continuar</b></h4>
+        </div>
+        @if (Model.SchedulesDisabled == true)
+        {
+            <button class="ghost" id="login" onclick="location.href='@Url.Action("ClosedScheduleInscriptions", "Inscription")'">
+                Revisar Inscripciones Afectadas
+            </button>        
+        }
+        
+        <button class="ghost" id="login" onclick="location.href='@Url.Action("MenuAdministrador", "Admin")'">
+            Volver al inicio
+        </button>
+    </div>
+
+</body>
+@section Scripts{
+    @{
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        @if (Model.SchedulesDisabled == true)
+        {
+            <script type="text/javascript">
+                window.onload = function () {
+                    setTimeout(function () {
+                        Swal.fire({
+                            title: 'Algunas planificaciones fueron cerradas',
+                            text: 'Revise las inscripciones afectadas',
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok',
+                        });
+                    }, 1000);
+                }
+            </script>
+        }
+    }
+}
