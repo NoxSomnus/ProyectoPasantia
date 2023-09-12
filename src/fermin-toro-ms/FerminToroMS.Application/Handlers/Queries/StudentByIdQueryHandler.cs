@@ -80,6 +80,7 @@ namespace FerminToroMS.Application.Handlers.Queries
                     .Include(c => c.Cronograma)
                     .ThenInclude(c => c.Modulo)
                     .ThenInclude(c => c.Curso)
+                    .Include(c=>c.Pagos)
                     .OrderBy(c=>c.FechaInscripcion).ToListAsync();
                 var response = new StudentResponse
                 {
@@ -109,6 +110,18 @@ namespace FerminToroMS.Application.Handlers.Queries
                             NroInscripcion = inscription.NroInscripcion,
                             InscriptionId = inscription.Id                            
                         };
+                        if (inscription.Pagos != null && inscription.Pagos.Count() != 0)
+                        {
+                            foreach (var payment in inscription.Pagos)
+                            {
+                                modulSawByStudent.TotalPaid = modulSawByStudent.TotalPaid + payment.Monto;
+                            }
+                            modulSawByStudent.HasPayment = true;
+                        }
+                        else
+                        {
+                            modulSawByStudent.HasPayment = false;
+                        }
                         studentInscriptions.Add(modulSawByStudent);
                     }                                       
                 }

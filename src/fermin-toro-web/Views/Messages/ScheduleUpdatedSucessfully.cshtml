@@ -15,7 +15,7 @@
         </div>
         @if (Model.SchedulesDisabled == true)
         {
-            <button class="ghost" id="login" onclick="location.href='@Url.Action("ClosedScheduleInscriptions", "Inscription")'">
+            <button class="ghost" id="login" onclick="location.href='@Url.Action("FreezedInscriptions", "Inscription")'">
                 Revisar Inscripciones Afectadas
             </button>        
         }

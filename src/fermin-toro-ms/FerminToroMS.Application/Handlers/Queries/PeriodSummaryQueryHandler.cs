@@ -85,6 +85,8 @@ namespace FerminToroMS.Application.Handlers.Queries
                 };
                 var schedules = _dbContext.Cronogramas.Include(c => c.Modulo)
                                                      .ThenInclude(m => m.Curso)
+                                                     .Include(c => c.Modulo)
+                                                     .ThenInclude(c=>c.Precios)
                                                      .Where(c => c.PeriodoId == period.Id && c.Habilitado == true)
                                                      .AsEnumerable()
                                                      .OrderBy(cadena => ObtenerValorModulo(cadena))
@@ -103,9 +105,10 @@ namespace FerminToroMS.Application.Handlers.Queries
                         Modalidad = schedule.Modalidad.ToString(),
                         Regularidad = schedule.Regularidad.ToString()
                     };
-                    var inscriptions = _dbContext.Inscripciones.Where(c=>c.CronogramaId == schedule.Id).ToList();
+                    var inscriptions = _dbContext.Inscripciones.Include(c=>c.Pagos).Where(c=>c.CronogramaId == schedule.Id).ToList();
                     foreach (var inscription in inscriptions) 
                     {
+                        double totalonpayment = 0;
                         var payments = _dbContext.Pagos.Where(c=>c.InscripcionId == inscription.Id).ToList();
                         foreach (var payment in payments) 
                         {
@@ -118,10 +121,28 @@ namespace FerminToroMS.Application.Handlers.Queries
                                 response.TotalOnline = response.TotalOnline + payment.Monto;
                             }
                             totalonmodul.Total = totalonmodul.Total + payment.Monto;
+                            totalonpayment = totalonpayment + payment.Monto;
                             response.TotalOnPeriod = response.TotalOnPeriod + payment.Monto;
-                            if (payment.PorCuotas) totalonmodul.CuotaQuantity++;
+                            
                             if (payment.NroFactura != null) totalonmodul.BillQuantity++;
                             if (payment.NroRecibo != null) totalonmodul.ReciboQuantity++;
+                        }
+                        if (inscription.Pagos != null)
+                        {
+                            if(inscription.Pagos.First().PorCuotas == true) totalonmodul.CuotaQuantity++;
+                        }
+                        var modulprice = schedule.Modulo.Precios
+                            .FirstOrDefault(c=>c.Modalidad == schedule.Modalidad &&
+                            c.Turno == schedule.Turno && c.Regularidad == schedule.Regularidad
+                            && c.PorCuotas == payments.First().PorCuotas);
+                        if (modulprice != null) 
+                        {
+                            if (totalonpayment < (modulprice.PorCuotas ? modulprice.Precio*2 : modulprice.Precio))
+                            {
+                                totalonmodul.PorCobrar = 
+                                    totalonmodul.PorCobrar +
+                                    (modulprice.PorCuotas ? modulprice.Precio*2 - totalonpayment : modulprice.Precio - totalonpayment);
+                            }
                         }
                     }
                     response.TotalOnModulsWithTurns.Add(totalonmodul);

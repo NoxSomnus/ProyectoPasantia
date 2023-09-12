@@ -40,6 +40,11 @@ namespace FerminToroMS.Controllers
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
+            catch (IdNotFoundException ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los pagos de la inscripcion");
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Ocurrió un error al consultar los pagos de la inscripcion");

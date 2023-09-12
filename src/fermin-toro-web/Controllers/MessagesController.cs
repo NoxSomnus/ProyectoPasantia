@@ -19,6 +19,16 @@ namespace FerminToroWeb.Controllers
             });
         }
 
+        public IActionResult InscriptionsMovedSucessfully()
+        {
+            return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
+            {
+                Message = "Acción completada con exito",
+                NextStep = "Haga click para volver al inicio",
+                ButtonContent = "Inicio"
+            });
+        }
+
         public IActionResult UploadInscriptionsSuccesfulView()
         {
             return View("~/Views/Messages/UploadInscriptionsSuccesfulView.cshtml", new SuccesfulMessageModel
@@ -34,6 +44,16 @@ namespace FerminToroWeb.Controllers
             return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
             {
                 Message = "Empleado Añadido al sistema",
+                NextStep = "Haga click para volver al inicio",
+                ButtonContent = "Inicio"
+            });
+        }
+
+        public IActionResult StudentAdded()
+        {
+            return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
+            {
+                Message = "Estudiante registrado en el sistema",
                 NextStep = "Haga click para volver al inicio",
                 ButtonContent = "Inicio"
             });

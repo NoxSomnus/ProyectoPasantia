@@ -65,7 +65,7 @@ namespace FerminToroWeb.Controllers
                     }
                     return RedirectToAction("SomethingWentWrongView", "Messages");
                 }
-                return RedirectToAction("EmployeeAdded", "Messages");
+                return RedirectToAction("StudentAdded", "Messages");
             }
             catch (HttpRequestException)
             {

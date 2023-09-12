@@ -10,10 +10,12 @@ namespace FerminToroMS.Core.Entities
     public class Precio_Mod_TurnoEntity : BaseEntity
     {
         public ModalidadEnum Modalidad { get; set; }
+        public RegularidadEnum Regularidad { get; set; }
         public TurnosEnum Turno { get; set; }
-        public float Precio { get; set; }
+        public double Precio { get; set; }
         public Guid ModuloId { get; set; }
         public ModuloEntity Modulo { get; set; } = null!;
+        public bool PorCuotas { get; set; }
         public ICollection<CronogramaEntity>? Cronogramas { get; set; }
     }
 }

@@ -8,5 +8,6 @@ namespace FerminToroWeb.Models
         public List<PaymentsDetailsResponse>? Pagos { get; set; }
         public double Total { get; set; }
         public string InscriptionCode { get; set; } = null!;
+        public double Debt { get; set; }
     }
 }

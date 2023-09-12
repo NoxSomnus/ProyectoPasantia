@@ -377,6 +377,18 @@ namespace FerminToroWeb.Controllers
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var Response = JsonConvert.DeserializeObject<List<ScheduleResponse>>(responseContent);
                 var model = new ScheduleByPeriodIdModel { PeriodoId = id, schedules = Response };
+                bool editable = false;
+                if (Response.Count != 0)
+                {
+                    var IsOnGoing = Response.LastOrDefault(r=> r.Habilitado);
+                    string fechaString = IsOnGoing.Fecha_Fin;
+                    DateTime fecha;
+                    if (DateTime.TryParseExact(fechaString, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out fecha))
+                    {
+                        editable = fecha > DateTime.Now;
+                    }
+                }
+                model.Editable = editable;
                 return View("~/Views/Schedule/AllSchedulesByPeriodId.cshtml",model);
             }
             catch (HttpRequestException)

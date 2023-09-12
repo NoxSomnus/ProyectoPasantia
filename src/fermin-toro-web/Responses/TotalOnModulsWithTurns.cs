@@ -18,6 +18,7 @@ namespace FerminToroMS.Application.Responses
         public int CuotaQuantity { get; set; } = 0;
         public int BillQuantity { get; set; } = 0;
         public int ReciboQuantity { get; set; } = 0;
-        public double Total { get; set; }
+        public double Total { get; set; } = 0;
+        public double PorCobrar { get; set; } = 0;
     }
 }

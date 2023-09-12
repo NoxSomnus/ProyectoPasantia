@@ -1,10 +1,13 @@
 ﻿using FerminToroMS.Application.Responses;
 using FerminToroWeb.ApiUrlConfig;
+using FerminToroWeb.CustomClasses;
 using FerminToroWeb.Filters;
 using FerminToroWeb.Mappers;
 using FerminToroWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Reflection;
+using System.Text;
 
 namespace FerminToroWeb.Controllers
 {
@@ -42,7 +45,7 @@ namespace FerminToroWeb.Controllers
             }
         }
 
-        public async Task<IActionResult> ClosedScheduleInscriptions()
+        public async Task<IActionResult> FreezedInscriptions()
         {
             _verifySessionFilter.VerifySession(HttpContext);
             try
@@ -70,6 +73,36 @@ namespace FerminToroWeb.Controllers
                     CronogramasDisponibles = Response2
                 };
                 return View(model);
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
+
+        public async Task<IActionResult> MoveFromClosedScheduleInscriptions(
+            List<string> InscriptionId, List<string> FreezeInscriptionId, List<string> ScheduleId)
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/inscription/movefreezeinscriptions";
+                var requestBody = new
+                {
+                    inscriptionsIds = InscriptionId,
+                    freezeInscriptionsIds = FreezeInscriptionId,
+                    schedulesId = ScheduleId
+                };
+                var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                }); // Serializa el body a formato JSON
+                var response = await _httpClient.PatchAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                return RedirectToAction("InscriptionsMovedSucessfully", "Messages");
             }
             catch (HttpRequestException)
             {

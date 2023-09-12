@@ -78,6 +78,17 @@
                         </td>
                     }
                 </tr>
+                <tr>
+                    <td class="firstcell" style="background-color: #306D74; color: #fff;">
+                        Cuentas por cobrar:
+                    </td>
+                    @foreach (var modul in Model.TotalOnModulsWithTurns.Where(x => x.ModulId == totalmodul.ModuloId))
+                    {
+                    <td class="cell" style="background-color: #BED0D8;">
+                        @modul.PorCobrar $
+                    </td>
+                    }
+                </tr>
             </table>
         }
         <h3 style="display: flex; justify-content: center;">Resumen General</h3>

@@ -10,7 +10,7 @@ namespace FerminToroMS.Application.Responses
     {
         public bool EnDivisa { get; set; }
         public bool EsJuridico { get; set; }
-        public bool CompletePayment { get; set; }
+        public bool CuotaPayment { get; set; }
         public double Mount { get; set; }
         public string PaymentDate { get; set; } = null!;
         public string PaymentMethod { get; set; } = null!;

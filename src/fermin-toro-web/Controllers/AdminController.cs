@@ -72,6 +72,11 @@ namespace FerminToroWeb.Controllers
             _verifySessionFilter.VerifySession(HttpContext);
             return View();
         }
+        public IActionResult UploadPricesCSVView()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            return View();
+        }
 
     }
 }

@@ -15,5 +15,7 @@ namespace FerminToroMS.Application.Responses
         public string InscriptionStatus { get; set; } = null!;
         public int NroInscripcion { get; set; }
         public Guid InscriptionId { get; set; }
+        public bool HasPayment { get; set; } = false;
+        public double TotalPaid { get; set; }
     }
 }

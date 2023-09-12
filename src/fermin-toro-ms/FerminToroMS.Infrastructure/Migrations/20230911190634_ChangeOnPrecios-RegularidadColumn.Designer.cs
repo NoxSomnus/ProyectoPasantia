@@ -3,6 +3,7 @@ using System;
 using FerminToroMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FerminToroMS.Infrastructure.Migrations
 {
     [DbContext(typeof(FerminToroDbContext))]
-    partial class FerminToroContextModelSnapshot : ModelSnapshot
+    [Migration("20230911190634_ChangeOnPrecios-RegularidadColumn")]
+    partial class ChangeOnPreciosRegularidadColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -886,8 +888,8 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<bool>("PorCuotas")
                         .HasColumnType("boolean");
 
-                    b.Property<double>("Precio")
-                        .HasColumnType("double precision");
+                    b.Property<float>("Precio")
+                        .HasColumnType("real");
 
                     b.Property<int>("Regularidad")
                         .HasColumnType("integer");

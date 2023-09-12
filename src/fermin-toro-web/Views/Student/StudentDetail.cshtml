@@ -29,6 +29,7 @@
                                         <th>Fecha Inscripción</th>
                                         <th>Estado</th>
                                         <th>Nro Inscripción</th>
+                                        <th>Total Pagado</th>
                                         <th>Pagos</th>
                                     </tr>
                                 </thead>
@@ -42,6 +43,7 @@
                                             <td>@inscriptions.InscriptionDate</td>
                                             <td>@inscriptions.InscriptionStatus</td>
                                             <td>@inscriptions.NroInscripcion</td>
+                                            <td>@(inscriptions.HasPayment ? inscriptions.TotalPaid +" $" : "No ha Pagado")</td>
                                             <td>
                                                 <form asp-action="Details" asp-controller="Payment" method="get">
                                                     <input value="@inscriptions.InscriptionId" name="InscriptionId" hidden>

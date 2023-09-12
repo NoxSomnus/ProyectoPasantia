@@ -100,7 +100,10 @@ else{
                         <input type="hidden" asp-for="schedules[i].Habilitado" />
                     }
                     <input name="PeriodoId" value="@Model.PeriodoId" hidden />
-                    <button type="submit" class="btn btn-primary">Editar</button>
+                    @if (Model.Editable)
+                    {
+                        <button type="submit" class="btn btn-primary">Editar</button>
+                    }
                 </div>
             </form>
         </div>

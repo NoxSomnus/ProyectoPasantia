@@ -34,22 +34,27 @@ namespace FerminToroWeb.Controllers
                     return RedirectToAction("SomethingWentWrongView", "Messages");
                 }
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var Response = JsonConvert.DeserializeObject<List<PaymentsDetailsResponse>>(responseContent);
+                var Response = JsonConvert.DeserializeObject<PaymentDetails>(responseContent);
                 double total = 0;
-                if (Response != null)
+                double debt = 0;
+                if (Response != null && Response.Payments != null)
                 {
-                    foreach (var pago in Response)
+                    foreach (var pago in Response.Payments)
                     {
                         total = total + pago.Mount;
                     }
+                    debt = Response.ByCuota ? Response.ModulPrice * 2 - total : Response.ModulPrice - total;
                 }
+
                 var model = new PaymentDetailsModel 
                 {
                     NombreEstudiante = Nombre +" "+ Apellido,
-                    Pagos = Response,
+                    Pagos = Response.Payments,
                     Total = total,
-                    InscriptionCode = Inscription
+                    InscriptionCode = Inscription,
+                    Debt = debt
                 };
+
                 return View(model);
             }
             catch (HttpRequestException)
