@@ -10,6 +10,13 @@ const acercaDeContent = document.getElementById('acerca-de-content');
 const archivosContent = document.getElementById('archivos-content');
 const botonBuscar = document.getElementById('buscar-boton');
 const imagenUsuario = document.getElementById('user-pic');
+
+if (window.history && window.history.pushState) {
+    $(window).on('unload', function () {
+        window.history.pushState('forward', null, './#forward');
+    });
+}
+
 // Función para mostrar u ocultar el submenú
 function toggleMenu() {
     const subMenu = document.getElementById('subMenu');

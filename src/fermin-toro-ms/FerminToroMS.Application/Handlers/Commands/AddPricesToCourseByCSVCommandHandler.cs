@@ -81,12 +81,22 @@ namespace FerminToroMS.Application.Handlers.Commands
                         throw new BadCSVRequest("El formato del csv no es correcto. " +
                             "Asegurese de poner los nombres de los cursos como estan registrados en el sistema");
                     }
+                    var modul = _dbContext.Modulos
+                        .FirstOrDefault(c=>c.Nombre == pricerequest.ModulName && c.CursoId == course.Id);
+                    if (modul == null)
+                    {
+                        throw new BadCSVRequest("El formato del csv no es correcto. " +
+                            "Asegurese de poner los nombres de los cursos como estan registrados en el sistema");
+                    }
                     var precio = new Precio_Mod_TurnoEntity
                     {
-                        CursoId = course.Id,
+                        ModuloId = modul.Id,
                         Modalidad = pricerequest.Modalidad,
+                        Regularidad = pricerequest.Regularidad,
+                        PorCuotas = pricerequest.Cuotas,
                         Turno = pricerequest.Turno,
-                        Precio = pricerequest.Precio
+                        Precio = pricerequest.Precio,
+                        
                     };
                     _dbContext.Precios.Add(precio);
                 }

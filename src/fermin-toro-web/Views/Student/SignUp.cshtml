@@ -25,7 +25,7 @@
         <div class="form-container register-container">
             @using (Html.BeginForm("SignUpAction", "Student", FormMethod.Post))
             {
-                <h1>Registrarse</h1>
+                <h1>Registrar Nuevo Estudiante</h1>
                 <input type="text" value="@Model.Cedula" placeholder="Cédula" name="Cedula" required pattern="[0-9]*" title="La Cédula debe contener solo números.">
                 <input type="text" value="@Model.Nombre" placeholder="Nombre" name="Nombre" required data-val="true" data-val-required="El campo Nombre es requerido">
                 <input type="text" value="@Model.Apellido" placeholder="Apellido" name="Apellido" required>
@@ -33,7 +33,7 @@
                 <input type="email" value="@Model.Correo" placeholder="Correo" name="Correo" required>
                 <input type="date" value="@Model.Fecha_Nac" id="Fecha_Nac" name="Fecha_Nac" required>
                 <input type="text" value="@Model.Direccion" placeholder="Dirección de Habitación" name="Direccion" required>
-                <button>Registrarse</button>
+                <button>Registrar Alumno</button>
             }
         </div>
 

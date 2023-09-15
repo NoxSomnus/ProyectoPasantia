@@ -113,5 +113,29 @@ namespace FerminToroMS.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing the inscription file.");
             }
         }
+
+        [HttpPost("ProcessPricesCSVFile")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ProcessPricesCSVFile([FromBody] ProcessCSVFileRequest request)
+        {
+            _logger.LogInformation("Entrando al metodo que procesa el archivo de google drive");
+            try
+            {
+                var query = new ProcessPricesCSVFileQuery(request);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (BadCSVRequest ex)
+            {
+                _logger.LogError("Ocurrio un error en la lectura del archivo. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los valores de prueba. Exception: " + ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing the inscription file.");
+            }
+        }
     }
 }

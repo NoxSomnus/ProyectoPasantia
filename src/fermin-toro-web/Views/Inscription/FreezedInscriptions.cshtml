@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Inscripciones Congeladas";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+@model ClosedScheduleInscriptionsModel
+<link rel="stylesheet" href="~/css/InscriptionsStyle.css" asp-append-version="true" />
+<div class="text-center">
+    <h1 class="display-4">Estudiantes Congelados</h1>
+</div>
+<br />
+@if (Model.Cerradas != null)
+{
+    if (Model.Cerradas.Count() == 0)
+    {
+        <div id="Cerrados">
+            <h1 class="display-4">No hay estudiantes por mover</h1>
+        </div>
+    }
+    else
+    {
+        <form asp-action="MoveFromClosedScheduleInscriptions" asp-controller="Inscription">
+            <div id="Cerrados">
+                <div class="student-table">
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>N° Lista</th>
+                                    <th>Estudiante</th>
+                                    <th>Contacto</th>
+                                    <th>Inscrito en</th>
+                                    <th>Mover a</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var student in Model.Cerradas)
+                                {
+                                    <input value="@student.FreezeInscriptionId" name="FreezeInscriptionId" hidden />
+                                    <input value="@student.InscriptionId" name="InscriptionId" hidden />
+                                    <tr>
+                                        <td>@student.NroInscripcion</td>
+                                        <td>@student.StudentName</td>
+                                        <td>@student.StudentCellPhone</td>
+                                        <td>@student.ScheduleCode</td>
+                                        <td>
+                                            <select name="ScheduleId" id="schedule" style="text-align: center;">
+                                                <option value=" " name="ScheduleId">Mantener Congelado</option>
+                                                @if (Model.CronogramasDisponibles != null)
+                                                {
+                                                    foreach (var schedule in Model.CronogramasDisponibles)
+                                                    {
+                                                        if (schedule.ModulId == student.ModulId)
+                                                        {
+                                                            <option value="@schedule.ScheduleId" name="ScheduleId">@schedule.ScheduleCode</option>
+                                                        }
+                                                    
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <br />
+                        <div style="display: flex; justify-content: center;">
+                            <button type="submit" style="display: flex; justify-content: center;" class="btn btn-primary">Aplicar Cambios</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+}
+@section Scripts
+    {
+   
+}

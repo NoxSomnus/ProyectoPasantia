@@ -2,6 +2,7 @@
 using FerminToroMS.Application.Queries;
 using FerminToroMS.Application.Responses;
 using FerminToroMS.Core.Database;
+using FerminToroMS.Core.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -68,24 +69,35 @@ namespace FerminToroMS.Application.Handlers.Queries
             try
             {
                 _logger.LogInformation("CalculateAllPaymentsByPeriodIdQueryHandler.HandleAsync");
-                var response = new PeriodSummaryResponse
-                {
-                    TotalOnline = 0,
-                    TotalOnPeriod = 0,
-                    TotalPresencial = 0,
-                    TotalOnModuls = new List<TotalOnModuls>()
-                };
+
                 var period = await _dbContext.Periodos.FirstOrDefaultAsync(c => c.Id == request.PeriodId);
                 if (period == null) 
                 {
                     throw new IdNotFoundException("El periodo no fue encontrado");
                 }
-                var schedules = _dbContext.Cronogramas.Include(c=> c.Modulo)
-                    .ThenInclude(m => m.Curso).Where(c=>c.PeriodoId == period.Id && c.Habilitado == true).ToList();
+                var response = new PeriodSummaryResponse
+                {
+                    PeriodName = period.NombrePeriodo,
+                    TotalOnline = 0,
+                    TotalOnPeriod = 0,
+                    TotalPresencial = 0,
+                    TotalOnModulsWithTurns = new List<TotalOnModulsWithTurns>()
+                };
+                var schedules = _dbContext.Cronogramas.Include(c => c.Modulo)
+                                                     .ThenInclude(m => m.Curso)
+                                                     .Include(c => c.Modulo)
+                                                     .ThenInclude(c=>c.Precios)
+                                                     .Where(c => c.PeriodoId == period.Id && c.Habilitado == true)
+                                                     .AsEnumerable()
+                                                     .OrderBy(cadena => ObtenerValorModulo(cadena))
+                                                     .ThenBy(cadena => ObtenerValorModalidad(cadena))
+                                                     .ToList();
                 foreach (var schedule in schedules) 
                 {
-                    var totalonmodul = new TotalOnModuls
+                    var totalonmodul = new TotalOnModulsWithTurns
                     {
+                        ModulId = schedule.Modulo.Id,
+                        ModulCode = schedule.Codigo,
                         ProgramName = schedule.Modulo.Curso.Nombre,
                         ModulName = schedule.Modulo.Nombre,
                         Turno = schedule.Turno.ToString(),
@@ -93,9 +105,10 @@ namespace FerminToroMS.Application.Handlers.Queries
                         Modalidad = schedule.Modalidad.ToString(),
                         Regularidad = schedule.Regularidad.ToString()
                     };
-                    var inscriptions = _dbContext.Inscripciones.Where(c=>c.CronogramaId == schedule.Id).ToList();
+                    var inscriptions = _dbContext.Inscripciones.Include(c=>c.Pagos).Where(c=>c.CronogramaId == schedule.Id).ToList();
                     foreach (var inscription in inscriptions) 
                     {
+                        double totalonpayment = 0;
                         var payments = _dbContext.Pagos.Where(c=>c.InscripcionId == inscription.Id).ToList();
                         foreach (var payment in payments) 
                         {
@@ -108,10 +121,31 @@ namespace FerminToroMS.Application.Handlers.Queries
                                 response.TotalOnline = response.TotalOnline + payment.Monto;
                             }
                             totalonmodul.Total = totalonmodul.Total + payment.Monto;
+                            totalonpayment = totalonpayment + payment.Monto;
                             response.TotalOnPeriod = response.TotalOnPeriod + payment.Monto;
+                            
+                            if (payment.NroFactura != null) totalonmodul.BillQuantity++;
+                            if (payment.NroRecibo != null) totalonmodul.ReciboQuantity++;
+                        }
+                        if (inscription.Pagos != null)
+                        {
+                            if(inscription.Pagos.First().PorCuotas == true) totalonmodul.CuotaQuantity++;
+                        }
+                        var modulprice = schedule.Modulo.Precios
+                            .FirstOrDefault(c=>c.Modalidad == schedule.Modalidad &&
+                            c.Turno == schedule.Turno && c.Regularidad == schedule.Regularidad
+                            && c.PorCuotas == payments.First().PorCuotas);
+                        if (modulprice != null) 
+                        {
+                            if (totalonpayment < (modulprice.PorCuotas ? modulprice.Precio*2 : modulprice.Precio))
+                            {
+                                totalonmodul.PorCobrar = 
+                                    totalonmodul.PorCobrar +
+                                    (modulprice.PorCuotas ? modulprice.Precio*2 - totalonpayment : modulprice.Precio - totalonpayment);
+                            }
                         }
                     }
-                    response.TotalOnModuls.Add(totalonmodul);
+                    response.TotalOnModulsWithTurns.Add(totalonmodul);
                 }
                 return response;
             }
@@ -120,6 +154,21 @@ namespace FerminToroMS.Application.Handlers.Queries
                 _logger.LogError(ex, "Error CalculateAllPaymentsByPeriodIdQueryHandler.HandleAsync. {Los datos ingresados no son validos}", ex.Message);
                 throw;
             }
+        }
+
+        private int ObtenerValorModulo(CronogramaEntity cadena)
+        {
+            if (cadena.Modulo.Nombre == "Modulo I") return 1;
+            if (cadena.Modulo.Nombre == "Modulo II") return 2;
+            if (cadena.Modulo.Nombre == "Modulo III") return 3;
+            return 100;
+        }
+
+        private int ObtenerValorModalidad(CronogramaEntity cadena)
+        {
+            if ((int)cadena.Modalidad == 0) return 1;
+            if ((int)cadena.Modalidad == 1) return 2;
+            return 100;
         }
     }
 }

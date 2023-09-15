@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FerminToroMS.Application.Queries
 {
-    public class PaymentDetailsQuery : IRequest<List<PaymentsDetailsResponse>>
+    public class PaymentDetailsQuery : IRequest<PaymentDetails>
     {
         public Guid InscriptionId { get; set; }
         public PaymentDetailsQuery(Guid inscriptionId)

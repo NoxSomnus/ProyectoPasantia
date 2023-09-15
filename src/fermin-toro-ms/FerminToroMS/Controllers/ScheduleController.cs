@@ -297,6 +297,34 @@ namespace FerminToroMS.Controllers
             }
         }
 
+        /// <summary>
+        /// Método que consulta todos los cronogramas disponibles.
+        /// </summary>
+        /// <returns>Una lista de cronogramas disponibles.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Get
+        /// </remarks>
+
+        [HttpGet("SchedulesEnabled")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> SchedulesEnabled()
+        {
+            _logger.LogInformation("Entrando al metodo que registra estudiantes mediante carga de archivo csv");
+            try
+            {
+                var query = new SchedulesEnabledQuery();
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los cronogramas");
+                return StatusCode(500, "Ocurrió un error al consultar los cronogramas. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
         [HttpPut("SetScheduleCode")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

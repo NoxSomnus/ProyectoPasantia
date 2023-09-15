@@ -11,17 +11,20 @@
         <h1 class="display-4">Estudiantes Registrados</h1>
     </div>
 
-    <div>
+    <div style="display: flex; justify-content: center;">
         <h3>Aplicar Filtro</h3>
+    </div>
+    <div style="display: flex; justify-content: center;">
         <input type="text" id="searchInput" placeholder="Buscar...">
-    <!--<label>Por Turno</label>
-        <select name="byturno" id="turnoSelect">
-            <option value="">Seleccionar...</option>
-            <option value="Matutino">Matutino</option>
-            <option value="Vespertino">Vespertino</option>
-            <option value="Nocturno">Nocturno</option>
-            <option value="Sabatino">Sabatino</option>
-        </select>-->
+    </div>
+    <br />
+    <div style="display: flex; justify-content: center;">
+        <form asp-action="SearchJuridicos" asp-controller="Student">
+            <button  type="submit" class="btn btn-primary">Mostrar Solo Jurídicos</button>
+        </form>
+        <form asp-action="AllStudents" asp-controller="Student">
+            <button type="submit" style="display: flex; justify-content: center;" class="btn btn-primary">Quitar Filtro</button>
+        </form>
     </div>
     <!-- Table -->
     <div class="table-scroll">

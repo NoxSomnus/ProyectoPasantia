@@ -1,0 +1,419 @@
+﻿@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "Inscripciones";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+@model CheckComprobantesModel
+<style>
+    .comprobante-table select,
+    .comprobante-table input[type="email"],
+    .comprobante-table input[type="text"]{
+        text-align: center;
+        width: 150px;
+    }
+    .comprobante-table input[type="number"],   
+    .comprobante-table input[type="date"] {
+        text-align: center;
+        width: 100%;
+    }
+
+</style>
+<link rel="stylesheet" href="~/css/CheckComprobantesStyle.css" asp-append-version="true" />
+<div class="info-table">
+    <div class="imgcell">
+        <img class="fermin-img" src="~/img/logos/Logo dark green.png">
+        <img class="cisco-img" src="~/img/logos/CiscoNetAcad_logo black.png">
+    </div>
+    <div class="programcell">
+        Programa @Model.CourseCompleteName
+    </div>
+    <div class="nullcell">
+    </div>
+    <table>
+        <tr>
+            <td class="cell">
+                Programa: @Model.ModulCompleteName
+            </td>
+            <td class="cell">
+                Fecha de Inicio: @Model.StartDate
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Instructor: @(Model.Instructor == "" ? "No Asignado" : Model.Instructor)
+            </td>
+            <td class="cell">
+                Fecha de Finalizacion: @Model.EndDate
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Instructor Asistente: No Asignado
+            </td>
+            <td class="cell">
+                Caga Horaria: 80 horas académicas
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Turno: @Model.Turno
+            </td>
+            <td class="cell">
+                Modalidad: @Model.Regularidad - @Model.Modalidad
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Horario: @Model.Horario
+            </td>
+            <td class="cell">
+                Nombre del Curso: @Model.Code
+            </td>
+        </tr>
+    </table>
+</div>
+@if (Model.BNC.Count() == 0 && Model.Paypal.Count() == 0 && Model.Zelle.Count() == 0 && Model.Mercantil.Count() == 0)
+{
+    <h1 class="display-4" style="display: flex; justify-content: center;">No hay comprobantes por conciliar</h1>
+}
+else {
+    <div style="display: flex; justify-content: center;">
+        <form asp-action="PaymentWithComprobantesReport" asp-controller="Reports">
+            <input type="hidden" name="modelo" value='@Html.Raw(JsonConvert.SerializeObject(Model))' />
+            <button type="submit" class="btn btn-primary">Ver comprobantes</button>
+        </form>        
+    </div>
+    <br />
+    <form asp-action="ChangePaymentStatus" asp-controller="Payment">
+        @if (Model.Mercantil.Any())
+        {
+           <div style="display: flex; justify-content: center;">
+                <h3>@Model.Mercantil.First().MetodoPago</h3>
+            </div>
+                <div class="comprobante-table">
+                    <div style="display: flex; justify-content: center;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>N° Inscripcion</th>
+                                    <th>Estudiante</th>
+                                    <th>Contacto</th>
+                                    <th>Modalidad de Pago</th>
+                                    <th>Monto a Pagar</th>
+                                    <th>Pagado</th>
+                                    <th>Estado Actual</th>
+                                    <th>Estado</th>
+                                    <th>Nro Transacción</th>
+                                    <th>Nro Cuenta</th>
+                                    <th>Teléfono Pago Móvil</th>
+                                    <th>Tasa BCV</th>
+                                    <th>Comprobante IVA</th>
+                                    <th>Fecha Transaccion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var comprobante in Model.Mercantil)
+                            {
+                                <tr>
+                                    <input hidden name="PaymentId" value="@comprobante.PaymentId" />
+                                    <td>@comprobante.NroInscripcion</td>
+                                    <td>@comprobante.StudentName</td>
+                                    <td>@comprobante.StudentPhone - @comprobante.StudentEmail</td>
+                                    <td>@(comprobante.Cuota ? "Cuotas" : "Completo")</td>
+                                    <td>@comprobante.Monto_A_Pagar $</td>
+                                    <td>
+                                        <input class="input-size" value="@comprobante.Monto" type="number" name="Monto" required> $
+                                    </td>
+                                    <td>@comprobante.EstadoActual</td>
+                                    <td>
+                                        <select name="Estado">
+                                            @if (comprobante.EstadoActual == "Falta IVA")
+                                            {
+                                                <option value="Falta IVA">Seleccionar...</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="No Conciliado">Seleccionar...</option>
+                                            }
+                                            <option value="No Conciliado">No Conciliado</option>
+                                            <option value="Aprobado">Aprobado</option>
+                                            <option value="Falta IVA">Falta IVA</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="NroTransaccion">
+                                    </td>
+                                    <td>
+                                        <input class="input-size" type="text" name="NroCuenta">
+                                    </td>
+                                    <td>
+                                        <input class="input-size" type="text" name="Telefono">
+                                    </td>
+                                    <td>
+                                        <input class="input-size" type="number" name="TasaBCV">
+                                    </td>
+                                    <input type="hidden" name="Correo" value="">
+                                    @if (comprobante.EstadoActual != "Falta IVA")
+                                    {
+                                        <td>
+                                            <input type="text" name="comprobanteIVA" hidden value="">
+                                            N/A
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input type="text" name="comprobanteIVA">
+                                        </td>
+                                    }
+                                    <td>
+                                        <input class="input-size" type="date" name="FechaTransaccion">
+                                    </td>
+                                </tr>  
+                                }
+                            </tbody>
+                        </table>                    
+                </div>
+            </div>
+        }
+        <br>
+        @if (Model.BNC.Any())
+        {
+            <div style="display: flex; justify-content: center;">
+                <h3>@Model.BNC.First().MetodoPago</h3>
+            </div>
+            <div class="comprobante-table">
+                <div style="display: flex; justify-content: center;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>N° Inscripcion</th>
+                                <th>Estudiante</th>
+                                <th>Contacto</th>
+                                <th>Modalidad de Pago</th>
+                                <th>Monto a Pagar</th>
+                                <th>Pagado</th>
+                                <th>Estado Actual</th>
+                                <th>Estado</th>
+                                <th>Nro Transacción</th>
+                                <th>Nro Cuenta</th>
+                                <th>Tasa BCV</th>
+                                <th>Comprobante IVA</th>
+                                <th>Fecha Transaccion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var comprobante in Model.BNC)
+                            {
+                                <tr>
+                                    <input hidden name="PaymentId" value="@comprobante.PaymentId" />
+                                    <td>@comprobante.NroInscripcion</td>
+                                    <td>@comprobante.StudentName</td>
+                                    <td>@comprobante.StudentPhone - @comprobante.StudentEmail</td>
+                                    <td>@(comprobante.Cuota ? "Cuotas" : "Completo")</td>
+                                    <td>@comprobante.Monto_A_Pagar $</td>
+                                    <td>
+                                        <input class="input-size" value="@comprobante.Monto" type="number" name="Monto" required> $
+                                    </td>
+                                    <td>@comprobante.EstadoActual</td>
+                                    <td>
+                                        <select name="Estado">
+                                            @if (comprobante.EstadoActual == "Falta IVA")
+                                            {
+                                                <option value="Falta IVA">Seleccionar...</option>                                                
+                                            }
+                                            else
+                                            {
+                                                <option value="No Conciliado">Seleccionar...</option>
+                                            }
+                                            <option value="No Conciliado">No Conciliado</option>
+                                            <option value="Aprobado">Aprobado</option>
+                                            <option value="Falta IVA">Falta IVA</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="NroTransaccion">
+                                    </td>
+                                    <td>
+                                        <input class="input-size" type="text" name="NroCuenta">
+                                    </td>
+                                    <td>
+                                        <input class="input-size" type="number" name="TasaBCV">
+                                    </td>
+                                    <input type="hidden" name="Telefono" value="">
+                                    <input type="hidden" name="Correo" value="">                                    
+                                    @if (comprobante.EstadoActual != "Falta IVA")
+                                    {
+                                        <td>
+                                            <input class="input-size" type="text" name="comprobanteIVA" hidden value="">
+                                            N/A
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input class="input-size" type="text" name="comprobanteIVA">
+                                        </td>
+                                    }
+                                    <td>
+                                        <input class="input-size" type="date" name="FechaTransaccion" >
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        <br>
+        @if (Model.Paypal.Any())
+        {
+            <div style="display: flex; justify-content: center;">
+                <h3>@Model.Paypal.First().MetodoPago</h3>
+            </div>
+            <div class="comprobante-table">
+                <div style="display: flex; justify-content: center;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>N° Inscripcion</th>
+                                <th>Estudiante</th>
+                                <th>Contacto</th>
+                                <th>Modalidad de Pago</th>
+                                <th>Monto a Pagar</th>
+                                <th>Pagado</th>
+                                <th>Estado Actual</th>
+                                <th>Estado</th>
+                                <th>Nro Transacción</th>
+                                <th>Correo</th>
+                                <th>Fecha Transaccion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var comprobante in Model.Paypal)
+                            {
+                                <tr>
+                                    <input hidden name="PaymentId" value="@comprobante.PaymentId" />
+                                    <td>@comprobante.NroInscripcion</td>
+                                    <td>@comprobante.StudentName</td>
+                                    <td>@comprobante.StudentPhone - @comprobante.StudentEmail</td>
+                                    <td>@(comprobante.Cuota ? "Cuotas" : "Completo")</td>
+                                    <td>@comprobante.Monto_A_Pagar $</td>
+                                    <td>
+                                        <input class="input-size" value="@comprobante.Monto" type="number" name="Monto" required> $
+                                    </td>
+                                    <td>@comprobante.EstadoActual</td>
+                                    <td>
+                                        <select name="Estado">
+                                            @if (comprobante.EstadoActual == "Falta IVA")
+                                            {
+                                                <option value="Falta IVA">Seleccionar...</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="No Conciliado">Seleccionar...</option>
+                                            }
+                                            <option value="No Conciliado">No Conciliado</option>
+                                            <option value="Aprobado">Aprobado</option>
+                                            <option value="Falta IVA">Falta IVA</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="NroTransaccion">
+                                    </td>
+                                    <input type="hidden" name="NroCuenta" value="">
+                                    <input type="hidden" name="Telefono" value="">
+                                    <input type="hidden" name="TasaBCV" value="">
+                                    <input type="text" name="comprobanteIVA" hidden value="">
+                                    <td>
+                                        <input class="input-size" type="text" name="Correo">
+                                    </td>
+                                    <td>
+                                        <input class="input-size" type="date" name="FechaTransaccion">
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        <br>
+        @if (Model.Zelle.Any())
+        {
+            <div style="display: flex; justify-content: center;">
+                <h3>@Model.Zelle.First().MetodoPago</h3>
+            </div>
+            <div class="comprobante-table">
+                <div style="display: flex; justify-content: center;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>N° Inscripcion</th>
+                                <th>Estudiante</th>
+                                <th>Contacto</th>
+                                <th>Modalidad de Pago</th>
+                                <th>Monto a Pagar</th>
+                                <th>Pagado</th>
+                                <th>Estado Actual</th>
+                                <th>Estado</th>
+                                <th>Nro Transacción</th>
+                                <th>Correo</th>
+                                <th>Fecha Transaccion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var comprobante in Model.Zelle)
+                            {
+                                <tr>
+                                    <input hidden name="PaymentId" value="@comprobante.PaymentId" />
+                                    <td>@comprobante.NroInscripcion</td>
+                                    <td>@comprobante.StudentName</td>
+                                    <td>@comprobante.StudentPhone - @comprobante.StudentEmail</td>
+                                    <td>@(comprobante.Cuota ? "Cuotas" : "Completo")</td>
+                                    <td>@comprobante.Monto_A_Pagar $</td>
+                                    <td>
+                                        <input class="input-size" value="@comprobante.Monto" type="number" name="Monto" required> $
+                                    </td>
+                                    <td>@comprobante.EstadoActual</td>
+                                    <td>
+                                        <select name="Estado">
+                                            @if (comprobante.EstadoActual == "Falta IVA")
+                                            {
+                                                <option value="Falta IVA">Seleccionar...</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="No Conciliado">Seleccionar...</option>
+                                            }
+                                            <option value="No Conciliado">No Conciliado</option>
+                                            <option value="Aprobado">Aprobado</option>
+                                            <option value="Falta IVA">Falta IVA</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="NroTransaccion">
+                                    </td>
+                                    <input type="hidden" name="NroCuenta" value="">
+                                    <input type="hidden" name="Telefono" value="">
+                                    <input type="hidden" name="TasaBCV" value="">
+                                    <input type="text" name="comprobanteIVA" hidden value="">
+                                    <td>
+                                        <input class="input-size" type="text" name="Correo">
+                                    </td>
+                                    <td>
+                                        <input class="input-size" type="date" name="FechaTransaccion">
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </form>
+}

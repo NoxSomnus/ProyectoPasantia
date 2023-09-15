@@ -81,7 +81,7 @@ namespace FerminToroMS.Application.Handlers.Commands
                 {
                     var course = _dbContext.Cursos.FirstOrDefault(c => c.Nombre == schedule.Programa);
                     if (course == null) { throw new DataNotFoundException("El curso: " + schedule.Programa + " no se encontro"); }
-                    var modul = _dbContext.Modulos.FirstOrDefault(c => c.Nombre == schedule.Modulo);
+                    var modul = _dbContext.Modulos.FirstOrDefault(c => c.Nombre == schedule.Modulo && c.CursoId == course.Id);
                     if (modul == null) { throw new DataNotFoundException("El modulo: " + schedule.Modulo + " no pertenece al programa seleccionado"); }
                     if (schedule.InstructorId == "No Asignado") { schedule.InstructorId = null; }
                     if (schedule.ScheduleId != null) //es una actualizacion
@@ -139,6 +139,28 @@ namespace FerminToroMS.Application.Handlers.Commands
             schedule.Duracion_Semanas = request.Duracion;
             schedule.NroVacantes = request.Vacantes;
             schedule.Habilitado = request.Habilitado;
+            if (!schedule.Habilitado) 
+            {
+                var inscriptions = _dbContext.Inscripciones.Where(c=>c.CronogramaId == schedule.Id).ToList();
+                if (inscriptions.Count != 0 || inscriptions != null) 
+                {
+                    foreach (var inscription in inscriptions)
+                    {
+                        var inscripcionYaCongelada = _dbContext.InscripcionesCongeladas
+                            .FirstOrDefault(c=>c.InscripcionId == inscription.Id);
+                        if (inscripcionYaCongelada == null)
+                        {
+                            var congelada = new InscripcionesCongeladasEntity
+                            {
+                                Id = Guid.NewGuid(),
+                                InscripcionId = inscription.Id,
+                                PlanificacionCerrada = true
+                            };
+                            _dbContext.InscripcionesCongeladas.Add(congelada);
+                        }                                                                    
+                    }
+                }
+            }
             return schedule;
         }
 

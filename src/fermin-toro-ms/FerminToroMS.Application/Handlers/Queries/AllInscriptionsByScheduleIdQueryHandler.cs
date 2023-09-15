@@ -79,6 +79,7 @@ namespace FerminToroMS.Application.Handlers.Queries
                             .Where(c => c.Id == request.ScheduleId)
                             .Select(c => new AllInscriptionsResponse
                             {
+                                ScheduleId = schedule.Id,
                                 ModulCompleteName = c.Modulo.NombreCompleto,
                                 CourseCompleteName = c.Modulo.Curso.NombreCompleto,
                                 ModulName = c.Modulo.Nombre,
@@ -96,18 +97,63 @@ namespace FerminToroMS.Application.Handlers.Queries
                 {
                     throw new DataNotFoundException("Ocurrio un error al consultar las inscripciones del cronograma");
                 }
-                var inscriptions = await _dbContext.Inscripciones.Where(c => c.CronogramaId == schedule.Id).OrderBy(c => c.NroInscripcion)
-                    .Select(c => new StudentRegiteredOnInscriptionResponse()
+                var inscripciones = new List<StudentRegiteredOnInscriptionResponse>();
+                var pagos = new List<InscriptionsPaymentsResponse>();
+                var inscriptions = await _dbContext.Inscripciones
+                    .Include(p=>p.Pagos)
+                    .ThenInclude(p=>p.MetodoPago)
+                    .Include(e=>e.Estudiante)
+                    .Where(c => c.CronogramaId == schedule.Id).OrderBy(c => c.NroInscripcion).ToListAsync();
+                foreach (var inscription in inscriptions) 
+                {
+                    var studentRegistered = new StudentRegiteredOnInscriptionResponse
                     {
-                        InscriptionId = c.Id,
-                        Cedula = c.Estudiante.Cedula,
-                        Name = c.Estudiante.Nombre,
-                        LastName = c.Estudiante.Apellido,
-                        CellPhone = c.Estudiante.Telefono,
-                        Email = c.Estudiante.Correo,
-                        NroInscription = c.NroInscripcion
-                    }).ToListAsync();
-                response.Students = inscriptions;
+                        InscriptionId = inscription.Id,
+                        StudentId = inscription.EstudianteId,
+                        Cedula = inscription.Estudiante.Cedula,
+                        Name = inscription.Estudiante.Nombre,
+                        LastName = inscription.Estudiante.Apellido,
+                        CellPhone = inscription.Estudiante.Telefono,
+                        Email = inscription.Estudiante.Correo,
+                        NroInscription = inscription.NroInscripcion
+                    };
+                    if (inscription.Pagos != null && inscription.Pagos.Count() != 0)
+                    {
+                        foreach (var payment in inscription.Pagos)
+                        {
+                            studentRegistered.TotalPaid = studentRegistered.TotalPaid + payment.Monto;
+                            var pago = new InscriptionsPaymentsResponse
+                            {
+                                InscripcionId = inscription.Id,
+                                MetodoPagoId = payment.MetodoPagoId,
+                                Estado = inscription.EstadoSolvencia != null ? inscription.EstadoSolvencia : " ",
+                                Comentario = payment.Comentarios != null ? payment.Comentarios : "",
+                                Cuotas = payment.PorCuotas,
+                                Divisa = payment.EnDivisa,
+                                Fecha = payment.Fecha.ToString("dd/MM/yyyy"),
+                                MetodoPago = payment.MetodoPago.NombreMetodo,
+                                Monto = payment.Monto,
+                                NroFactura = payment.NroFactura,
+                                NroRecibo = payment.NroRecibo,
+                                NroInscripcion = inscription.NroInscripcion,
+                                UrlComprobante = payment.URLComprobante,
+                                StudentName = inscription.Estudiante.Nombre + " " + inscription.Estudiante.Apellido
+                            };
+                            pagos.Add(pago);
+                        }
+                        studentRegistered.ByCuota = inscription.Pagos.First().PorCuotas;
+                        studentRegistered.EsJuridico = inscription.Pagos.First().EsJuridico;
+                        studentRegistered.HasPayment = true;
+                    }
+                    else 
+                    {
+                        studentRegistered.HasPayment = false;
+                    }
+                    inscripciones.Add(studentRegistered);
+                }
+
+                response.Students = inscripciones;
+                response.Payments = pagos;
                 return response;
             }
             catch (DataNotFoundException ex)

@@ -34,5 +34,6 @@ namespace FerminToroMS.Core.Entities
         public Guid? RepresentanteId { get; set; }
         public RepresentanteEntity? Representante { get; set; }
         public ICollection<InscripcionEntity>? Inscripciones { get; set; }
+        public bool EsJuridico { get; set; } = false;
     }
 }

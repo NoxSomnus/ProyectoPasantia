@@ -21,14 +21,14 @@ namespace FerminToroWeb.Controllers
             };
             return View(model);
         }
-
+        [ResponseCache(Duration = 600)]
         public IActionResult AdminEmployee()
         {
             _verifySessionFilter.VerifySession(HttpContext);
             
             return View();
         }
-
+        [ResponseCache(Duration = 600)]
         public IActionResult AdminSchedule()
         {
             _verifySessionFilter.VerifySession(HttpContext);
@@ -68,6 +68,11 @@ namespace FerminToroWeb.Controllers
             return View();
         }
         public IActionResult UploadInscriptionsCSVView()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            return View();
+        }
+        public IActionResult UploadPricesCSVView()
         {
             _verifySessionFilter.VerifySession(HttpContext);
             return View();

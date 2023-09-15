@@ -1,8 +1,8 @@
 ﻿using FerminToroMS.Application.Responses;
 using FerminToroWeb.ApiUrlConfig;
-using FerminToroWeb.CustomClasses;
 using FerminToroWeb.Filters;
 using FerminToroWeb.Mappers;
+using FerminToroWeb.CustomClasses;
 using FerminToroWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Protocol;
@@ -161,7 +161,8 @@ namespace FerminToroWeb.Controllers
             List<string> fechaInicio, List<string> fechaFin, List<string> regularidad,
             List<string> turno, List<string> horario, List<string> modalidad, List<int> duracion,
             List<int> vacantes, List<string> instructor, List<bool> habilitado)
-        {       
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
             try
             {
                 var apiUrl = apiurl.ApiUrl + "/schedule/updateschedule";
@@ -181,7 +182,12 @@ namespace FerminToroWeb.Controllers
                 {
                     return RedirectToAction("SomethingWentWrongView", "Messages");
                 }
-                return RedirectToAction("ScheduleAdded", "Messages");
+                if (habilitado.Any(elemento => elemento == false)) 
+                {
+                    var model = new ScheduleUpdatedSuccessfullyModel { SchedulesDisabled = true };
+                    return View("~/Views/Messages/ScheduleUpdatedSucessfully.cshtml", model);
+                }
+                return RedirectToAction("ScheduleUpdatedSucessfully", "Messages");
             }
             catch (HttpRequestException)
             {
@@ -372,6 +378,18 @@ namespace FerminToroWeb.Controllers
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var Response = JsonConvert.DeserializeObject<List<ScheduleResponse>>(responseContent);
                 var model = new ScheduleByPeriodIdModel { PeriodoId = id, schedules = Response };
+                bool editable = false;
+                if (Response.Count != 0)
+                {
+                    var IsOnGoing = Response.LastOrDefault(r=> r.Habilitado);
+                    string fechaString = IsOnGoing.Fecha_Fin;
+                    DateTime fecha;
+                    if (DateTime.TryParseExact(fechaString, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out fecha))
+                    {
+                        editable = fecha > DateTime.Now;
+                    }
+                }
+                model.Editable = editable;
                 return View("~/Views/Schedule/AllSchedulesByPeriodId.cshtml",model);
             }
             catch (HttpRequestException)

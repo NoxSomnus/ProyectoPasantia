@@ -56,13 +56,12 @@ namespace FerminToroMS.Controllers
         }
 
         /// <summary>
-        /// Método que registra inscripciones mediante carga de archivo .csv.
+        /// Método que consulta inscripciones de un cronograma
         /// </summary>
-        /// <param name="request">Objeto JSON en el cuerpo de la solicitud con las propiedades necesarias 
-        /// para registrar las inscripciones.</param>
-        /// <returns>Un objeto JSON con la información de si la operacion fue exitosa.</returns>
+        /// <param name="request">Guid con el Id del cronograma.</param>
+        /// <returns>Una lista de inscripciones del cronograma.</returns>
         /// <remarks>
-        /// Este método recibe una solicitud HTTP Post con un objeto JSON en el cuerpo de la solicitud
+        /// Este método recibe una solicitud HTTP Get con un parametro en la url
         /// </remarks>
 
         [HttpGet("InscriptionsByScheduleId")]
@@ -87,6 +86,61 @@ namespace FerminToroMS.Controllers
             {
                 _logger.LogError(ex, "Ocurrió un error al consultar las inscripciones");
                 return StatusCode(500, "Ocurrió un error al consultar las inscripciones. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
+        /// Método que consulta inscripciones congeladas
+        /// </summary>
+        /// <returns>Una lista de inscripciones congeladas.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Get
+        /// </remarks>
+
+        [HttpGet("FreezedInscriptions")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> FreezedInscriptions()
+        {
+            _logger.LogInformation("Entrando al metodo que registra cursos mediante carga de archivo csv");
+            try
+            {
+                var query = new AllFreezedInscriptionsQuery();
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }            
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar las inscripciones");
+                return StatusCode(500, "Ocurrió un error al consultar las inscripciones. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
+        /// Método que mueve las inscripciones congeladas o las mantiene congeladas
+        /// </summary>
+        /// <returns>bool que indica si la operacion fue exitosa o no.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Patch
+        /// </remarks>
+
+        [HttpPatch("MoveFreezeInscriptions")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> MoveFreezeInscriptions([FromBody] MoveFreezeInscriptionsRequest request)
+        {            
+            try
+            {
+                var command = new MoveFreezeInscriptionsCommand(request);
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al mover las inscripciones");
+                return StatusCode(500, "Ocurrió un error al mover las inscripciones. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
         }
     }

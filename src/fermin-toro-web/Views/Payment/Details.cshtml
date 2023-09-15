@@ -20,15 +20,16 @@
                 <thead>
                     <tr>
                         <th>Metodo de Pago</th>
-                        <th>Divisa</th>
-                        <th>Pago Completo</th>
+                        <th>Moneda</th>
+                        <th>Modalidad de Pago</th>
                         <th>Recibo</th>
                         <th>Factura</th>
-                        <th>Pago Juridico</th>
+                        <th>Natural/Jurídico</th>
                         <th>Fecha de Pago</th>
                         <th>Monto</th>
                         <th>Comprobante</th>
                         <th>Empresa Jurídica</th>
+                        <th>Comentarios</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,8 +37,8 @@
                     {
                         <tr>
                             <td>@pago.PaymentMethod</td>
-                            <td>@(pago.EnDivisa ? "Si" : "No")</td>
-                            <td>@(pago.CompletePayment ? "No" : "Si")</td>
+                            <td>@(pago.EnDivisa ? "Divisa" : "Bolívares")</td>
+                            <td>@(pago.CuotaPayment ? "Cuotas" : "Completo")</td>
                             @if (pago.NroRecibo == null)
                             {
                                 <td></td>                            
@@ -58,7 +59,7 @@
                                     #@pago.NroFactura
                                 </td>
                             }
-                            <td>@(pago.EsJuridico ? "Si" : "No")</td>
+                            <td>@(pago.EsJuridico ? "Jurídico" : "Natural")</td>
                             <td>@pago.PaymentDate</td>
                             <td>@pago.Mount</td>
                             @if (pago.Comprobante == null)
@@ -78,16 +79,23 @@
                             else
                             {
                                 <td>
-                                    <a href="">Detalles</a>
+                                    <form>
+                                        <input name="EmpresaJuridicaId" value="@pago.EmpresaJuridica" hidden/>
+                                        <button type="submit" class="btn btn-primary">Detalles</button>
+                                    </form>
+                                    
                                 </td>
                             }
+                            <td>
+                                <p>@pago.Comments</p>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
             <label>Total Pagado: @Model.Total</label>
             <br>
-            <label>Por pagar: Aun falta implementar este cálculo</label>
+            <label>Por pagar: @Model.Debt</label>
         </div>
     }    
 </div>

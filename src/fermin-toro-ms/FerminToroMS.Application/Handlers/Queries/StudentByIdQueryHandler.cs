@@ -2,6 +2,7 @@
 using FerminToroMS.Application.Queries;
 using FerminToroMS.Application.Responses;
 using FerminToroMS.Core.Database;
+using FerminToroMS.Core.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -69,10 +70,18 @@ namespace FerminToroMS.Application.Handlers.Queries
             {
                 _logger.LogInformation("EmployeeByIdQueryHandler.HandleAsync");
                 var student = await _dbContext.Estudiantes.FirstOrDefaultAsync(c => c.Id == request.Id);
+                
                 if (student == null)
                 {
                     throw new UserIdNotFoundException("No se encontro el estudiante");
                 }
+                var studentInscriptionsQuery = await _dbContext.Inscripciones
+                    .Where(c => c.EstudianteId == student.Id)
+                    .Include(c => c.Cronograma)
+                    .ThenInclude(c => c.Modulo)
+                    .ThenInclude(c => c.Curso)
+                    .Include(c=>c.Pagos)
+                    .OrderBy(c=>c.FechaInscripcion).ToListAsync();
                 var response = new StudentResponse
                 {
                     StudentId = student.Id,
@@ -86,6 +95,37 @@ namespace FerminToroMS.Application.Handlers.Queries
                     YearRange = student.Rango_Edad == null ? null : student.Rango_Edad,
                     Beca = student.Porcentaje_Beca
                 };
+                var studentInscriptions = new List<ModulsSawByStudent>();
+                if (student.Inscripciones != null) 
+                {
+                    foreach (var inscription in studentInscriptionsQuery)
+                    {
+                        var modulSawByStudent = new ModulsSawByStudent
+                        {
+                            CourseName = inscription.Cronograma.Modulo.Curso.Nombre,
+                            ModulCode = inscription.Cronograma.Codigo,
+                            ModulName = inscription.Cronograma.Modulo.Nombre,
+                            InscriptionDate = inscription.FechaInscripcion.ToString("dd/MM/yyyy"),
+                            InscriptionStatus = inscription.EstadoSolvencia == null ? " " : inscription.EstadoSolvencia,
+                            NroInscripcion = inscription.NroInscripcion,
+                            InscriptionId = inscription.Id                            
+                        };
+                        if (inscription.Pagos != null && inscription.Pagos.Count() != 0)
+                        {
+                            foreach (var payment in inscription.Pagos)
+                            {
+                                modulSawByStudent.TotalPaid = modulSawByStudent.TotalPaid + payment.Monto;
+                            }
+                            modulSawByStudent.HasPayment = true;
+                        }
+                        else
+                        {
+                            modulSawByStudent.HasPayment = false;
+                        }
+                        studentInscriptions.Add(modulSawByStudent);
+                    }                                       
+                }
+                response.ModulsSawByStudent = studentInscriptions;
                 return response;
             }
             catch (UserIdNotFoundException ex)

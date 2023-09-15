@@ -8,6 +8,7 @@ namespace FerminToroMS.Application.Responses
 {
     public class AllInscriptionsResponse
     {
+        public Guid ScheduleId { get; set; }
         public string CourseCompleteName { get; set; } = null!;
         public string ModulCompleteName { get; set; } = null!;
         public string Code { get; set; } = null!;
@@ -20,5 +21,6 @@ namespace FerminToroMS.Application.Responses
         public string Turno { get; set; } = null!;
         public string Instructor { get; set; } = null!;
         public List<StudentRegiteredOnInscriptionResponse> Students { get; set; } = null!;
+        public List<InscriptionsPaymentsResponse> Payments { get; set; } = null!;
     }
 }

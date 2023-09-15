@@ -37,7 +37,7 @@
             <tr>
                 <td>Agregar Nuevo Estudiante</td>
                 <td>
-                    <form asp-action="" asp-controller="">
+                    <form asp-action="SignUp" asp-controller="Student">
                         <button class="btn btn-success" type="submit">Ir a opción</button>
                     </form>
                 </td>
@@ -49,6 +49,14 @@
                 </td>
                 <td>
                     <form asp-action="AllStudents" asp-controller="Student">
+                        <button class="btn btn-success" type="submit">Ir a opción</button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Ver estudiantes congelados</td>
+                <td>
+                    <form asp-action="FreezedInscriptions" asp-controller="Inscription">
                         <button class="btn btn-success" type="submit">Ir a opción</button>
                     </form>
                 </td>

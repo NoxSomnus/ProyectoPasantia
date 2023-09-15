@@ -11,8 +11,11 @@ namespace FerminToroMS.Application.Requests
     public class PricesRequest
     {
         public string CourseName { get; set; } = null!;
+        public string ModulName { get; set; } = null!;
         public ModalidadEnum Modalidad { get; set; }
         public TurnosEnum Turno { get; set; }
-        public float Precio { get; set; }
+        public RegularidadEnum Regularidad { get; set; }
+        public double Precio { get; set; }
+        public bool Cuotas { get; set; }
     }
 }
