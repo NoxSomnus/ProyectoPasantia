@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FerminToroMS.Application.Responses;
 
-namespace FerminToroMS.Application.Responses
+namespace FerminToroWeb.Models
 {
-    public class AllInscriptionsResponse
+    public class CheckComprobantesModel
     {
-        public Guid ScheduleId { get; set; }
         public string CourseCompleteName { get; set; } = null!;
         public string ModulCompleteName { get; set; } = null!;
+        public Guid ModulId { get; set; }
         public string Code { get; set; } = null!;
         public string ModulName { get; set; } = null!;
         public string StartDate { get; set; } = null!;
@@ -20,7 +16,11 @@ namespace FerminToroMS.Application.Responses
         public string Regularidad { get; set; } = null!;
         public string Turno { get; set; } = null!;
         public string Instructor { get; set; } = null!;
-        public List<StudentRegiteredOnInscriptionResponse> Students { get; set; } = null!;
-        public List<InscriptionsPaymentsResponse> Payments { get; set; } = null!;
+        public List<AllComprobantes> Mercantil { get; set; } = null!;
+        public List<AllComprobantes> BNC { get; set; } = null!;
+        public List<AllComprobantes> Paypal { get; set; } = null!;
+        public List<AllComprobantes> Zelle { get; set; } = null!;
+        public AllComprobantesByScheduleIdResponse Response { get; set; } = null!;
+
     }
 }

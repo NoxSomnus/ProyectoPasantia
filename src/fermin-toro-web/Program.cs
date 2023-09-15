@@ -1,4 +1,5 @@
 using FerminToroWeb.Filters;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Login}/{id?}");
-
+QuestPDF.Settings.License = LicenseType.Community;
 
 app.Run();

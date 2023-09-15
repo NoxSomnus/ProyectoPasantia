@@ -32,7 +32,5 @@ namespace FerminToroMS.Core.Entities
         [DefaultValue(true)]
         public bool Habilitado { get; set; } = true;
         public string Codigo { get; set; } = string.Empty;
-        public Guid? PrecioId { get; set; }
-        public Precio_Mod_TurnoEntity? Precio { get; set; }
     }
 }

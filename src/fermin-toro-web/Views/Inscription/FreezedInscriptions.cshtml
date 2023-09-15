@@ -27,6 +27,7 @@
                                 <tr>
                                     <th>N° Lista</th>
                                     <th>Estudiante</th>
+                                    <th>Contacto</th>
                                     <th>Inscrito en</th>
                                     <th>Mover a</th>
                                 </tr>
@@ -39,9 +40,10 @@
                                     <tr>
                                         <td>@student.NroInscripcion</td>
                                         <td>@student.StudentName</td>
+                                        <td>@student.StudentCellPhone</td>
                                         <td>@student.ScheduleCode</td>
                                         <td>
-                                            <select name="ScheduleId" id="schedule">
+                                            <select name="ScheduleId" id="schedule" style="text-align: center;">
                                                 <option value=" " name="ScheduleId">Mantener Congelado</option>
                                                 @if (Model.CronogramasDisponibles != null)
                                                 {
@@ -61,7 +63,9 @@
                             </tbody>
                         </table>
                         <br />
-                        <button type="submit" class="btn btn-primary">Aplicar Cambios</button>
+                        <div style="display: flex; justify-content: center;">
+                            <button type="submit" style="display: flex; justify-content: center;" class="btn btn-primary">Aplicar Cambios</button>
+                        </div>
                     </div>
                 </div>
             </div>

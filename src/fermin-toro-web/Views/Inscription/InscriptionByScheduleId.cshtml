@@ -61,7 +61,8 @@
 
 <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'Estudiantes')">Estudiantes</button>
-    <button class="tablinks" onclick="openTab(event, 'Pagos')">Pagos</button>
+    <button class="tablinks" onclick="openTab(event, 'Pagos')">Pagos General</button>
+    @*<button class="tablinks" onclick="openTab(event, 'AdminPagos')">Administrar Pagos</button>*@
 </div>
 @if (Model.Students.Count() == 0)
 {
@@ -111,6 +112,12 @@ else{
 </div>
 
 <div id="Pagos" class="tabcontent">
+    <form asp-action="CheckComprobantes" asp-controller="Payment" method="get">
+        <div style="display: flex; justify-content: center;">
+            <input value="@Model.ScheduleId" name="ScheduleId" hidden>
+            <button class="btn btn-primary" type="submit">Revisar Comprobantes</button>
+        </div>
+    </form>
     <div class="student-table">
         <div>
             <table>
@@ -159,6 +166,98 @@ else{
         </div>
     </div>
 </div>
+   @* <div id="AdminPagos" class="tabcontent">
+        <div class="student-table">
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N° Form</th>
+                            <th>Estudiante</th>
+                            <th>Fecha de Pago</th>
+                            <th>Método de Pago</th>
+                            <th>Modalidad Pago</th>
+                            <th>Moneda</th>
+                            <th>Nro Recibo</th>
+                            <th>Nro Factura</th>
+                            <th>Monto</th>
+                            <th>Comprobante</th>
+                            <th>Aprobado</th>
+                            <th>Comentario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fila" id="row_1000" data-row-id="1000" hidden>
+                            <td>
+                                <select name="student" id="student_1000" data-row-id="1000">
+                                @if (Model.Students != null)
+                                {
+                                    foreach (var student in Model.Students)
+                                    {
+                                        <option value="@student.StudentId">@student.Name @student.LastName</option>
+                                    }
+                                }
+                                </select>
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                                <input type="date" name="fecha" id="fecha_1000" required data-row-id="1000" />
+                            </td>
+                            <td>@Model.Payments[i].MetodoPago</td>
+                            <td>
+                                <select name="student" id="student_1000" data-row-id="1000">
+
+                                </select>
+                            </td>
+                            <td>@(Model.Payments[i].Divisa ? "Divisa" : "Bolívares")</td>
+                            <td>@(Model.Payments[i].NroRecibo != null ? "#" + Model.Payments[i].NroRecibo : " ")</td>
+                            <td>@(Model.Payments[i].NroFactura != null ? "#" + Model.Payments[i].NroFactura : " ")</td>
+                            <td>@Model.Payments[i].Monto $</td>
+                            <td>@(Model.Payments[i].UrlComprobante != null ? Model.Payments[i].UrlComprobante : " ")</td>
+                            <td>
+                                <select>
+                                    <option value="true">Aprobado</option>
+                                    <option value="false">Rechazado</option>
+                                    <option value="">Falta IVA</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" value="@Model.Payments[i].Comentario" />
+                            </td>
+                        </tr>
+                        @for (int i = 0; i < Model.Payments.Count; i++)
+                        {
+                            <tr class="fila">
+                                <td>@Model.Payments[i].NroInscripcion</td>
+                                <td>@Model.Payments[i].StudentName</td>
+                                <td>@Model.Payments[i].Fecha</td>
+                                <td>@Model.Payments[i].MetodoPago</td>
+                                <td>@(Model.Payments[i].Cuotas ? "Cuotas" : "Completo")</td>
+                                <td>@(Model.Payments[i].Divisa ? "Divisa" : "Bolívares")</td>
+                                <td>@(Model.Payments[i].NroRecibo != null ? "#"+ Model.Payments[i].NroRecibo : " ")</td>
+                                <td>@(Model.Payments[i].NroFactura != null ? "#" + Model.Payments[i].NroFactura : " ")</td>
+                                <td>@Model.Payments[i].Monto $</td>
+                                <td>@(Model.Payments[i].UrlComprobante != null ? Model.Payments[i].UrlComprobante : " ")</td>
+                                <td>
+                                    <select>
+                                        <option value="true">Aprobado</option>
+                                        <option value="false">Rechazado</option>
+                                        <option value="">Falta IVA</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" value="@Model.Payments[i].Comentario"/>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    *@
 }
 @section Scripts 
 {

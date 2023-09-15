@@ -3,6 +3,7 @@ using System;
 using FerminToroMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FerminToroMS.Infrastructure.Migrations
 {
     [DbContext(typeof(FerminToroDbContext))]
-    partial class FerminToroContextModelSnapshot : ModelSnapshot
+    [Migration("20230913182800_ChangeOnPago-Estado")]
+    partial class ChangeOnPagoEstado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,6 +124,9 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<Guid>("PeriodoId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("PrecioId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Regularidad")
                         .HasColumnType("integer");
 
@@ -141,6 +146,8 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.HasIndex("ModuloId");
 
                     b.HasIndex("PeriodoId");
+
+                    b.HasIndex("PrecioId");
 
                     b.ToTable("Cronogramas");
                 });
@@ -499,9 +506,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnOrder(1);
 
-                    b.Property<double?>("CantidadAPagar")
-                        .HasColumnType("double precision");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -792,54 +796,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.HasIndex("PrimeraCuotaId");
 
                     b.ToTable("Pagos");
-                });
-
-            modelBuilder.Entity("FerminToroMS.Core.Entities.PagosAprobadosEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnOrder(1);
-
-                    b.Property<string>("Correo")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("FechaConciliacion")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("FechaTransaccion")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Nombre_Empelado")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("NroCuenta")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("NroTransaccion")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("PagoId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PagoId");
-
-                    b.ToTable("Pagos_Aprobados");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.PaisesEntity", b =>
@@ -1144,11 +1100,17 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FerminToroMS.Core.Entities.Precio_Mod_TurnoEntity", "Precio")
+                        .WithMany("Cronogramas")
+                        .HasForeignKey("PrecioId");
+
                     b.Navigation("Instructor");
 
                     b.Navigation("Modulo");
 
                     b.Navigation("Periodo");
+
+                    b.Navigation("Precio");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.DeudasEntity", b =>
@@ -1300,17 +1262,6 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Navigation("PrimeraCuota");
                 });
 
-            modelBuilder.Entity("FerminToroMS.Core.Entities.PagosAprobadosEntity", b =>
-                {
-                    b.HasOne("FerminToroMS.Core.Entities.PagoEntity", "Pago")
-                        .WithMany()
-                        .HasForeignKey("PagoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Pago");
-                });
-
             modelBuilder.Entity("FerminToroMS.Core.Entities.Precio_Mod_TurnoEntity", b =>
                 {
                     b.HasOne("FerminToroMS.Core.Entities.ModuloEntity", "Modulo")
@@ -1393,6 +1344,11 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Navigation("Cronogramas");
 
                     b.Navigation("Fechas_Pago");
+                });
+
+            modelBuilder.Entity("FerminToroMS.Core.Entities.Precio_Mod_TurnoEntity", b =>
+                {
+                    b.Navigation("Cronogramas");
                 });
 #pragma warning restore 612, 618
         }

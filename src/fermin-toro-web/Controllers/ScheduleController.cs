@@ -1,8 +1,8 @@
 ﻿using FerminToroMS.Application.Responses;
 using FerminToroWeb.ApiUrlConfig;
-using FerminToroWeb.CustomClasses;
 using FerminToroWeb.Filters;
 using FerminToroWeb.Mappers;
+using FerminToroWeb.CustomClasses;
 using FerminToroWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Protocol;
@@ -161,7 +161,8 @@ namespace FerminToroWeb.Controllers
             List<string> fechaInicio, List<string> fechaFin, List<string> regularidad,
             List<string> turno, List<string> horario, List<string> modalidad, List<int> duracion,
             List<int> vacantes, List<string> instructor, List<bool> habilitado)
-        {       
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
             try
             {
                 var apiUrl = apiurl.ApiUrl + "/schedule/updateschedule";

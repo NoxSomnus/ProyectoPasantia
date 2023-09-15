@@ -79,6 +79,7 @@ namespace FerminToroMS.Application.Handlers.Queries
                             .Where(c => c.Id == request.ScheduleId)
                             .Select(c => new AllInscriptionsResponse
                             {
+                                ScheduleId = schedule.Id,
                                 ModulCompleteName = c.Modulo.NombreCompleto,
                                 CourseCompleteName = c.Modulo.Curso.NombreCompleto,
                                 ModulName = c.Modulo.Nombre,
@@ -97,8 +98,10 @@ namespace FerminToroMS.Application.Handlers.Queries
                     throw new DataNotFoundException("Ocurrio un error al consultar las inscripciones del cronograma");
                 }
                 var inscripciones = new List<StudentRegiteredOnInscriptionResponse>();
+                var pagos = new List<InscriptionsPaymentsResponse>();
                 var inscriptions = await _dbContext.Inscripciones
                     .Include(p=>p.Pagos)
+                    .ThenInclude(p=>p.MetodoPago)
                     .Include(e=>e.Estudiante)
                     .Where(c => c.CronogramaId == schedule.Id).OrderBy(c => c.NroInscripcion).ToListAsync();
                 foreach (var inscription in inscriptions) 
@@ -119,9 +122,27 @@ namespace FerminToroMS.Application.Handlers.Queries
                         foreach (var payment in inscription.Pagos)
                         {
                             studentRegistered.TotalPaid = studentRegistered.TotalPaid + payment.Monto;
+                            var pago = new InscriptionsPaymentsResponse
+                            {
+                                InscripcionId = inscription.Id,
+                                MetodoPagoId = payment.MetodoPagoId,
+                                Estado = inscription.EstadoSolvencia != null ? inscription.EstadoSolvencia : " ",
+                                Comentario = payment.Comentarios != null ? payment.Comentarios : "",
+                                Cuotas = payment.PorCuotas,
+                                Divisa = payment.EnDivisa,
+                                Fecha = payment.Fecha.ToString("dd/MM/yyyy"),
+                                MetodoPago = payment.MetodoPago.NombreMetodo,
+                                Monto = payment.Monto,
+                                NroFactura = payment.NroFactura,
+                                NroRecibo = payment.NroRecibo,
+                                NroInscripcion = inscription.NroInscripcion,
+                                UrlComprobante = payment.URLComprobante,
+                                StudentName = inscription.Estudiante.Nombre + " " + inscription.Estudiante.Apellido
+                            };
+                            pagos.Add(pago);
                         }
                         studentRegistered.ByCuota = inscription.Pagos.First().PorCuotas;
-                        studentRegistered.ByCuota = inscription.Pagos.First().EsJuridico;
+                        studentRegistered.EsJuridico = inscription.Pagos.First().EsJuridico;
                         studentRegistered.HasPayment = true;
                     }
                     else 
@@ -132,6 +153,7 @@ namespace FerminToroMS.Application.Handlers.Queries
                 }
 
                 response.Students = inscripciones;
+                response.Payments = pagos;
                 return response;
             }
             catch (DataNotFoundException ex)

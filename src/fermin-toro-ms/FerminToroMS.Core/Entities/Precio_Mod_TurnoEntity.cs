@@ -16,6 +16,5 @@ namespace FerminToroMS.Core.Entities
         public Guid ModuloId { get; set; }
         public ModuloEntity Modulo { get; set; } = null!;
         public bool PorCuotas { get; set; }
-        public ICollection<CronogramaEntity>? Cronogramas { get; set; }
     }
 }

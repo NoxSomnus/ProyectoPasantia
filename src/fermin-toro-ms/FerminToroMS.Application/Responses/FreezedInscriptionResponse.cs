@@ -13,6 +13,7 @@ namespace FerminToroMS.Application.Responses
         public Guid ScheduleId { get; set; }
         public string ScheduleCode { get; set; } = null!;
         public string StudentName { get; set; } = null!;
+        public string StudentCellPhone { get; set; } = null!;
         public int NroInscripcion { get; set; }
         public bool PlanificacionCerrada { get; set; }
         public Guid ModulId { get; set; }

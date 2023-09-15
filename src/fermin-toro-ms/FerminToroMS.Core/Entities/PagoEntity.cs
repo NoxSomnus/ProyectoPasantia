@@ -8,15 +8,15 @@ namespace FerminToroMS.Core.Entities
 {
     public class PagoEntity : BaseEntity
     {
-        public DateTime Fecha { get; set; } //posiblemente se cambie a nulleable para la migracion
-        public double Monto { get; set; }
+        public DateTime Fecha { get; set; } 
+        public double Monto { get; set; } = 0;
         public bool PorCuotas { get; set; }
         public bool EnDivisa { get; set; }
         public string? URLComprobante { get; set; }
-        public bool? EsAprobado { get; set; }
+        public string Estado { get; set; } = "No Conciliado";
         public string? Comentarios { get; set; }
         public string? FechaPagoEfectivo { get; set; }
-        public TimeOnly? HoraPagoEfectivo { get; set; }
+        public string? HoraPagoEfectivo { get; set; }
         public bool EsJuridico { get; set; }
         public bool? CheckRetencion { get; set; }
         public int? NroRetencion { get; set; }

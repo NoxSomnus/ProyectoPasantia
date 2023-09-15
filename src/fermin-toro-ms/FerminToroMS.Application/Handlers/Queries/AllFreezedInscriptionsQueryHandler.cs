@@ -80,6 +80,7 @@ namespace FerminToroMS.Application.Handlers.Queries
                         FreezeInscriptionId = c.Id,
                         ScheduleCode = c.Inscripcion.Cronograma.Codigo,
                         StudentName = c.Inscripcion.Estudiante.Nombre + " " + c.Inscripcion.Estudiante.Apellido,
+                        StudentCellPhone = c.Inscripcion.Estudiante.Telefono,
                         NroInscripcion = c.Inscripcion.NroInscripcion,
                         ScheduleId = c.Inscripcion.CronogramaId,
                         PlanificacionCerrada = c.PlanificacionCerrada,

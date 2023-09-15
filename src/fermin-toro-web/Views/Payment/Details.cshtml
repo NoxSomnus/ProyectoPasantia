@@ -20,7 +20,7 @@
                 <thead>
                     <tr>
                         <th>Metodo de Pago</th>
-                        <th>Divisa</th>
+                        <th>Moneda</th>
                         <th>Modalidad de Pago</th>
                         <th>Recibo</th>
                         <th>Factura</th>
@@ -37,7 +37,7 @@
                     {
                         <tr>
                             <td>@pago.PaymentMethod</td>
-                            <td>@(pago.EnDivisa ? "Si" : "No")</td>
+                            <td>@(pago.EnDivisa ? "Divisa" : "Bolívares")</td>
                             <td>@(pago.CuotaPayment ? "Cuotas" : "Completo")</td>
                             @if (pago.NroRecibo == null)
                             {
