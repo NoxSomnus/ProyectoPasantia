@@ -9,10 +9,12 @@ namespace FerminToroMS.Core.Entities
 {
     public class PagosAprobadosEntity : BaseEntity
     {
-        public int? NroTransaccion { get; set; }
+        public string NroTransaccion { get; set; } = null!;
         public DateTime FechaTransaccion { get; set; }
         public string? Correo { get ; set; }
-        public int NroCuenta { get; set; }
+        public string? NroCuentaPagoMovil { get; set; }
+        public string? ComprobanteIVA { get; set; }
+        public double? TasaBCV { get; set; }
         public string Nombre_Empleado { get; set; } = null!;
         public DateTime FechaConciliacion { get; set; }
         [ForeignKey("PagoEntity")]

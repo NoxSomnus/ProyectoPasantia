@@ -107,7 +107,9 @@ namespace FerminToroMS.Application.Handlers.Commands
                         && c.CronogramaId == schedule.Id);
                     if (inscription != null)
                     {
-                        continue;
+                        inscription.PagoEnCuotas = inscripcionrequest.PagoPorCuotas;
+                        inscription.Cantidad_A_Pagar = GetModulPrice(modul.Id,schedule, inscripcionrequest.PagoPorCuotas);
+                        _dbContext.Inscripciones.Update(inscription);
                     }
                     else
                     {
@@ -119,6 +121,8 @@ namespace FerminToroMS.Application.Handlers.Commands
                             FueraVenezuela = schedule.Modalidad == 0 ? false : true,
                             EstadoSolvencia = "Solvente",
                             FechaInscripcion = DateTime.ParseExact(inscripcionrequest.InscriptionDate, "dd/MM/yyyy", null),
+                            PagoEnCuotas = inscripcionrequest.PagoPorCuotas,
+                            Cantidad_A_Pagar = GetModulPrice(modul.Id,schedule, inscripcionrequest.PagoPorCuotas)
                         };
                         _dbContext.Inscripciones.Add(inscription);
                     }
@@ -148,5 +152,19 @@ namespace FerminToroMS.Application.Handlers.Commands
             }
         }
 
+        private double GetModulPrice(Guid modulId, CronogramaEntity schedule, bool Cuotas) 
+        {
+            double price = 0;
+            var modulprice = _dbContext.Precios
+                .FirstOrDefault(p=>p.ModuloId == modulId && p.PorCuotas == Cuotas 
+                && p.Regularidad == schedule.Regularidad && p.Turno == schedule.Turno
+                && p.Modalidad == schedule.Modalidad);
+            if (modulprice != null) 
+            {
+                if(modulprice.PorCuotas)price = modulprice.Precio*2;
+                else price = modulprice.Precio;
+            }
+            return price;
+        }
     }
 }

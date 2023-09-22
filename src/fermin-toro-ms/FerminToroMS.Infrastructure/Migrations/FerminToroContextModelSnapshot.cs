@@ -34,7 +34,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("ModulosAprobadosId");
 
-                    b.ToTable("EstudianteEntityModuloEntity", (string)null);
+                    b.ToTable("EstudianteEntityModuloEntity");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.AbonoEntity", b =>
@@ -68,7 +68,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("PagoId");
 
-                    b.ToTable("Abonos", (string)null);
+                    b.ToTable("Abonos");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.CronogramaEntity", b =>
@@ -142,7 +142,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("PeriodoId");
 
-                    b.ToTable("Cronogramas", (string)null);
+                    b.ToTable("Cronogramas");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.CursoEntity", b =>
@@ -174,7 +174,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cursos", (string)null);
+                    b.ToTable("Cursos");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.DatoEmpresaJuridicaEntity", b =>
@@ -214,7 +214,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Datos_Empresa_Juridica", (string)null);
+                    b.ToTable("Datos_Empresa_Juridica");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.DeudasEntity", b =>
@@ -257,7 +257,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("InscripcionId");
 
-                    b.ToTable("Deudas", (string)null);
+                    b.ToTable("Deudas");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.Empleado_PermisoEntity", b =>
@@ -291,7 +291,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("PermisoId");
 
-                    b.ToTable("Permisos_Empleados", (string)null);
+                    b.ToTable("Permisos_Empleados");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.EmpleadoEntity", b =>
@@ -352,7 +352,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Empleados", (string)null);
+                    b.ToTable("Empleados");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.EstadosVnzlaEntity", b =>
@@ -369,7 +369,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Estados_Venezuela", (string)null);
+                    b.ToTable("Estados_Venezuela");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.EstudianteEntity", b =>
@@ -451,7 +451,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("RepresentanteId");
 
-                    b.ToTable("Estudiantes", (string)null);
+                    b.ToTable("Estudiantes");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.Fechas_PagoEntity", b =>
@@ -489,7 +489,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("PeriodoId");
 
-                    b.ToTable("Fechas_Limite_Pago", (string)null);
+                    b.ToTable("Fechas_Limite_Pago");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.InscripcionEntity", b =>
@@ -499,7 +499,7 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnOrder(1);
 
-                    b.Property<double?>("CantidadAPagar")
+                    b.Property<double>("Cantidad_A_Pagar")
                         .HasColumnType("double precision");
 
                     b.Property<DateTime>("CreatedAt")
@@ -532,6 +532,9 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<int>("NroInscripcion")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("PagoEnCuotas")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -544,7 +547,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("EstudianteId");
 
-                    b.ToTable("Inscripciones", (string)null);
+                    b.ToTable("Inscripciones");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.InscripcionesCongeladasEntity", b =>
@@ -622,7 +625,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Metodos_Pago", (string)null);
+                    b.ToTable("Metodos_Pago");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.ModuloEntity", b =>
@@ -667,7 +670,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("CursoId");
 
-                    b.ToTable("Modulos", (string)null);
+                    b.ToTable("Modulos");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.Modulos_AprobadoEntity", b =>
@@ -701,7 +704,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("ModuloId");
 
-                    b.ToTable("Modulos_Aprobados", (string)null);
+                    b.ToTable("Modulos_Aprobados");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.PagoEntity", b =>
@@ -791,7 +794,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("PrimeraCuotaId");
 
-                    b.ToTable("Pagos", (string)null);
+                    b.ToTable("Pagos");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.PagosAprobadosEntity", b =>
@@ -800,6 +803,9 @@ namespace FerminToroMS.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnOrder(1);
+
+                    b.Property<string>("ComprobanteIVA")
+                        .HasColumnType("text");
 
                     b.Property<string>("Correo")
                         .HasColumnType("text");
@@ -816,18 +822,22 @@ namespace FerminToroMS.Infrastructure.Migrations
                     b.Property<DateTime>("FechaTransaccion")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Nombre_Empelado")
+                    b.Property<string>("Nombre_Empleado")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("NroCuenta")
-                        .HasColumnType("integer");
+                    b.Property<string>("NroCuentaPagoMovil")
+                        .HasColumnType("text");
 
-                    b.Property<int?>("NroTransaccion")
-                        .HasColumnType("integer");
+                    b.Property<string>("NroTransaccion")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid>("PagoId")
                         .HasColumnType("uuid");
+
+                    b.Property<double?>("TasaBCV")
+                        .HasColumnType("double precision");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -860,7 +870,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Paises", (string)null);
+                    b.ToTable("Paises");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.PeriodoEntity", b =>
@@ -898,7 +908,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Periodos", (string)null);
+                    b.ToTable("Periodos");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.PermisosEntity", b =>
@@ -926,7 +936,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permisos", (string)null);
+                    b.ToTable("Permisos");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.Precio_Mod_TurnoEntity", b =>
@@ -970,7 +980,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("ModuloId");
 
-                    b.ToTable("Precios", (string)null);
+                    b.ToTable("Precios");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.PromocionEntity", b =>
@@ -1012,7 +1022,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasIndex("CronogramaId");
 
-                    b.ToTable("Promociones", (string)null);
+                    b.ToTable("Promociones");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.RepresentanteEntity", b =>
@@ -1055,7 +1065,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Representantes", (string)null);
+                    b.ToTable("Representantes");
                 });
 
             modelBuilder.Entity("FerminToroMS.Core.Entities.ValoresEntity", b =>
@@ -1089,7 +1099,7 @@ namespace FerminToroMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Valores", (string)null);
+                    b.ToTable("Valores");
                 });
 
             modelBuilder.Entity("EstudianteEntityModuloEntity", b =>

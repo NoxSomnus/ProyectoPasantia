@@ -11,11 +11,10 @@ namespace FerminToroMS.Application.Requests
         public Guid PaymentId { get; set; }
         public string State { get; set; } = null!;
         public double Monto { get; set; }
-        public double TasaBCV { get; set; }
-        public string? TransactionNumber { get; set; }
+        public string TransactionNumber { get; set; } = string.Empty;
         public string? AccountNumber { get; set; }
         public string? Email { get; set; }
-        public string? CellPhone { get; set; }
+        public double? TasaBCV { get; set; }
         public string? TransactionDate { get; set; }
         public string? ComprobanteIVA { get; set; }
     }

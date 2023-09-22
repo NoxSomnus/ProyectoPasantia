@@ -1,0 +1,213 @@
+﻿@using FerminToroMS.Application.Responses;
+@{
+    ViewData["Title"] = "Pagos aprobados";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+
+@model AllApprovedPaymentsResponse
+<link rel="stylesheet" href="~/css/AllPeriodsTable.css" asp-append-version="true" />
+<div class="text-center">
+    <h1 class="display-4">Pagos Aprobados</h1>
+</div>
+
+<div style="display: flex; justify-content: center;">
+    <h3>Aplicar Filtro</h3>
+</div>
+<div>
+    <label>Por Método de Pago:</label>
+    <select id="selectMetodo" onchange="filtrarRegistros()">
+        <option value="">Seleccionar...</option>
+        <option value="Banco Mercantil">Banco Mercantil</option>
+        <option value="Banco BNC">Banco BNC</option>
+        <option value="Paypal">Paypal</option>
+        <option value="Zelle">Zelle</option>
+    </select>
+</div>
+<div>
+    <label>Por Período:</label>
+    <select id="selectPeriodo" onchange="cargarCronogramas()">
+        <option value="">Seleccione Período</option>
+        @foreach(var periodo in Model.Periodos)
+        {
+            <option value="@periodo.PeriodId">@periodo.PeriodName @periodo.Año</option>
+        }
+    </select>
+    <select id="selectCronograma" style="font-size: 16px; width: 350px;" onchange="filtrarRegistros()">
+        <option value="">Elige un periodo para ver cursos</option>
+    </select>
+</div>
+<div>
+    <label>Por Moneda:</label>
+    <select id="selectDivisa" onchange="filtrarRegistros()">
+        <option value="">Seleccionar...</option>
+        <option value="Divisa">Divisa</option>
+        <option value="Bolívares">Bolívares</option>
+    </select>
+</div>
+<div>
+    <label>Por Rango de Fecha:</label>
+    <input type="date" name="fecha-inicio" id="fecha-inicio" oninput="filtrarRegistros()"/>
+    <input type="date" name="fecha-fin" id="fecha-fin" oninput="filtrarRegistros()" />
+</div>
+<br />
+<!-- Table -->
+<div class="table-scroll">
+    <div>
+        <table id="main-table" class="main-table">
+            <thead>
+                <tr>
+                    <th>Fecha Transacción</th>
+                    <th>Método de Pago</th>
+                    <th>Nro Transacción</th>
+                    <th>Monto</th>
+                    <th>NroCuenta / PagoMovil</th>
+                    <th>Tasa BCV</th>
+                    <th>Correo</th>
+                    <th>Moneda</th>
+                    <th>Conciliado Por</th>
+                    <th>Fecha Conciliación</th>
+                    <th hidden>Inscripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mercantil in Model.PagosMercantil)
+                {
+                    <tr>
+                        <td>@mercantil.FechaTransaccion</td>
+                        <td>Banco Mercantil</td>
+                        <td>@mercantil.NroTransaccion</td>
+                        <td>@mercantil.Monto $</td>
+                        <td>@mercantil.NroCuentaPagoMovil</td>
+                        <td>@mercantil.TasaBCV .BS</td>
+                        <td>N/A</td>
+                        <td>@(mercantil.Divisa ? "Divisa" : "Bolívares")</td>
+                        <td>@mercantil.Empleado_Conciliador</td>
+                        <td>@mercantil.FechaConciliacion</td>
+                        <td hidden>@mercantil.CodigoCronograma</td>
+                    </tr>
+                }
+                @foreach (var BNC in Model.PagosBNC)
+                {
+                    <tr>
+                        <td>@BNC.FechaTransaccion</td>
+                        <td>Banco BNC</td>
+                        <td>@BNC.NroTransaccion</td>
+                        <td>@BNC.Monto $</td>
+                        <td>@BNC.NroCuenta</td>
+                        <td>@BNC.TasaBCV .BS</td>
+                        <td>N/A</td>
+                        <td>@(BNC.Divisa ? "Divisa" : "Bolívares")</td>
+                        <td>@BNC.Empleado_Conciliador</td>
+                        <td>@BNC.FechaConciliacion</td>
+                        <td hidden>@BNC.CodigoCronograma</td>
+                    </tr>
+                }
+                @foreach (var Paypal in Model.PagosPaypal)
+                {
+                    <tr>
+                        <td>@Paypal.FechaTransaccion</td>
+                        <td>Paypal</td>
+                        <td>@Paypal.NroTransaccion</td>
+                        <td>@Paypal.Monto $</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>@Paypal.Correo</td>
+                        <td>Divisa</td>
+                        <td>@Paypal.Empleado_Conciliador</td>
+                        <td>@Paypal.FechaConciliacion</td>
+                        <td hidden>@Paypal.CodigoCronograma</td>
+                    </tr>
+                }
+                @foreach (var Zelle in Model.PagosZelle)
+                {
+                    <tr>
+                        <td>@Zelle.FechaTransaccion</td>
+                        <td>Zelle</td>
+                        <td>@Zelle.NroTransaccion</td>
+                        <td>@Zelle.Monto $</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>@Zelle.Correo</td>
+                        <td>Divisa</td>
+                        <td>@Zelle.Empleado_Conciliador</td>
+                        <td>@Zelle.FechaConciliacion</td>
+                        <td hidden>@Zelle.CodigoCronograma</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        <script>
+            function cargarCronogramas() {
+                const selectPeriodo = document.getElementById('selectPeriodo');
+                const selectCronograma = document.getElementById('selectCronograma');
+                const periodoSeleccionado = selectPeriodo.value;
+
+                // Hacer una petición AJAX para obtener los cronogramas
+                fetch('/Schedule/GetCronogramasByPeriodId?periodo=' + periodoSeleccionado)
+                    .then(response => response.json())
+                    .then(cronogramas => {
+                        // Limpiar las opciones actuales del selectCronograma
+                        selectCronograma.innerHTML = '';
+                        const option = document.createElement('option');
+                        option.value = "";
+                        option.textContent = "Seleccionar...";
+                        selectCronograma.appendChild(option);
+                        // Agregar las nuevas opciones al selectCronograma
+                        cronogramas.forEach(cronograma => {
+                            const option = document.createElement('option');
+                            option.value = cronograma.scheduleCode;
+                            option.textContent = cronograma.scheduleCode;
+                            selectCronograma.appendChild(option);
+                        });
+
+                    });
+            }
+
+            function filtrarRegistros() {
+                // Get the selected value from the selectCronograma dropdown menu
+                var codigo = document.getElementById("selectCronograma").value;
+                var metodo = document.getElementById("selectMetodo").value;
+                var divisa = document.getElementById("selectDivisa").value;
+                var inicio = document.getElementById("fecha-inicio").value;
+                var fin = document.getElementById("fecha-fin").value;
+                var fechaInicio = new Date(inicio);
+                var fechaFin = new Date(fin);
+                // Get the table and its rows
+                var table = document.getElementById("main-table");
+                var rows = table.getElementsByTagName("tr");
+
+                // Iterate over the rows of the table
+                for (var i = 1; i < rows.length; i++) {
+                    var row = rows[i];
+                    var cells = row.getElementsByTagName("td");
+
+                    // Get the value of the cronograma in the current row
+                    var codigoValue = cells[10].innerText;
+                    var metodoValue = cells[1].innerText;
+                    var divisaValue = cells[7].innerText;
+                    var fechaTransaccionValue = cells[0].innerText;
+                    var fechaTrasaccion = new Date(fechaTransaccionValue.split('/').reverse().join('-')) 
+                    console.log(inicio);
+                    console.log(fin);
+                    // Apply the filter
+                    if ((codigo === "" || codigoValue === codigo) &&
+                        (metodo == "" || metodoValue == metodo) &&
+                        (divisa == "" || divisaValue == divisa) &&
+                        ((inicio === "" || fin === "") ||
+                        (fechaTrasaccion >= fechaInicio && fechaTrasaccion <= fechaFin))
+                        ) {
+                        row.style.display = ""; // Show the row if it matches the filter
+                    } else {
+                        row.style.display = "none"; // Hide the row if it doesn't match the filter
+                    }
+                }
+            }
+        </script>
+
+    }
+}

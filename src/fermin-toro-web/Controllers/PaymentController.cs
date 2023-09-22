@@ -45,7 +45,7 @@ namespace FerminToroWeb.Controllers
                     {
                         total = total + pago.Mount;
                     }
-                    debt = Response.ByCuota ? Response.ModulPrice * 2 - total : Response.ModulPrice - total;
+                    debt = Response.ModulPrice - total;
                 }
 
                 var model = new PaymentDetailsModel 
@@ -112,12 +112,34 @@ namespace FerminToroWeb.Controllers
                 return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
             }
         }
-        
+
+        [HttpGet]
+        public async Task<IActionResult> AllApprovedPayments()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            try
+            {
+                var apiUrl = apiurl.ApiUrl + "/payment/approvedpayments";
+                var response = await _httpClient.GetAsync(apiUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SomethingWentWrongView", "Messages");
+                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var Response = JsonConvert.DeserializeObject<AllApprovedPaymentsResponse>(responseContent);
+                return View(Response);
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
+            }
+        }
+
 
         public async Task<IActionResult> ChangePaymentStatus(List<string> PaymentId,
             List<string> Estado, List<double> Monto, List<string> NroTransaccion, List<string> NroCuenta,
-            List<string> Correo, List<string> Telefono, List<string> FechaTransaccion,
-            List<string> comprobanteIVA, List<double> TasaBCV) 
+            List<string> Correo, List<string> FechaTransaccion,
+            List<string> comprobanteIVA, List<string> TasaBCV) 
         {
             _verifySessionFilter.VerifySession(HttpContext);
             try
@@ -125,19 +147,22 @@ namespace FerminToroWeb.Controllers
                 var apiUrl = apiurl.ApiUrl + "/payment/updatepaymentstate";
                 var requestBody = new
                 {
-                    paymentsToUpdate = PaymentMapper.PaymentDataToUpdateMap(PaymentId,Estado,Monto,FechaTransaccion)
-                };
+                    paymentsToUpdate = PaymentMapper
+                    .PaymentDataToUpdateMap(PaymentId,Estado,Monto,NroTransaccion,NroCuenta,
+                    Correo,FechaTransaccion,comprobanteIVA,TasaBCV),
+                    empleado = HttpContext.Session.GetString("UserId")
+            };
                 var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore
                 }); // Serializa el body a formato JSON
-                var response = await _httpClient.PutAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+                var response = await _httpClient.PatchAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
                 if (!response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("SomethingWentWrongView", "Messages");
                 }
                 
-                return RedirectToAction("ScheduleUpdatedSucessfully", "Messages");
+                return RedirectToAction("ChangesSavedSucessfully", "Messages");
             }
             catch (HttpRequestException)
             {

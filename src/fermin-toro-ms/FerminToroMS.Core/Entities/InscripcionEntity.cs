@@ -22,6 +22,7 @@ namespace FerminToroMS.Core.Entities
         public DateTime FechaInscripcion { get; set; }
         public ICollection<DeudasEntity>? Deudas { get; set; }
         public ICollection<PagoEntity>? Pagos { get; set; }
-        public double? CantidadAPagar { get; set; }
+        public double Cantidad_A_Pagar { get; set; } = 0;
+        public bool PagoEnCuotas { get; set; } = false;
     }
 }

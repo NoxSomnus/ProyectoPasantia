@@ -1,4 +1,5 @@
-﻿using FerminToroMS.Application.Commands;
+﻿using Automatonymous;
+using FerminToroMS.Application.Commands;
 using FerminToroMS.Application.Exceptions;
 using FerminToroMS.Application.Mappers;
 using FerminToroMS.Core.Database;
@@ -70,6 +71,7 @@ namespace FerminToroMS.Application.Handlers.Commands
             var transaction = _dbContext.BeginTransaction();
             try
             {
+                var employee = _dbContext.Empleados.FirstOrDefault(c=>c.Id == request._request.Empleado);
                 foreach (var PaymentToUpdate in request._request.PaymentsToUpdate)
                 {
                     var payment = _dbContext.Pagos.FirstOrDefault(p=>p.Id == PaymentToUpdate.PaymentId);
@@ -83,8 +85,14 @@ namespace FerminToroMS.Application.Handlers.Commands
                                 new PagosAprobadosEntity
                                 {
                                     PagoId = payment.Id,
-                                    Nombre_Empleado = request._request.EmpleadoUsername,
-                                    FechaConciliacion = DateTime.Now
+                                    Nombre_Empleado = employee.Nombre + " " + employee.Apellido,
+                                    FechaConciliacion = DateTime.Now,
+                                    ComprobanteIVA = PaymentToUpdate.ComprobanteIVA,
+                                    FechaTransaccion =  PaymentToUpdate.TransactionDate != null ? DateTime.ParseExact(PaymentToUpdate.TransactionDate, "yyyy-MM-dd", null) : DateTime.Now,
+                                    NroCuentaPagoMovil = PaymentToUpdate.AccountNumber,
+                                    NroTransaccion = PaymentToUpdate.TransactionNumber,
+                                    Correo = PaymentToUpdate.Email,
+                                    TasaBCV = PaymentToUpdate.TasaBCV
                                 }
                             );
                         }

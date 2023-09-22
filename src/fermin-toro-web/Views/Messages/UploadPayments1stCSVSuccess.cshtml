@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Operación Éxitosa";
+    Layout = "~/Views/Shared/_MensajeExitoLayout.cshtml";
+}
+@model FerminToroMS.Application.Responses.AddPayments1stCSVResponse
+@if (Model.NroInscripcionNoRegistrados.Count > 0)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            $('#exampleModal').modal('show');
+        }
+    </script>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Números de inscripcion no registrados</h5>
+
+                </div>
+                <div class="modal-body">
+                    <b>Las inscripciones con estos Números de inscripción en el csv no fueron procesados</b>
+                    <b>debido a que no hay inscripciones relacionadas con estos numeros.</b>
+                    <br />
+                    <b>
+                        Se recomienda actualizar el csv de inscripciones y luego subir este csv
+                        de nuevo para completar los pagos faltantes.
+                    </b>
+                    <br />
+                    @foreach (var NroInscripcion in Model.NroInscripcionNoRegistrados)
+                    {
+                        <b>@NroInscripcion</b>
+                        <br />
+                    }
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-primary" onclick="cerrarModal()">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<body>
+
+    <div class="success-message">
+        <svg viewBox="0 0 76 76" class="success-message__icon icon-checkmark">
+            <circle cx="38" cy="38" r="36" />
+            <path fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M17.7,40.9l10.9,10.9l28.7-28.7" />
+        </svg>
+        <h1 class="success-message__title">Archivo Subido con Éxito</h1>
+        <div class="success-message__content">
+            <h4><b>Haga click para volver al inicio</b></h4>
+        </div>
+        <button class="ghost" id="login" onclick="location.href='@Url.Action("MenuAdministrador", "Admin")'">
+            Inicio
+        </button>
+    </div>
+
+</body>
+@section Scripts{
+    @{
+        <script>
+            function cerrarModal() {
+                // Obtén el elemento del modal por su ID
+                let modal = document.getElementById('exampleModal');
+
+                // Cierra el modal utilizando el método 'modal' de Bootstrap
+                modal.modal('hide');
+
+                // Remueve la clase 'modal-open' del elemento 'body' para permitir el desplazamiento de la página nuevamente
+                $('body').removeClass('modal-open');
+
+                // Remueve el elemento del fondo oscuro del modal
+                $('.modal-backdrop').remove();
+            }
+        </script>
+    }
+}

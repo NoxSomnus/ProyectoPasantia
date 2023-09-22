@@ -42,6 +42,12 @@
                         <button id="boton-VerUsuarioss" type="submit">Administrar <br/>Cronogramas</button>
                     }
                 </li>
+                <li id="usuarios-link">
+                    @using (Html.BeginForm("AllApprovedPayments", "Payment", FormMethod.Get))
+                    {
+                        <button id="boton-VerUsuarioss" type="submit">Pagos <br />Aprobados</button>
+                    }
+                </li>
                 <li id="migration-link">
                     @using (Html.BeginForm("UploadCSVMigrationOptions", "Admin", FormMethod.Post))
                     {

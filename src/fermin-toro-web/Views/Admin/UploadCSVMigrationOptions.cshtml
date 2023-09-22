@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Inicio";
+    ViewData["Title"] = "Opciones de migración";
     Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
 }
 <style>
@@ -70,6 +70,14 @@
                 <td>Migrar Inscripciones</td>
                 <td>
                     <form asp-action="UploadInscriptionsCSVView" asp-controller="Admin">
+                        <button class="btn btn-success" type="submit">Ir a opción</button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Migrar Pagos 1er CSV</td>
+                <td>
+                    <form asp-action="UploadPaymets1stCSVView" asp-controller="Admin">
                         <button class="btn btn-success" type="submit">Ir a opción</button>
                     </form>
                 </td>

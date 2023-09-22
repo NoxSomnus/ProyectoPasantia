@@ -118,6 +118,39 @@ namespace FerminToroMS.Controllers
         }
 
         /// <summary>
+        /// Método que consulta los datos de una empresa juridica por Id
+        /// </summary>
+        /// <returns>Los datos de la empresa juridica.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Get
+        /// </remarks>
+
+        [HttpGet("DatosEmpresaJuridica")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DatosEmpresaJuridica(Guid request)
+        {
+            _logger.LogInformation("Entrando al metodo que registra cursos mediante carga de archivo csv");
+            try
+            {
+                var query = new DatosEmpresaJuridicaQuery(request);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (IdNotFoundException ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los datos de la empresa");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los datos de la empresa");
+                return StatusCode(500, "Ocurrió un error al consultar las inscripciones. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
         /// Método que mueve las inscripciones congeladas o las mantiene congeladas
         /// </summary>
         /// <returns>bool que indica si la operacion fue exitosa o no.</returns>

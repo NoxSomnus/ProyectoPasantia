@@ -127,24 +127,27 @@ namespace FerminToroMS.Application.Handlers.Queries
                             if (payment.NroFactura != null) totalonmodul.BillQuantity++;
                             if (payment.NroRecibo != null) totalonmodul.ReciboQuantity++;
                         }
-                        if (inscription.Pagos != null)
+                        if (inscription.PagoEnCuotas)
                         {
-                            if(inscription.Pagos.First().PorCuotas == true) totalonmodul.CuotaQuantity++;
+                            totalonmodul.CuotaQuantity++;
                         }
-                        var modulprice = schedule.Modulo.Precios
-                            .FirstOrDefault(c=>c.Modalidad == schedule.Modalidad &&
-                            c.Turno == schedule.Turno && c.Regularidad == schedule.Regularidad
-                            && c.PorCuotas == payments.First().PorCuotas);
-                        if (modulprice != null) 
-                        {
-                            if (totalonpayment < (modulprice.PorCuotas ? modulprice.Precio*2 : modulprice.Precio))
+                        totalonmodul.PorCobrar = totalonmodul.PorCobrar + inscription.Cantidad_A_Pagar;
+                            /*
+                            var modulprice = schedule.Modulo.Precios
+                                .FirstOrDefault(c => c.Modalidad == schedule.Modalidad &&
+                                c.Turno == schedule.Turno && c.Regularidad == schedule.Regularidad
+                                && c.PorCuotas == payments.First().PorCuotas);
+                            if (modulprice != null)
                             {
-                                totalonmodul.PorCobrar = 
-                                    totalonmodul.PorCobrar +
-                                    (modulprice.PorCuotas ? modulprice.Precio*2 - totalonpayment : modulprice.Precio - totalonpayment);
-                            }
-                        }
+                                if (totalonpayment < (modulprice.PorCuotas ? modulprice.Precio * 2 : modulprice.Precio))
+                                {
+                                    totalonmodul.PorCobrar =
+                                        totalonmodul.PorCobrar +
+                                        (modulprice.PorCuotas ? modulprice.Precio * 2 - totalonpayment : modulprice.Precio - totalonpayment);
+                                }
+                            }*/
                     }
+                    totalonmodul.PorCobrar = totalonmodul.PorCobrar - totalonmodul.Total;
                     response.TotalOnModulsWithTurns.Add(totalonmodul);
                 }
                 return response;

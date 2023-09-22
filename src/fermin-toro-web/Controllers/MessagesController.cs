@@ -29,6 +29,16 @@ namespace FerminToroWeb.Controllers
             });
         }
 
+        public IActionResult ChangesSavedSucessfully()
+        {
+            return View("~/Views/Messages/SuccessfulMessageView.cshtml", new SuccesfulMessageModel
+            {
+                Message = "Cambios guardados con éxito",
+                NextStep = "Haga click para volver al inicio",
+                ButtonContent = "Inicio"
+            });
+        }
+
         public IActionResult UploadInscriptionsSuccesfulView()
         {
             return View("~/Views/Messages/UploadInscriptionsSuccesfulView.cshtml", new SuccesfulMessageModel

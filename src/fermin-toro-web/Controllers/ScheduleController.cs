@@ -12,6 +12,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using FerminToroMS.Application.CustomClasses;
 
 namespace FerminToroWeb.Controllers
 {
@@ -396,6 +397,20 @@ namespace FerminToroWeb.Controllers
             {
                 return StatusCode(StatusCodes.Status503ServiceUnavailable, "No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.");
             }
+        }
+
+        public async Task<IActionResult> GetCronogramasByPeriodId(string periodo)
+        {
+            var apiUrl = apiurl.ApiUrl + "/schedule/schedulecodesbyperiodid?request=" + periodo;
+            var response = await _httpClient.GetAsync(apiUrl);
+            if (!response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("SomethingWentWrongView", "Messages");
+            }
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var Response = JsonConvert.DeserializeObject<List<ScheduleCodes>>(responseContent);
+            // Devuelve los cronogramas en formato JSON
+            return Json(Response);
         }
 
 

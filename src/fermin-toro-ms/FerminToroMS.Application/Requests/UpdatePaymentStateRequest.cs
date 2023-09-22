@@ -9,6 +9,6 @@ namespace FerminToroMS.Application.Requests
     public class UpdatePaymentStateRequest
     {
         public List<UpdatePaymentState> PaymentsToUpdate { get; set; } = null!;
-        public string EmpleadoUsername { get; set; } = null!;
+        public Guid Empleado { get; set; }
     }
 }

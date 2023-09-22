@@ -113,6 +113,7 @@ namespace FerminToroMS.Application.Handlers.Queries
                     .Include(p=>p.MetodoPago)
                     .Where(p => p.Inscripcion.CronogramaId == request.ScheduleId
                     && p.URLComprobante != null && p.Estado != "Aprobado")
+                    .OrderBy(p=>p.Fecha)
                     .Select(p => new AllComprobantes
                     {
                         PaymentId = p.Id,
