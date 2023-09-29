@@ -78,6 +78,7 @@ namespace FerminToroMS.Application.Handlers.Queries
                 response.PagosMercantil = new List<MercantilApprovedPayments>();
                 response.PagosBNC = new List<BNCApprovedPayments>();
                 response.PagosZelle = new List<ZelleApprovedPayments>();
+                response.PagosEfectivo = new List<EfectivoApprovedPayments>();
                 response.Periodos = _dbContext.Periodos.OrderByDescending(c => c.Año).ThenByDescending(c => c.CreatedAt).Select(c => new PeriodResponse
                     {
                        PeriodId = c.Id,
@@ -105,7 +106,11 @@ namespace FerminToroMS.Application.Handlers.Queries
                     {
                         response.PagosZelle.Add(ApprovedPaymentFactory.CreateZelleApprovedPayments(ApprovedPayment));
                     }
-                }
+                    if (ApprovedPayment.Pago.MetodoPago.NombreMetodo == "Efectivo")
+                    {
+                        response.PagosEfectivo.Add(ApprovedPaymentFactory.CreateEfectivoApprovedPayments(ApprovedPayment));
+                    }
+                    }
                 return response;
             }
             catch (Exception ex)

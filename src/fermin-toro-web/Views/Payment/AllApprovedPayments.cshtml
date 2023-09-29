@@ -60,7 +60,7 @@
                     <th>Método de Pago</th>
                     <th>Nro Transacción</th>
                     <th>Monto</th>
-                    <th>NroCuenta / PagoMovil</th>
+                    @*<th>NroCuenta / PagoMovil</th>*@
                     <th>Tasa BCV</th>
                     <th>Correo</th>
                     <th>Moneda</th>
@@ -70,6 +70,22 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach (var efectivo in Model.PagosEfectivo)
+                {
+                    <tr>
+                        <td>@efectivo.FechaTransaccion</td>
+                        <td>Efectivo</td>
+                        <td>@efectivo.NroTransaccion</td>
+                        <td>@efectivo.Monto $</td>
+                        @*<td>N/A</td>*@
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>@(efectivo.Divisa ? "Divisa" : "Bolívares")</td>
+                        <td>@efectivo.Empleado_Conciliador</td>
+                        <td>@efectivo.FechaConciliacion</td>
+                        <td hidden>@efectivo.CodigoCronograma</td>
+                    </tr>
+                }
                 @foreach (var mercantil in Model.PagosMercantil)
                 {
                     <tr>
@@ -77,7 +93,7 @@
                         <td>Banco Mercantil</td>
                         <td>@mercantil.NroTransaccion</td>
                         <td>@mercantil.Monto $</td>
-                        <td>@mercantil.NroCuentaPagoMovil</td>
+                        @*<td>@mercantil.NroCuentaPagoMovil</td>*@
                         <td>@mercantil.TasaBCV .BS</td>
                         <td>N/A</td>
                         <td>@(mercantil.Divisa ? "Divisa" : "Bolívares")</td>
@@ -93,7 +109,7 @@
                         <td>Banco BNC</td>
                         <td>@BNC.NroTransaccion</td>
                         <td>@BNC.Monto $</td>
-                        <td>@BNC.NroCuenta</td>
+                        @*<td>@BNC.NroCuenta</td>*@
                         <td>@BNC.TasaBCV .BS</td>
                         <td>N/A</td>
                         <td>@(BNC.Divisa ? "Divisa" : "Bolívares")</td>
@@ -109,7 +125,7 @@
                         <td>Paypal</td>
                         <td>@Paypal.NroTransaccion</td>
                         <td>@Paypal.Monto $</td>
-                        <td>N/A</td>
+                        @*<td>N/A</td>*@
                         <td>N/A</td>
                         <td>@Paypal.Correo</td>
                         <td>Divisa</td>
@@ -125,7 +141,7 @@
                         <td>Zelle</td>
                         <td>@Zelle.NroTransaccion</td>
                         <td>@Zelle.Monto $</td>
-                        <td>N/A</td>
+                        @*<td>N/A</td>*@
                         <td>N/A</td>
                         <td>@Zelle.Correo</td>
                         <td>Divisa</td>
@@ -187,9 +203,9 @@
                     var cells = row.getElementsByTagName("td");
 
                     // Get the value of the cronograma in the current row
-                    var codigoValue = cells[10].innerText;
+                    var codigoValue = cells[9].innerText;
                     var metodoValue = cells[1].innerText;
-                    var divisaValue = cells[7].innerText;
+                    var divisaValue = cells[6].innerText;
                     var fechaTransaccionValue = cells[0].innerText;
                     var fechaTrasaccion = new Date(fechaTransaccionValue.split('/').reverse().join('-')) 
                     console.log(inicio);

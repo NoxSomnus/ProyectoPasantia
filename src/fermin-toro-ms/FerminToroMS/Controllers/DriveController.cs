@@ -138,15 +138,39 @@ namespace FerminToroMS.Controllers
             }
         }
 
-        [HttpPost("ProcessPayments1stCSVCSVFile")]
+        [HttpPost("ProcessPayments1stCSVFile")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> ProcessPayments1stCSVCSVFile([FromBody] ProcessCSVFileRequest request)
+        public async Task<ActionResult> ProcessPayments1stCSVFile([FromBody] ProcessCSVFileRequest request)
         {
             _logger.LogInformation("Entrando al metodo que procesa el archivo de google drive");
             try
             {
                 var query = new ProcessPayments1stCSVQuery(request);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (BadCSVRequest ex)
+            {
+                _logger.LogError("Ocurrio un error en la lectura del archivo. Exception: " + ex);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocurrio un error en la consulta de los valores de prueba. Exception: " + ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing the inscription file.");
+            }
+        }
+
+        [HttpPost("ProcessPayments2ndCSVFile")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ProcessPayments2ndCSVFile([FromBody] ProcessCSVFileRequest request)
+        {
+            _logger.LogInformation("Entrando al metodo que procesa el archivo de google drive");
+            try
+            {
+                var query = new ProcessPayments2ndCSVQuery(request);
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }

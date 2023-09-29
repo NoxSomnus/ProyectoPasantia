@@ -68,11 +68,17 @@ namespace FerminToroMS.Application.Handlers.Commands
         {
             var transaction = _dbContext.BeginTransaction();
             var cedulasNoRegistradas = new List<string>();
+            var cronogramasNoRegistrados = new List<string>();
             try
             {
                 _logger.LogInformation("AddPermissionCommandHandler.HandleAsync");
                 foreach (var inscripcionrequest in request._request.Inscriptions)
                 {
+                    var nroinscripcion = _dbContext.Inscripciones.Any(c => c.NroInscripcion == inscripcionrequest.NroInscription);
+                    if (nroinscripcion) 
+                    {
+                        continue;
+                    }
                     var period = _dbContext.Periodos.FirstOrDefault(c => c.NombrePeriodo == inscripcionrequest.PeriodName
                         && c.Año == inscripcionrequest.PeriodYear);
                     if (period == null)
@@ -95,7 +101,11 @@ namespace FerminToroMS.Application.Handlers.Commands
                         && c.Turno == inscripcionrequest.Turno && c.Modalidad == inscripcionrequest.Modalidad);
                     if (schedule == null)
                     {
-                        throw new DataNotFoundException("El registro del cronograma no se encontro");
+                        cronogramasNoRegistrados.Add
+                            (inscripcionrequest.PeriodName + " " + inscripcionrequest.PeriodYear
+                            + " " + inscripcionrequest.CourseName + " " + inscripcionrequest.ModulName + " "
+                            + inscripcionrequest.Turno + " " +inscripcionrequest.Regularidad+ " " + inscripcionrequest.Modalidad);
+                        continue;
                     }
                     var student = _dbContext.Estudiantes.FirstOrDefault(c => c.Cedula == inscripcionrequest.Cedula);
                     if (student == null)
@@ -134,7 +144,8 @@ namespace FerminToroMS.Application.Handlers.Commands
                 {
                     Success = true,
                     Message = "Inscripciones realizadas con exito",
-                    Cedulas = cedulasNoRegistradas
+                    Cedulas = cedulasNoRegistradas,
+                    CronogramasNoRegistrados = cronogramasNoRegistrados
                 };
                 return response;
             }

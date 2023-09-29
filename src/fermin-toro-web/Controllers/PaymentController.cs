@@ -137,7 +137,7 @@ namespace FerminToroWeb.Controllers
 
 
         public async Task<IActionResult> ChangePaymentStatus(List<string> PaymentId,
-            List<string> Estado, List<double> Monto, List<string> NroTransaccion, List<string> NroCuenta,
+            List<string> Estado, List<double> Monto, List<string> NroTransaccion,
             List<string> Correo, List<string> FechaTransaccion,
             List<string> comprobanteIVA, List<string> TasaBCV) 
         {
@@ -148,7 +148,7 @@ namespace FerminToroWeb.Controllers
                 var requestBody = new
                 {
                     paymentsToUpdate = PaymentMapper
-                    .PaymentDataToUpdateMap(PaymentId,Estado,Monto,NroTransaccion,NroCuenta,
+                    .PaymentDataToUpdateMap(PaymentId,Estado,Monto,NroTransaccion,
                     Correo,FechaTransaccion,comprobanteIVA,TasaBCV),
                     empleado = HttpContext.Session.GetString("UserId")
             };

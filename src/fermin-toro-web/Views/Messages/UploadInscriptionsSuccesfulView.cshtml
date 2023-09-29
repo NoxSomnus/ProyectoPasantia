@@ -3,6 +3,36 @@
     Layout = "~/Views/Shared/_MensajeExitoLayout.cshtml";
 }
 @model FerminToroMS.Application.Responses.AddInscriptionsResponse
+@if (Model.CronogramasNoRegistrados != null && Model.CronogramasNoRegistrados.Count > 0)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            $('#exampleModal1').modal('show');
+        }
+    </script>
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Estos cronogramas no están registrados en la base de datos</h5>
+
+                </div>
+                <div class="modal-body">
+
+                    @foreach (var cronograma in Model.CronogramasNoRegistrados)
+                    {
+                        <b>@cronograma</b>
+                        <br />
+                    }
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-primary" onclick="cerrarModal()">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 @if (Model.Cedulas != null)
 {
     <script type="text/javascript">
@@ -29,7 +59,7 @@
                     {
                         <b>@cedula</b>
                         <br/>
-                    }
+                    }                    
                 </div>
                     <div class="modal-footer">
                         
@@ -39,6 +69,7 @@
         </div>
     </div>
 }
+
 <body>
 
     <div class="success-message">

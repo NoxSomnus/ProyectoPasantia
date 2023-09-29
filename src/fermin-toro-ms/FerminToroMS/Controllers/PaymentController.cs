@@ -151,6 +151,26 @@ namespace FerminToroMS.Controllers
             }
         }
 
+        [HttpPost("SetPaymentsStateByEfectivo")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> SetPaymentsStateByEfectivo()
+        {
+            _logger.LogInformation("Entrando al metodo que consulta los pagos de una inscripcion");
+            try
+            {
+                var command = new SetPaymentsStateByEfectivoCommand();
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los pagos de la inscripcion");
+                return StatusCode(500, "Ocurrió un error al consultar los pagos de la inscripcion. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
         /// <summary>
         /// Método que consulta los pagos aprobados
         /// </summary>

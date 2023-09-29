@@ -89,7 +89,6 @@ namespace FerminToroMS.Application.Handlers.Commands
                                     FechaConciliacion = DateTime.Now,
                                     ComprobanteIVA = PaymentToUpdate.ComprobanteIVA,
                                     FechaTransaccion =  PaymentToUpdate.TransactionDate != null ? DateTime.ParseExact(PaymentToUpdate.TransactionDate, "yyyy-MM-dd", null) : DateTime.Now,
-                                    NroCuentaPagoMovil = PaymentToUpdate.AccountNumber,
                                     NroTransaccion = PaymentToUpdate.TransactionNumber,
                                     Correo = PaymentToUpdate.Email,
                                     TasaBCV = PaymentToUpdate.TasaBCV

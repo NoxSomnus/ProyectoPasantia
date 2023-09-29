@@ -8,7 +8,7 @@ namespace FerminToroWeb.Mappers
     public class PaymentMapper
     {
         public static List<UpdatePaymentState> PaymentDataToUpdateMap(List<string> PaymentId,
-            List<string> Estado, List<double> Monto, List<string> NroTransaccion, List<string> NroCuenta,
+            List<string> Estado, List<double> Monto, List<string> NroTransaccion,
             List<string> Correo, List<string> FechaTransaccion,
             List<string> comprobanteIVA, List<string> TasaBCV) 
         {
@@ -19,8 +19,7 @@ namespace FerminToroWeb.Mappers
                 {
                     Monto = Monto[i],
                     PaymentId = PaymentId[i],
-                    State = Estado[i],
-                    AccountNumber = NroCuenta[i],
+                    State = Estado[i],                    
                     ComprobanteIVA = comprobanteIVA[i],
                     Email = Correo[i],
                     TransactionDate = FechaTransaccion[i],

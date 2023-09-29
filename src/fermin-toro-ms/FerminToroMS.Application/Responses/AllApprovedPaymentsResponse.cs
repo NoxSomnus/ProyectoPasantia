@@ -13,6 +13,7 @@ namespace FerminToroMS.Application.Responses
         public List<BNCApprovedPayments> PagosBNC { get; set; } = null!;
         public List<PaypalApprovedPayments> PagosPaypal { get; set; } = null!;
         public List<ZelleApprovedPayments> PagosZelle { get; set; } = null!;
+        public List<EfectivoApprovedPayments> PagosEfectivo { get; set; } = null!;
         public List<PeriodResponse> Periodos { get; set; } = null!;
     }
 }

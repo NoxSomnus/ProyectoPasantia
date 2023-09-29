@@ -86,5 +86,21 @@ namespace FerminToroMS.Application.Factories
             };
             return zelle;
         }
+        public static EfectivoApprovedPayments CreateEfectivoApprovedPayments(PagosAprobadosEntity ApprovedPayment) 
+        {
+            var efectivo = new EfectivoApprovedPayments 
+            {
+                PagoAprobadoId = ApprovedPayment.Id, 
+                CodigoCronograma = ApprovedPayment.Pago.Inscripcion.Cronograma.Codigo,
+                PagoId = ApprovedPayment.PagoId,
+                Divisa = ApprovedPayment.Pago.EnDivisa,
+                FechaConciliacion = ApprovedPayment.FechaConciliacion.ToString("dd/MM/yyyy"),
+                Empleado_Conciliador = ApprovedPayment.Nombre_Empleado,
+                FechaTransaccion = ApprovedPayment.FechaTransaccion.ToString("dd/MM/yyyy"),
+                Monto = ApprovedPayment.Pago.Monto,
+                NroTransaccion = ApprovedPayment.NroTransaccion                
+            };
+            return efectivo;
+        }
     }
 }
