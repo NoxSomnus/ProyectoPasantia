@@ -1,13 +1,16 @@
 ﻿using FerminToroMS.Application.Responses;
 using FerminToroWeb.CustomClasses;
 using FerminToroWeb.Models;
+using System.Globalization;
 
 namespace FerminToroWeb.Mappers
 {
     public class PaymentMapper
     {
         public static List<UpdatePaymentState> PaymentDataToUpdateMap(List<string> PaymentId,
-            List<string> Estado, List<double> Monto, List<string> FechaTransaccion) 
+            List<string> Estado, List<double> Monto, List<string> NroTransaccion,
+            List<string> Correo, List<string> FechaTransaccion,
+            List<string> comprobanteIVA, List<string> TasaBCV) 
         {
             var payments = new List<UpdatePaymentState>();
             for (int i=0; i < PaymentId.Count; i++)
@@ -16,8 +19,20 @@ namespace FerminToroWeb.Mappers
                 {
                     Monto = Monto[i],
                     PaymentId = PaymentId[i],
-                    State = Estado[i]
+                    State = Estado[i],                    
+                    ComprobanteIVA = comprobanteIVA[i],
+                    Email = Correo[i],
+                    TransactionDate = FechaTransaccion[i],
+                    TransactionNumber = NroTransaccion[i] == null ? string.Empty : NroTransaccion[i],
                 };
+                if (TasaBCV[i].Contains("."))
+                {
+                    payment.TasaBCV = double.Parse(TasaBCV[i], CultureInfo.GetCultureInfo("en-US"));
+                }
+                else 
+                {
+                    payment.TasaBCV = double.Parse(TasaBCV[i], CultureInfo.GetCultureInfo("es-ES"));
+                }
                 payments.Add(payment);
             }
             return payments;

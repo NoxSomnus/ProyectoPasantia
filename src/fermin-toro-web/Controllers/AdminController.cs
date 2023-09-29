@@ -78,5 +78,15 @@ namespace FerminToroWeb.Controllers
             return View();
         }
 
+        public IActionResult UploadPaymets1stCSVView()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            return View();
+        }
+        public IActionResult UploadPaymets2ndCSVView()
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            return View();
+        }
     }
 }

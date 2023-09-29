@@ -19,5 +19,6 @@ namespace FerminToroMS.Application.Requests
         public string Cedula { get; set; } = null!;
         public string InscriptionDate { get; set; } = null!;
         public int NroInscription { get; set; }
+        public bool PagoPorCuotas { get; set; }
     }
 }

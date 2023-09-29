@@ -150,5 +150,53 @@ namespace FerminToroMS.Controllers
                 return StatusCode(500, "Ocurrió un error al consultar los pagos de la inscripcion. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
             }
         }
+
+        [HttpPost("SetPaymentsStateByEfectivo")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> SetPaymentsStateByEfectivo()
+        {
+            _logger.LogInformation("Entrando al metodo que consulta los pagos de una inscripcion");
+            try
+            {
+                var command = new SetPaymentsStateByEfectivoCommand();
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los pagos de la inscripcion");
+                return StatusCode(500, "Ocurrió un error al consultar los pagos de la inscripcion. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
+
+        /// <summary>
+        /// Método que consulta los pagos aprobados
+        /// </summary>
+        /// <returns>Un objeto JSON con la información de todos los pagos aprobados.</returns>
+        /// <remarks>
+        /// Este método recibe una solicitud HTTP Get
+        /// </remarks>
+
+        [HttpGet("ApprovedPayments")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> ApprovedPayments()
+        {
+            _logger.LogInformation("Entrando al metodo que consulta todos los pagos aprobados");
+            try
+            {
+                var query = new AllApprovedPaymentsQuery();
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocurrió un error al consultar los pagos aprobados");
+                return StatusCode(500, "Ocurrió un error al consultar los pagos aprobados. Por favor, inténtelo de nuevo más tarde o contacte al soporte técnico si el problema persiste.");
+            }
+        }
     }
 }

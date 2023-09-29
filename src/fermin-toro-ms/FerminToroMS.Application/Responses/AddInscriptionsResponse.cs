@@ -11,5 +11,6 @@ namespace FerminToroMS.Application.Responses
         public bool Success { get; set; }
         public string Message { get; set; } = null!;
         public List<string>? Cedulas { get; set; }
+        public List<string>? CronogramasNoRegistrados { get; set; }
     }
 }

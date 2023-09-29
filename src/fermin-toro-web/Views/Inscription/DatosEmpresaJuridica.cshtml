@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Empresa Jurídica";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+@model FerminToroMS.Application.Responses.EmpresaJuridicaResponse
+
+<div class="text-center">
+    <h1 class="display-4">Datos de Empresa Juridica</h1>
+</div>
+
+<table style="max-width:900px;">
+    <tr>
+        <td>
+            Nombre Empresa:
+        </td>
+        <td>
+            @(Model.Nombre_Empresa != null ? Model.Nombre_Empresa : "No registrado")
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Rif: 
+        </td>
+        <td>
+            <a href="@Model.UrlRif" class="btn btn-primary">Ver</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Correo Adminsitrativo: 
+        </td>
+        <td>
+            @(Model.CorreoAdministrativo != null ? Model.CorreoAdministrativo : "No registrado")
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Teléfono Administrativo: 
+        </td>
+        <td>
+            @(Model.TelefonoAdministrativo != null ? Model.TelefonoAdministrativo : "No registrado")
+        </td>
+    </tr>
+
+</table>

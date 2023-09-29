@@ -186,5 +186,65 @@ namespace FerminToroWeb.Controllers
             var Response = JsonConvert.DeserializeObject<AddInscriptionsResponse>(responseContent);
             return View("~/Views/Messages/UploadInscriptionsSuccesfulView.cshtml", Response);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadPayments1stCSVFile(IFormFile file)
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            var Id = GoogleDriveRepository.FileUploadCSV(file);
+            if (Id == null)
+            {
+                return RedirectToAction("UploadFailedView", "Messages");
+            }
+            var apiUrl = apiurl.ApiUrl + "/drive/ProcessPayments1stCSVFile";
+            var requestBody = new { drivefileid = Id };
+            var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            }); // Serializa el body a formato JSON
+            var response = await _httpClient.PostAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return RedirectToAction("BadCSVFormat", "Messages");
+                }
+
+                return RedirectToAction("FailedCSVRead", "Messages");
+            }
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var Response = JsonConvert.DeserializeObject<AddPayments1stCSVResponse>(responseContent);
+            return View("~/Views/Messages/UploadPayments1stCSVSuccess.cshtml", Response);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UploadPayments2ndCSVFile(IFormFile file)
+        {
+            _verifySessionFilter.VerifySession(HttpContext);
+            var Id = GoogleDriveRepository.FileUploadCSV(file);
+            if (Id == null)
+            {
+                return RedirectToAction("UploadFailedView", "Messages");
+            }
+            var apiUrl = apiurl.ApiUrl + "/drive/ProcessPayments2ndCSVFile";
+            var requestBody = new { drivefileid = Id };
+            var jsonBody = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            }); // Serializa el body a formato JSON
+            var response = await _httpClient.PostAsync(apiUrl, new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return RedirectToAction("BadCSVFormat", "Messages");
+                }
+
+                return RedirectToAction("FailedCSVRead", "Messages");
+            }
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var Response = JsonConvert.DeserializeObject<AddPayments2ndCSVResponse>(responseContent);
+            return View("~/Views/Messages/UploadPayments2ndCSVSuccess.cshtml", Response);
+        }
+        
     }
 }

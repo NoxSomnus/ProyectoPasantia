@@ -89,13 +89,28 @@ namespace FerminToroMS.Application.Handlers.Queries
                                 Comments = c.Comentarios == null ? " " : c.Comentarios,
                             })
                             .ToListAsync();
+                var inscription = _dbContext.Inscripciones.FirstOrDefault(i => i.Id == request.InscriptionId);
+                if (inscription == null) 
+                {
+                    throw new IdNotFoundException("Inscripcion no encontrada");
+                }
+                if (payments.Count == 0) 
+                {
+                    var details = new PaymentDetails
+                    {
+                        ByCuota = inscription.PagoEnCuotas,
+                        ModulPrice = inscription.Cantidad_A_Pagar,
+                        Payments = new List<PaymentsDetailsResponse>()
+                    };
+                    return details;
+                }
                 var response = new PaymentDetails
                 {
-                    ByCuota = false,
-                    ModulPrice = 0,
+                    ByCuota = inscription.PagoEnCuotas,
+                    ModulPrice = inscription.Cantidad_A_Pagar,
                     Payments = payments
                 };
-                var inscription = _dbContext.Inscripciones
+                /*var inscription = _dbContext.Inscripciones
                     .Include(c => c.Cronograma)
                     .FirstOrDefault(c=>c.Id == request.InscriptionId);
                 if (inscription == null) 
@@ -113,7 +128,7 @@ namespace FerminToroMS.Application.Handlers.Queries
                     return response;    
                 }
                 response.ModulPrice = price.Precio;
-                response.ByCuota = price.PorCuotas;
+                response.ByCuota = price.PorCuotas;*/
                 return response;
             }
             catch (IdNotFoundException ex) 

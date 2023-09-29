@@ -119,7 +119,8 @@ namespace FerminToroMS.Application.Handlers.Queries
                                     Modalidad = (ModalidadEnum)Enum.Parse(typeof(ModalidadEnum), columns[6]),
                                     Cedula = columns[7],
                                     InscriptionDate = columns[8],
-                                    NroInscription = int.Parse(columns[9])
+                                    NroInscription = int.Parse(columns[9]),
+                                    PagoPorCuotas = bool.Parse(columns[10])
                                 };
                                 inscriptions.Add(inscription);
                             }

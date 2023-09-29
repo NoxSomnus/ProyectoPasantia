@@ -12,7 +12,7 @@
 </head>
 <body>
     <header>
-        <nav>
+        <nav style="padding: 10px 5%;">
             <div class="logo-wrap">
                 <img src="~/img/logos/Logo_white_letras.png" class="logo">
                 <div class="user-type">Administrador</div>
@@ -40,6 +40,12 @@
                     @using (Html.BeginForm("AdminSchedule", "Admin", FormMethod.Post))
                     {
                         <button id="boton-VerUsuarioss" type="submit">Administrar <br/>Cronogramas</button>
+                    }
+                </li>
+                <li id="usuarios-link">
+                    @using (Html.BeginForm("AllApprovedPayments", "Payment", FormMethod.Get))
+                    {
+                        <button id="boton-VerUsuarioss" type="submit">Pagos <br />Aprobados</button>
                     }
                 </li>
                 <li id="migration-link">
