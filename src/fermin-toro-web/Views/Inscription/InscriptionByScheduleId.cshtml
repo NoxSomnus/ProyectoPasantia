@@ -1,0 +1,293 @@
+﻿@{
+    ViewData["Title"] = "Inscripciones";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+@model FerminToroMS.Application.Responses.AllInscriptionsResponse
+<link rel="stylesheet" href="~/css/InscriptionsStyle.css" asp-append-version="true" />
+<div class="info-table"> 
+    <div class="imgcell">
+        <img class="fermin-img" src="~/img/logos/Logo dark green.png">
+        <img class="cisco-img" src="~/img/logos/CiscoNetAcad_logo black.png">
+    </div>
+    <div class="programcell">
+        Programa @Model.CourseCompleteName
+     </div>
+    <div class="nullcell">
+        
+    </div>
+    <table>
+        <tr>
+            <td class="cell">
+                Programa: @Model.ModulCompleteName 
+            </td>
+            <td class="cell">
+                Fecha de Inicio: @Model.StartDate
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Instructor: @(Model.Instructor == "" ? "No Asignado" : Model.Instructor)
+            </td>
+            <td class="cell">
+                Fecha de Finalizacion: @Model.EndDate
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Instructor Asistente: No Asignado
+            </td>
+            <td class="cell">
+                Caga Horaria: 80 horas académicas
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Turno: @Model.Turno
+            </td>
+            <td class="cell">
+                Modalidad: @Model.Regularidad - @Model.Modalidad
+            </td>
+        </tr>
+        <tr>
+            <td class="cell">
+                Horario: @Model.Horario
+            </td>
+            <td class="cell">
+                Nombre del Curso: @Model.Code
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'Estudiantes')">Estudiantes</button>
+    <button class="tablinks" onclick="openTab(event, 'Pagos')">Pagos General</button>
+    @*<button class="tablinks" onclick="openTab(event, 'AdminPagos')">Administrar Pagos</button>*@
+</div>
+@if (Model.Students.Count() == 0)
+{
+    <div id="Estudiantes" class="tabcontent">
+        <h1 class="display-4">No hay estudiantes registrados aún</h1>
+    </div>
+    <div id="Pagos" class="tabcontent">
+        <h1 class="display-4">No hay estudiantes registrados aún</h1>
+    </div>
+}
+else{
+<div id="Estudiantes" class="tabcontent">
+    <div class="student-table">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>N° Lista</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Cédula</th>
+                        <th>Teléfono</th>
+                        <th>Correo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model.Students)
+                    {
+                        <tr>
+                            <td>@(Model.Students.IndexOf(student) + 1)</td>
+                            <td>@student.Name</td>
+                            <td>@student.LastName</td>
+                            <td>
+                                <a href="/Student/StudentDetail?id=@student.StudentId">
+                                    @student.Cedula
+                                </a>
+
+                            </td>
+                            <td>@student.CellPhone</td>
+                            <td>@student.Email</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="Pagos" class="tabcontent">
+    <form asp-action="CheckComprobantes" asp-controller="Payment" method="get">
+        <div style="display: flex; justify-content: center;">
+            <input value="@Model.ScheduleId" name="ScheduleId" hidden>
+            <button class="btn btn-primary" type="submit">Revisar Comprobantes</button>
+        </div>
+    </form>
+    <div class="student-table">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>N° Form</th>
+                        <th>Estudiante</th>
+                        <th>Modalidad Pago</th>
+                        <th>Natural / Juridico</th>
+                        <th>Pagado</th>
+                        <th>Detalles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model.Students)
+                    {
+                        <tr class="fila">
+                            <td>@student.NroInscription</td>
+                            <td>@student.Name @student.LastName</td>
+                            @if (student.HasPayment)
+                            {
+                                    <td>@(student.ByCuota == true ? "Cuota" : "Completo")</td>
+                                    <td>@(student.EsJuridico == true ? "Jurídico" : "Natural")</td>
+                                }
+                                else
+                                {
+                                    <td>Pago no registrado</td>
+                                    <td>Pago no registrado</td>
+                                }
+
+                            <td>@student.TotalPaid $</td>
+                            <td>
+                                <form asp-action="Details" asp-controller="Payment" method="get">
+                                    <input value="@student.InscriptionId" name="InscriptionId" hidden>
+                                     <input value="@Model.Code" name="Inscription" hidden>
+                                    <input value="@student.Name" name="Nombre" hidden>
+                                    <input value="@student.LastName" name="Apellido" hidden>
+                                    <button type="submit">Detalles</button>
+                                </form>
+                                
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+   @* <div id="AdminPagos" class="tabcontent">
+        <div class="student-table">
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N° Form</th>
+                            <th>Estudiante</th>
+                            <th>Fecha de Pago</th>
+                            <th>Método de Pago</th>
+                            <th>Modalidad Pago</th>
+                            <th>Moneda</th>
+                            <th>Nro Recibo</th>
+                            <th>Nro Factura</th>
+                            <th>Monto</th>
+                            <th>Comprobante</th>
+                            <th>Aprobado</th>
+                            <th>Comentario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fila" id="row_1000" data-row-id="1000" hidden>
+                            <td>
+                                <select name="student" id="student_1000" data-row-id="1000">
+                                @if (Model.Students != null)
+                                {
+                                    foreach (var student in Model.Students)
+                                    {
+                                        <option value="@student.StudentId">@student.Name @student.LastName</option>
+                                    }
+                                }
+                                </select>
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                                <input type="date" name="fecha" id="fecha_1000" required data-row-id="1000" />
+                            </td>
+                            <td>@Model.Payments[i].MetodoPago</td>
+                            <td>
+                                <select name="student" id="student_1000" data-row-id="1000">
+
+                                </select>
+                            </td>
+                            <td>@(Model.Payments[i].Divisa ? "Divisa" : "Bolívares")</td>
+                            <td>@(Model.Payments[i].NroRecibo != null ? "#" + Model.Payments[i].NroRecibo : " ")</td>
+                            <td>@(Model.Payments[i].NroFactura != null ? "#" + Model.Payments[i].NroFactura : " ")</td>
+                            <td>@Model.Payments[i].Monto $</td>
+                            <td>@(Model.Payments[i].UrlComprobante != null ? Model.Payments[i].UrlComprobante : " ")</td>
+                            <td>
+                                <select>
+                                    <option value="true">Aprobado</option>
+                                    <option value="false">Rechazado</option>
+                                    <option value="">Falta IVA</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" value="@Model.Payments[i].Comentario" />
+                            </td>
+                        </tr>
+                        @for (int i = 0; i < Model.Payments.Count; i++)
+                        {
+                            <tr class="fila">
+                                <td>@Model.Payments[i].NroInscripcion</td>
+                                <td>@Model.Payments[i].StudentName</td>
+                                <td>@Model.Payments[i].Fecha</td>
+                                <td>@Model.Payments[i].MetodoPago</td>
+                                <td>@(Model.Payments[i].Cuotas ? "Cuotas" : "Completo")</td>
+                                <td>@(Model.Payments[i].Divisa ? "Divisa" : "Bolívares")</td>
+                                <td>@(Model.Payments[i].NroRecibo != null ? "#"+ Model.Payments[i].NroRecibo : " ")</td>
+                                <td>@(Model.Payments[i].NroFactura != null ? "#" + Model.Payments[i].NroFactura : " ")</td>
+                                <td>@Model.Payments[i].Monto $</td>
+                                <td>@(Model.Payments[i].UrlComprobante != null ? Model.Payments[i].UrlComprobante : " ")</td>
+                                <td>
+                                    <select>
+                                        <option value="true">Aprobado</option>
+                                        <option value="false">Rechazado</option>
+                                        <option value="">Falta IVA</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" value="@Model.Payments[i].Comentario"/>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    *@
+}
+@section Scripts 
+{
+    <script>
+        window.onload = function () {
+            var i, tabcontent, tablinks;
+            var tabName = "Estudiantes";
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+}

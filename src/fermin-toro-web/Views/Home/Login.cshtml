@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "Inicio - ";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+@model FerminToroWeb.Models.LoginViewModel
+@if (Model.Error == true)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            Swal.fire({
+                title: 'No puede iniciar sesión',
+                text: "Comuniquese con un administrador para concederle el permiso",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Ok'
+            });
+        }
+    </script>
+}
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            alert("@ViewBag.Message")
+        }
+    </script>
+}
+
+<main role="main" class="pb-3">
+    <div class="container" id="container">
+
+        <div class="form-container registrarse-container">
+            @using (Html.BeginForm("LoginAction", "Home", FormMethod.Post))
+            {
+                <h1>Iniciar sesión</h1>
+                <input type="text" placeholder="Usuario" name="username" required>
+                <input type="password" placeholder="Contraseña" name="password" required>
+                <div class="content">
+                    <div class="pass-link">
+                        <a href="@Url.Action("RecuperarClave", "RecuperarClave")">¿Has olvidado tu contraseña?</a>
+                    </div>
+                </div>
+                <button>Iniciar Sesion</button>
+            }            
+        </div>
+
+        <div class="form-container login-container">
+            @using (Html.BeginForm("RegistrarConsumidor", "RegistrarUsuario", FormMethod.Post))
+            {
+                <h1>¿Estudiante regular?</h1>
+                <p>Ingresa con el correo que te registraste a uno de los cursos</p>
+                <input type="text" placeholder="Correo" name="Correo" required>
+                <!--<a href="@Url.Action("SignUp", "Student")">¿Estudiante nuevo ingreso?</a>-->
+                <a href="">¿Estudiante nuevo ingreso?</a>
+                <button>Entrar</button>
+            }
+        </div>
+
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <img src="~/img/logos/logo_icon_white.png" class="logo" style="max-width: 150px; max-height: 150px;">
+                    <br />
+                    <br />
+                    <h1 class="title">Bienvenidos a <br> nuestra plataforma</h1>
+                    <p>Si eres estudiante haz click en el boton de abajo</p>
+                    <button class="ghost" id="login">
+                        Soy Estudiante
+                        <i class="lni lni-arrow-left login"></i>
+                    </button>
+                </div>
+                
+                <div class="overlay-panel overlay-right">
+                    <img src="~/img/logos/logo_icon_dark.png" class="logo" style="max-width: 200px; max-height: 200px;">
+                    <br />
+                    <br />
+                    <h1 class="title">Academia Fermín Toro</h1>
+                    <p>¿Perteneces al equipo de la academia?</p>
+                    <button class="ghost" id="registrarse">
+                        Haz click aqui
+                        <i class="lni lni-arrow-right registrarse"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</main>

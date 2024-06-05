@@ -1,0 +1,184 @@
+﻿@{
+    ViewData["Title"] = "Periodos";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+
+@model IEnumerable<AllPeriodsModel>
+<link rel="stylesheet" href="~/css/AllPeriodsTable.css" asp-append-version="true" />
+<div class="text-center">
+    <h1 class="display-4">Seleccione un período</h1>
+</div>
+
+<div>
+    <h3>Aplicar Filtro</h3>
+</div>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" onclick="mostrarModalaño()">Por año</button>
+<button type="button" class="btn btn-primary" onclick="mostrarModaldate()">Por fecha</button>
+<a asp-action="AllPeriods" asp-controller="Schedule" style="float: right" class="btn btn-primary">Sin Filtros</a>
+<!-- Modal por año -->
+<div class="modal fade" id="exampleModalaño" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Filtrar Periodos por año</h5>               
+            </div>
+            <form id="searchForm" asp-action="SearchByYear" asp-controller="Schedule">
+                <div class="modal-body">
+                    <div>
+                        <label for="año">Año</label>
+                        <input type="number" id="año" name="año" required pattern="[0-9]*" title="Solo números" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="enviarFormulario()">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal por fecha -->
+<div class="modal fade" id="exampleModaldate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Filtrar Periodos por rango de fecha</h5>
+            </div>
+            <form id="searchForm2" asp-action="SearchByDate" asp-controller="Schedule">
+                <div class="modal-body">
+                    <div>
+                        <label for="fechainicio">Inicio</label>
+                        <input type="date" id="fechainicio" name="fechainicio" required/>
+                    </div>
+                    <div>
+                        <label for="fechafin">Fin</label>
+                        <input type="date" id="fechafin" name="fechafin" required oninput="actualizarUltimoDia()" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="enviarFormulario2()">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Table -->
+<div class="table-scroll">
+    <div>
+        <table id="main-table" class="main-table">
+            <thead>
+                <tr>
+                    <th>Periodo</th>
+                    <th>Año</th>
+                    <th>Meses</th>
+                    <th>Estado</th>
+                    <th>Administrar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var period in Model)
+                {
+                    <tr>
+                        <td>@period.Nombre</td>
+                        <td>@period.Año</td>
+                        <td>@period.MesInicio - @period.MesFin</td>
+                        <td>@if (period.Color == "gray")
+                            {
+                                <div class="gray-circle">
+                                </div>
+                            }
+                            @if (period.Color == "green")
+                            {
+                                <div class="green-circle">
+                                </div>
+                            }
+                            @if (period.Color == "yellow")
+                            {
+                                <div class="yellow-circle">
+                                </div>
+                            }
+
+                        </td>
+                        <td>
+                            <form asp-action="AllSchedulesByPeriodId" asp-controller="Schedule" method="post">
+                                <input type="hidden" name="id" value="@period.Id" />
+                                <button type="submit" class="btn btn-primary" asp-route-id="@period.Id">Ver Cronograma</button>
+                            </form>
+                            @if (period.Color == "yellow" || period.Color == "green") {
+                                <form method="post" id="form-@period.Id" asp-action="UpdateView" asp-controller="Schedule">
+                                    <input type="hidden" name="id" value="@period.Id" />
+                                    <input type="hidden" name="NombrePeriodo" value="@period.Nombre" />
+                                    <input type="hidden" name="Año" value="@period.Año" />
+                                    <input type="hidden" name="MesInicio" value="@period.MesInicio" />
+                                    <input type="hidden" name="MesFin" value="@period.MesFin" />
+                                    <button type="submit" class="btn btn-primary">Editar Periodo</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<br />
+<div>
+    <div class="green-circle">
+    </div>
+    <p>Período en curso</p>
+    <div class="yellow-circle">
+    </div>
+    <p>Período próximo</p>
+    <div class="gray-circle">
+    </div>
+    <p>Período culminado</p>
+</div>
+@section Scripts{
+    @{
+        <script>
+            function mostrarModalaño() {
+                $('#exampleModalaño').modal('show');
+            }
+        </script>
+        <script>
+            function mostrarModaldate() {
+                $('#exampleModaldate').modal('show');
+            }
+        </script>
+        <script>
+            function enviarFormulario() {
+                var form = document.getElementById("searchForm");
+                form.submit();
+            }
+        </script>
+        <script>
+            function enviarFormulario2() {
+                var fechainicioInput = document.getElementById("fechainicio");
+                var fechafinInput = document.getElementById("fechafin");
+
+                if (fechainicioInput.checkValidity() && fechafinInput.checkValidity()) {
+                    var form = document.getElementById("searchForm2");
+                    form.submit();
+                } else {
+                    Swal.fire({
+                        title: 'Completa los campos de fecha correctamente',
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            }
+        </script>
+        <script>
+            function actualizarUltimoDia() {
+                var fechafinInput = document.getElementById("fechafin");
+                var fechaSeleccionada = new Date(fechafinInput.value);
+                var ultimoDia = new Date(fechaSeleccionada.getFullYear(), fechaSeleccionada.getMonth() + 1, 0).getDate();
+
+                fechafinInput.value = fechaSeleccionada.getFullYear() + "-" + (fechaSeleccionada.getMonth() + 1).toString().padStart(2, "0") + "-" + ultimoDia.toString().padStart(2, "0");
+            }
+        </script>
+
+    }
+}

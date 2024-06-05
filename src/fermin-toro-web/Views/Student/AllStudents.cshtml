@@ -1,0 +1,75 @@
+﻿@using FerminToroMS.Application.Responses;
+@{
+    ViewData["Title"] = "Listado de Estudiantes";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+
+@model IEnumerable<AllStudentsResponse>
+<link rel="stylesheet" href="~/css/AllPeriodsTable.css" asp-append-version="true" />
+
+    <div class="text-center">
+        <h1 class="display-4">Estudiantes Registrados</h1>
+    </div>
+
+    <div style="display: flex; justify-content: center;">
+        <h3>Aplicar Filtro</h3>
+    </div>
+    <div style="display: flex; justify-content: center;">
+        <input type="text" id="searchInput" placeholder="Buscar...">
+    </div>
+    <br />
+    <div style="display: flex; justify-content: center;">
+        <form asp-action="SearchJuridicos" asp-controller="Student">
+            <button  type="submit" class="btn btn-primary">Mostrar Solo Jurídicos</button>
+        </form>
+        <form asp-action="AllStudents" asp-controller="Student">
+            <button type="submit" style="display: flex; justify-content: center;" class="btn btn-primary">Quitar Filtro</button>
+        </form>
+    </div>
+    <!-- Table -->
+    <div class="table-scroll">
+        <div>
+            <table id="main-table" class="main-table">
+                <thead>
+                    <tr>
+                        <th>Cédula</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Student in Model)
+                    {
+                        <tr>
+                        <td><a href="/Student/StudentDetail?id=@Student.StudentId">@Student.Cedula</a></td>
+                            <td>@Student.StudentName @Student.StudentLastName</td>
+                            <td>@Student.StudentEmail</td>
+                            <td>@Student.StudentCellPhone</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+@section Scripts {
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const table = document.getElementById('main-table').getElementsByTagName('tbody')[0];
+        const rows = table.getElementsByTagName('tr');
+
+        searchInput.addEventListener('input', function () {
+            const searchText = searchInput.value.toLowerCase();
+
+            for (let i = 0; i < rows.length; i++) {
+                const rowData = rows[i].innerText.toLowerCase();
+
+                if (rowData.includes(searchText)) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        });
+    </script>
+}

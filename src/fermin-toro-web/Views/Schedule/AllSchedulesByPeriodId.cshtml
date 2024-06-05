@@ -1,0 +1,222 @@
+﻿@using FerminToroMS.Application.Responses;
+@{
+    ViewData["Title"] = "Cronogramas";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+
+@model ScheduleByPeriodIdModel
+<link rel="stylesheet" href="~/css/AllSchedulesByPeriodId.css" asp-append-version="true" />
+@if (@Model.schedules.FirstOrDefault() == null)
+{
+    <div class="text-center">
+        <h1 class="display-4">Cronograma no creado</h1>
+    </div>
+    <form method="post" id="crearcronograma" asp-action="AddScheduleFromPeriodsList" asp-controller="Schedule">
+        <input type="hidden" name="periodoid" value="@Model.PeriodoId"/>
+        <div style="display: flex; justify-content: center;">
+            <button type="submit" class="btn btn-primary">Crear nuevo cronograma</button>
+        </div>
+    </form>
+
+}
+else{
+    <div class="text-center">
+        <h1 class="display-4">Cronograma del @Model.schedules.FirstOrDefault().PeriodName</h1>
+    </div>
+
+    <div>
+        <h3>Aplicar Filtro</h3>
+        <label>Por Turno</label>
+        <select name="byturno" id="turnoSelect">
+            <option value="">Seleccionar...</option>
+            <option value="Matutino">Matutino</option>
+            <option value="Vespertino">Vespertino</option>
+            <option value="Nocturno">Nocturno</option>
+            <option value="Sabatino">Sabatino</option>
+        </select>
+        <label>Por Modalidad</label>
+        <select name="bymodalidad" id="modalidadSelect">
+            <option value="">Seleccionar...</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Online">Online</option>
+        </select>
+        <label>Por Regularidad</label>
+        <select name="byregularidad" id="regularidadSelect">
+            <option value="">Seleccionar...</option>
+            <option value="Regular">Regular</option>
+            <option value="SemiIntensivo">SemiIntensivo</option>
+            <option value="Intensivo">Intensivo</option>
+        </select>
+        <label>Por Módulo</label>
+        <select name="bymodulo" id="moduloSelect">
+            <option value="">Seleccionar...</option>
+            @{
+                var opciones = new List<string>();
+            }
+            @foreach (var programs in Model.schedules)
+            {
+                if (!opciones.Contains(programs.ModulName))
+                {
+                    opciones.Add(programs.ModulName);
+                    <option value="@programs.ModulName">@programs.ModulName</option>
+                }
+            }
+        </select>
+        <br />
+        <label>Por Programa</label>
+        <select name="byprograma" id="programaSelect">
+            <option value="">Seleccionar...</option>
+            @{
+                opciones = new List<string>();
+            }
+            @foreach (var programs in Model.schedules)
+            {
+                if (!opciones.Contains(programs.CourseName))
+                {
+                    opciones.Add(programs.CourseName);
+                    <option value="@programs.CourseName">@programs.CourseName</option>
+                }
+            }
+        </select>
+        <div>
+            <form method="post" id="crearcronograma" asp-action="UpdateScheduleView" asp-controller="Schedule">
+                <div style="display: flex; justify-content: right;">
+                    @for (int i = 0; i < Model.schedules.Count; i++)
+                    {
+                        <input type="hidden" asp-for="schedules[i].CourseName" />
+                        <input type="hidden" asp-for="schedules[i].Modalidad" />
+                        <input type="hidden" asp-for="schedules[i].NroVacantes" />
+                        <input type="hidden" asp-for="schedules[i].ModulName" />
+                        <input type="hidden" asp-for="schedules[i].Duracion" />
+                        <input type="hidden" asp-for="schedules[i].Fecha_Fin" />
+                        <input type="hidden" asp-for="schedules[i].Fecha_Inicio" />
+                        <input type="hidden" asp-for="schedules[i].Horario" />
+                        <input type="hidden" asp-for="schedules[i].Horas" />
+                        <input type="hidden" asp-for="schedules[i].Regularidad" />
+                        <input type="hidden" asp-for="schedules[i].InstructorAsignado" />
+                        <input type="hidden" asp-for="schedules[i].InstructorId" />
+                        <input type="hidden" asp-for="schedules[i].ScheduleId" />
+                        <input type="hidden" asp-for="schedules[i].Turno" />
+                        <input type="hidden" asp-for="schedules[i].Habilitado" />
+                    }
+                    <input name="PeriodoId" value="@Model.PeriodoId" hidden />
+                    @if (Model.Editable)
+                    {
+                        <button type="submit" class="btn btn-primary">Editar</button>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="schedule-table">
+        <div>
+            <table id="main-table" class="main-table">
+                <thead>
+                    <tr>
+                        <th>Inscripciones</th>
+                        <th>Modalidad</th>
+                        <th>Programa</th>
+                        <th>Modulo</th>
+                        <th>Turno</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                        <th>Horario</th>
+                        <th>Regularidad</th>
+                        <th>Duración</th>
+                        <th>Nro Vacantes</th>
+                        <th>Horas</th>
+                        <th>Instructor Asignado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var schedule in Model.schedules)
+                    {
+                        <tr class="@(schedule.Habilitado ? "active" : "inactive")">
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">
+                                @if(schedule.Habilitado)
+                                {
+                                    <a href="/Inscription/InscriptionByScheduleId?scheduleId=@schedule.ScheduleId" class="btn btn-primary">Ver Inscripciones</a>
+                                }else
+                                {
+                                    <p>Cerrado</p>
+                                }
+                            </td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Modalidad</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.CourseName</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.ModulName</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Turno</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Fecha_Inicio</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Fecha_Fin</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Horario</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Regularidad</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Duracion semanas</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.NroVacantes</td>
+                            <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.Horas</td>
+                            @if (schedule.InstructorAsignado != null)
+                            {
+                                <td class="@(schedule.Habilitado ? "active" : "inactive")">@schedule.InstructorAsignado</td>
+                            }
+                            else{
+                                <td class="@(schedule.Habilitado ? "active" : "inactive")">No asignado</td>
+                            }           
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <form method="get" id="crearcronograma" asp-action="PeriodSummary" asp-controller="Payment">
+        <input type="hidden" name="PeriodId" value="@Model.PeriodoId" />
+        <div style="display: flex; justify-content: center;">
+            <button type="submit" class="btn btn-primary">Summary</button>
+        </div>
+    </form>
+}
+@section Scripts {
+    <script>
+        // Capturar el evento de cambio en los select
+        document.getElementById("turnoSelect").addEventListener("change", filtrarRegistros);
+        document.getElementById("modalidadSelect").addEventListener("change", filtrarRegistros);
+        document.getElementById("regularidadSelect").addEventListener("change", filtrarRegistros);
+        document.getElementById("moduloSelect").addEventListener("change", filtrarRegistros);
+        document.getElementById("programaSelect").addEventListener("change", filtrarRegistros);
+
+        function filtrarRegistros() {
+            // Obtener los valores seleccionados en los select
+            var turno = document.getElementById("turnoSelect").value;
+            var modalidad = document.getElementById("modalidadSelect").value;
+            var regularidad = document.getElementById("regularidadSelect").value;
+            var modulo = document.getElementById("moduloSelect").value;
+            var programa = document.getElementById("programaSelect").value;
+
+            // Obtener la tabla y sus filas
+            var table = document.getElementById("main-table");
+            var rows = table.getElementsByTagName("tr");
+
+            // Recorrer las filas de la tabla
+            for (var i = 1; i < rows.length; i++) {
+                var row = rows[i];
+                var cells = row.getElementsByTagName("td");
+
+                // Obtener los valores de turno, modalidad, regularidad, módulo y programa en la fila actual
+                var turnoValue = cells[4].innerText;
+                var modalidadValue = cells[1].innerText;
+                var regularidadValue = cells[8].innerText;
+                var moduloValue = cells[3].innerText;
+                var programaValue = cells[2].innerText;
+                // Aplicar el filtro
+                if ((turno == "" || turnoValue == turno) && 
+                (modalidad == "" || modalidadValue == modalidad) && 
+                (regularidad == "" || regularidadValue == regularidad) &&
+                (modulo == "" || moduloValue == modulo) && 
+                (programa == "" || programaValue == programa)) {
+                    row.style.display = ""; // Mostrar la fila si cumple con el filtro
+                } else {
+                    row.style.display = "none"; // Ocultar la fila si no cumple con el filtro
+                }
+            }
+        }
+    </script>
+}

@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "Summary";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+
+@model PeriodSummaryModel
+<link rel="stylesheet" href="~/css/SummaryStyle.css" asp-append-version="true" />
+<div class="info-table">
+    <div class="imgcell">
+        <img class="fermin-img" src="~/img/logos/Logo dark green.png">
+        <img class="cisco-img" src="~/img/logos/CiscoNetAcad_logo black.png">
+    </div>
+    <div class="programcell">
+        Summary de @Model.PeriodName
+    </div>
+    <div class="nullcell">
+    </div>
+    <div style="background-color: #BED0D8;>
+        @foreach(var totalmodul in Model.TotalOnModuls)
+        {
+        <h3 style="display: flex; justify-content: center;"></h3> <!-- Si lo quitas, por alguna razon el primer h3 no lo centra-->
+            <h3 style="display: flex; justify-content: center;">
+                @totalmodul.NombreModulo
+            </h3>
+            <table class="table" style="justify-content: center;">
+                <tr>
+                    <td class="firstcell" style="background-color: #306D74; color: #fff;">
+                        Total ingresado <br> @totalmodul.NombreModulo
+                    </td>
+                    @foreach (var modul in Model.TotalOnModulsWithTurns.Where(x => x.ModulId == totalmodul.ModuloId))
+                    {
+                        <td class="firstcell" style="background-color: #306D74; color: #fff;">
+                            Total en <br> @modul.ModulCode <br> @modul.Modalidad  <br> @modul.Turno
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <td class="cell" style="background-color: #BED0D8;">
+                        @totalmodul.Total $
+                    </td>
+                    @foreach (var modul in Model.TotalOnModulsWithTurns.Where(x => x.ModulId == totalmodul.ModuloId))
+                    {
+                        <td class="cell" style="background-color: #BED0D8;">
+                            @modul.Total $
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <td class="firstcell" style="background-color: #306D74; color: #fff;">
+                        Facturas Realizadas:
+                    </td>
+                    @foreach (var modul in Model.TotalOnModulsWithTurns.Where(x => x.ModulId == totalmodul.ModuloId))
+                    {
+                        <td class="cell" style="background-color: #BED0D8;">
+                            @modul.BillQuantity
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <td class="firstcell" style="background-color: #306D74; color: #fff;">
+                        Recibos Realizados:
+                    </td>
+                    @foreach (var modul in Model.TotalOnModulsWithTurns.Where(x => x.ModulId == totalmodul.ModuloId))
+                    {
+                        <td class="cell" style="background-color: #BED0D8;">
+                            @modul.ReciboQuantity
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <td class="firstcell" style="background-color: #306D74; color: #fff;">
+                        Pagos por Cuotas:
+                    </td>
+                    @foreach (var modul in Model.TotalOnModulsWithTurns.Where(x => x.ModulId == totalmodul.ModuloId))
+                    {
+                        <td class="cell" style="background-color: #BED0D8;">
+                            @modul.CuotaQuantity
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <td class="firstcell" style="background-color: #306D74; color: #fff;">
+                        Cuentas por cobrar:
+                    </td>
+                    @foreach (var modul in Model.TotalOnModulsWithTurns.Where(x => x.ModulId == totalmodul.ModuloId))
+                    {
+                    <td class="cell" style="background-color: #BED0D8;">
+                        @modul.PorCobrar $
+                    </td>
+                    }
+                </tr>
+            </table>
+        }
+        <h3 style="display: flex; justify-content: center;">Resumen General</h3>
+        <table style="justify-content: center;">
+            <tr>
+                <td class="cell">
+                    Total ingresado Online <br> @Model.TotalOnline $
+                </td>
+            </tr>
+            <tr>
+                <td class="cell">
+                    Total ingresado Presencial <br /> @Model.TotalPresencial $
+                </td>
+            </tr>
+            <tr>
+                <td class="cell">
+                    Total ingresado <br /> @Model.TotalOnPeriod $
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

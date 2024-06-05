@@ -1,0 +1,101 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using FerminToroWeb.Models
+@{
+    ViewData["Title"] = "Agregar nuevo empleado";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+@model FerminToroWeb.Models.AddEmployeeModel
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    }
+}
+@if (Model.Error == true)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            Swal.fire({
+                title: 'Error',
+                text: 'La cédula o el nombre de usuario ya esta registrado',
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    </script>
+}
+<div class="col-md-12 col-sm-12">
+    <div class="contenedorlogin">
+        <form asp-action="AddAction" asp-controller="Employee" method="post">
+            <div class="form-group">
+                <label>Cédula</label>
+                <input type="text" name="Cedula" value="@Model.Cedula" class="form-control" placeholder="Cédula" data-val="true" data-val-required="El campo Cédula es requerido"
+                       data-val-regex-pattern="^[0-9]*$" data-val-regex="La Cédula debe ser solo numeros (sin puntos)." data-val-length-min="7" data-val-length-max="9"
+                       data-val-length="La longitud de la Cédula debe estar entre 7 y 9 caracteres.">
+                @Html.ValidationMessageFor(m => m.Cedula ,null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" name="Name" value="@Model.Name" class="form-control" placeholder="Nombre" data-val="true" data-val-required="El campo Nombre es requerido">
+                @Html.ValidationMessageFor(m => m.Name ,null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label>Apellido</label>
+                <input type="text" name="LastName" value="@Model.LastName" class="form-control" placeholder="Apellido" data-val="true" data-val-required="El campo Apellido es requerido">
+                @Html.ValidationMessageFor(m => m.LastName ,null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label>Usuario</label>
+                <input type="text" name="UserName" value="@Model.UserName" class="form-control" placeholder="Usuario" data-val="true" data-val-required="El campo Usuario es requerido">
+                @Html.ValidationMessageFor(m => m.UserName ,null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label>Correo</label>
+                <input type="email" name="Email" value="@Model.Email" class="form-control" placeholder="Email" data-val="true" data-val-required="El campo Correo es requerido">
+                @Html.ValidationMessageFor(m => m.Email ,null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" name="Password" value="@Model.Password" class="form-control" placeholder="Contraseña" data-val="true" data-val-required="El campo Contraseña es requerido"
+                data-val-length-min="8" data-val-length="Debe tener minimo 8 caracteres">
+                @Html.ValidationMessageFor(m => m.Password ,null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label>Administrador</label>
+                <input type="checkbox" asp-for="esAdmin" class="form-check-input">
+            </div>
+            <div class="form-group">
+                <label>Instructor</label>
+                <input type="checkbox" asp-for="esInstructor" class="form-check-input">
+            </div>
+            <div class="form-group">
+                <label>Director</label>
+                <input type="checkbox" asp-for="esDirector" class="form-check-input">
+            </div>
+            <div>
+                <label>Permisos a asignar</label>
+            </div>
+            <div id="permissions-container">
+                <div id="permissions-container">
+                    @for (int i = 0; i < Model.permisos.Count; i++)
+                    {
+                        <label>
+                            <input type="checkbox" asp-for="permisos[i].Selected" />
+                            <input type="hidden" asp-for="permisos[i].IdPermiso" />
+                            @Model.permisos[i].NombrePermiso
+                        </label>
+                    }
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="botones">
+                <button type="submit" class="btn btn-success">Registrar Empleado</button>
+                <a class="btn btn-danger" asp-area="" asp-controller="Admin" asp-action="AdminEmployee">Cancelar</a>
+            </div>
+        </form>
+        <p>@ViewBag.Error</p>
+    </div>
+</div>

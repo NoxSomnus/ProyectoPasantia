@@ -1,0 +1,75 @@
+﻿.table-scroll {
+    position: relative;
+    max-width: 1280px;
+    z-index: 1;
+    margin: auto;
+    overflow-y: scroll;
+    height: 350px;
+}
+
+    .table-scroll table {
+        width: 100%;
+        margin: auto;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+.table-wrap {
+    position: relative;
+}
+.gray-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: gray;
+}
+
+.green-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: green;
+}
+
+.yellow-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: yellow;
+}
+
+
+
+.table-scroll th,
+.table-scroll td {
+    padding: 5px 20px;
+    border: 1px solid #000;
+    background: #fff;
+    vertical-align: top;
+}
+
+.table-scroll thead th {
+    background: #306D74;
+    color: #fff;
+    text-align: center;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.table-scroll tbody td {
+    background: #BED0D8;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+
+
+
+
+
+
+

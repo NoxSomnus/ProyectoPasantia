@@ -1,0 +1,149 @@
+﻿@{
+    ViewData["Title"] = "Detalles de alumno";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+}
+
+@model FerminToroMS.Application.Responses.StudentResponse
+<link rel="stylesheet" href="~/css/StudentDetailStyle.css" asp-append-version="true" />
+<div class="col-md-12 col-sm-12">
+    <div class="contenedorlogin">
+        <br />
+        <h3 style="display: flex; justify-content: center;">Estudiante: @Model.StudentName @Model.StudentLastName - C.I. @Model.Cedula</h3>
+        <br />
+        <div class="tab">
+            <button class="tablinks" onclick="openTab(event, 'Inscripciones')">Inscripciones del Estudiante</button>
+            <button class="tablinks" onclick="openTab(event, 'Info')">Información del Estudiante</button>
+        </div>
+        <div id="Inscripciones" class="tabcontent">
+            <div class="student-table">
+                <div>
+                    @if (Model.ModulsSawByStudent != null)
+                    {
+                        <div class="form-group">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Programa</th>
+                                        <th>Modulo</th>
+                                        <th>Periodo</th>
+                                        <th>Fecha Inscripción</th>
+                                        <th>Estado</th>
+                                        <th>Nro Inscripción</th>
+                                        <th>Total Pagado</th>
+                                        <th>Pagos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var inscriptions in Model.ModulsSawByStudent)
+                                    {
+                                        <tr>
+                                            <td>@inscriptions.CourseName</td>
+                                            <td>@inscriptions.ModulName</td>
+                                            <td>@inscriptions.ModulCode</td>
+                                            <td>@inscriptions.InscriptionDate</td>
+                                            <td>@inscriptions.InscriptionStatus</td>
+                                            <td>@inscriptions.NroInscripcion</td>
+                                            <td>@(inscriptions.HasPayment ? inscriptions.TotalPaid +" $" : "No ha Pagado")</td>
+                                            <td>
+                                                <form asp-action="Details" asp-controller="Payment" method="get">
+                                                    <input value="@inscriptions.InscriptionId" name="InscriptionId" hidden>
+                                                    <input value="@inscriptions.ModulCode" name="Inscription" hidden>
+                                                    <input value="@Model.StudentName" name="Nombre" hidden>
+                                                    <input value="@Model.StudentLastName" name="Apellido" hidden>
+                                                    <button type="submit" class="btn btn-primary">Detalles</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <h1 class="display-4">Este estudiante no se ha inscrito en algún curso aún</h1>
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div id="Info" class="tabcontent">
+            <div class="student-table">
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Dirección</th>
+                                <th>Edad</th>
+                                <th>Rango de Edad</th>
+                                <th>Beca</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@Model.StudentEmail</td>
+                                <td>@Model.StudentCellPhone</td>
+                                <td>@Model.StudentDirection</td>                                
+                                @if (Model.StudentAge == null)
+                                {
+                                    <td>No registrado</td>
+                                }
+                                else
+                                {
+                                    <td>@Model.StudentAge</td>
+                                }
+                                @if (Model.YearRange == string.Empty || Model.YearRange == "" || Model.YearRange == null)
+                                {
+                                    <td>Rango de Edad: No registrado</td>
+                                }
+                                else
+                                {
+                                    <td>@Model.YearRange</td>
+                                }
+                                <td>@Model.Beca %</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+</div>
+</div>
+
+
+@section Scripts
+    {
+    <script>
+        window.onload = function () {
+            var i, tabcontent, tablinks;
+            var tabName = "Inscripciones";
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+}

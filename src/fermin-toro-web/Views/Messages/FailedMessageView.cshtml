@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "~/Views/Shared/_MensajeErrorLayout.cshtml";
+}
+
+@model FerminToroWeb.Models.ErrorMessageModel
+
+<body>
+    <div class="error-message">
+        <svg viewBox="0 0 76 76" class="error-message__icon icon-cross">
+            <circle cx="38" cy="38" r="36" />
+            <path fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M17.7,17.7l40.6,40.6M58.3,17.7L17.7,58.3" />
+        </svg>
+        <h1 class="error-message__title">Error: @Model.Error</h1>
+        <div class="error-message__content">
+            <h4><b>@Model.Message</b></h4>
+            <a href ="https://docs.microsoft.com/aspnet/core">Consulte el manual para solventar este error</a>
+        </div>
+        <button class="ghost" id="login" onclick="location.href='@Url.Action("MenuAdministrador", "Admin")'">@Model.ButtonContent</button>
+    </div>
+</body>

@@ -1,0 +1,198 @@
+﻿@{
+    ViewData["Title"] = "Editar periodo";
+    Layout = "~/Views/Shared/_MenuAdministradorLayout.cshtml";
+    var esAdmin = ViewContext.HttpContext.Session.GetString("EsAdmin");
+    var esDirector = ViewContext.HttpContext.Session.GetString("EsDirector");
+    var UserId = ViewContext.HttpContext.Session.GetString("UserId");
+}
+
+
+
+@model FerminToroWeb.Models.UpdatePeriodModel
+<!-- Modal por año -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Contraseña de Administrador</h5>
+            </div>
+            <form id="deleteForm" asp-action="DeletePeriodAction" asp-controller="Schedule" >
+                <div class="modal-body">
+                    <div>
+                        <label for="password">Ingrese la contraseña del administrador</label>
+                        <input type="password" id="password" name="password" required />
+                        <input type="hidden" value="@UserId" name="UserId" />
+                        <input type="hidden" value="@Model.Id" name="PeriodId" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="enviarFormulario(event)">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 col-sm-12">
+    <div class="contenedorlogin">
+        <form id="myForm" asp-action="UpdatePeriodAction" asp-controller="Schedule" method="post" onsubmit="return validarFormulario()">
+            <input type="hidden" value="@Model.Id" name="Id"/>
+            <div class="form-group">
+                <label>Nombre del Período</label>
+                <input type="text" id="nombreperiodo" name="NombrePeriodo" value="@Model.NombrePeriodo" class="form-control" placeholder="Nombre" required>
+            </div>
+            <div class="form-group">
+                <label>Año</label>
+                <input type="number" name="Año" value="@Model.Año" class="form-control" placeholder="Año" required pattern="[0-9]*" title="Solo se permite un número en este campo.">
+            </div>
+            <div class="form-group">
+                <label>Inicio</label>
+                <select name="MesInicio" id="mesInicioSelect">
+                    <option value="enero">Enero</option>
+                    <option value="febrero">Febrero</option>
+                    <option value="marzo">Marzo</option>
+                    <option value="abril">Abril</option>
+                    <option value="mayo">Mayo</option>
+                    <option value="junio">Junio</option>
+                    <option value="julio">Julio</option>
+                    <option value="agosto">Agosto</option>
+                    <option value="septiembre">Septiembre</option>
+                    <option value="octubre">Octubre</option>
+                    <option value="noviembre">Noviembre</option>
+                    <option value="diciembre">Diciembre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Fin</label>
+                <select name="MesFin" id="mesFinSelect">
+                    <option value="enero">Enero</option>
+                    <option value="febrero">Febrero</option>
+                    <option value="marzo">Marzo</option>
+                    <option value="abril">Abril</option>
+                    <option value="mayo">Mayo</option>
+                    <option value="junio">Junio</option>
+                    <option value="julio">Julio</option>
+                    <option value="agosto">Agosto</option>
+                    <option value="septiembre">Septiembre</option>
+                    <option value="octubre">Octubre</option>
+                    <option value="noviembre">Noviembre</option>
+                    <option value="diciembre">Diciembre</option>
+                </select>
+            </div>
+            <br />
+            <div class="botones">
+                <button type="button" class="btn btn-success" onclick="validarFormulario()">Actualizar Periodo</button>
+                <a class="btn btn-danger" asp-area="" asp-controller="Admin" asp-action="AdminSchedule">Cancelar</a>
+               
+            </div>
+        </form>
+    </div>
+</div>
+@if(esAdmin == "aaaa" || esDirector == "aaaa"){
+    <div>
+        <button type="button" class="btn btn-danger" onclick="mostrarModal()">Eliminar</button>
+    </div>
+}
+@section Scripts{
+    @{
+        <script>
+            var mesInicio = "@Model.MesInicio";
+            var mesFin = "@Model.MesFin";
+
+            document.getElementById("mesInicioSelect").value = mesInicio;
+            document.getElementById("mesFinSelect").value = mesFin;
+        </script>
+
+        <script>
+            function mostrarModal() {
+                $('#exampleModal').modal('show');
+            }
+        </script>
+        <script>
+            function enviarFormulario(e) {
+                var form = document.getElementById("deleteForm");
+                mostrarAlerta(form, e);
+            }
+        </script>
+        <script>
+            function mostrarAlerta(form, e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: '¿Está seguro que quiere eliminar este período?',
+                    text: 'Los cronogramas de este período se eliminarán',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, eliminar',
+                    cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        mostrarAlerta2(form,e);
+                    }
+                });
+            }
+        </script>
+        <script>
+            function validarFormulario() {
+                const form = document.getElementById('myForm'); // Reemplaza 'myForm' con el id de tu formulario
+
+                var input = document.getElementById("nombreperiodo").value;
+                var words = input.trim().split(" ");
+                // Realizar la validación según tus requisitos
+                if (words.length < 1) {
+                    Swal.fire({
+                        title: 'Complete todos los campos requeridos',
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                    return false;
+                }
+                
+
+                // Si todos los campos están validados, realizar el envío del formulario
+                form.submit();
+            }
+            function validateInput() {
+                console.log("entre a la funcion");
+                var input = document.getElementById("nombreperiodo").value;
+                var form = document.getElementById("myForm");
+                var words = input.trim().split(" ");
+
+                if (words.length < 2) {
+                    console.log("entro en el if < 2 ");
+                    Swal.fire({
+                        title: 'Completa los campos de fecha correctamente',
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                } else {
+                    console.log("estoy en el else");
+                }
+                console.log("saliendo de la funcion");
+            }
+        </script>
+            
+        <script>
+            function mostrarAlerta2(form,e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Los cronogramas e inscripciones serán eliminados',
+                    icon: 'warning',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    denyButtonText: 'No eliminar',
+                    confirmButtonText: 'Si, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
+        </script>
+    }
+}
